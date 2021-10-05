@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_myday">
+
+    <fragment
+        android:id="@+id/nav_myday"
+        android:name="com.example.habtrack.ui.myday.MydayFragment"
+        android:label="@string/menu_myday"
+        tools:layout="@layout/fragment_myday" />
+
+    <fragment
+        android:id="@+id/nav_friends"
+        android:name="com.example.habtrack.ui.friends.FriendsFragment"
+        android:label="@string/menu_friends"
+        tools:layout="@layout/fragment_friends"/>
+
+    <fragment
+        android:id="@+id/nav_manage"
+        android:name="com.example.habtrack.ui.manage.ManageFragment"
+        android:label="@string/menu_manage"
+        tools:layout="@layout/fragment_manage" />
+
+    <fragment
+        android:id="@+id/nav_events"
+        android:name="com.example.habtrack.ui.events.EventsFragment"
+        android:label="@string/menu_events"
+        tools:layout="@layout/fragment_events" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.habtrack.ui.profile.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/nav_following"
+        android:name="com.example.habtrack.ui.following.FollowingFragment"
+        android:label="@string/menu_following"
+        tools:layout="@layout/fragment_following" />
+
+    <fragment
+        android:id="@+id/nav_follower"
+        android:name="com.example.habtrack.ui.follower.FollowerFragment"
+        android:label="@string/menu_follower"
+        tools:layout="@layout/fragment_follower" />
+</navigation>
