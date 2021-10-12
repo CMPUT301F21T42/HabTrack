@@ -10,7 +10,7 @@ public class FollowingViewModel extends ViewModel {
 
     public FollowingViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is following fragment");
+//        mText.setValue("This is following fragment");
     }
 
     public LiveData<String> getText() {

@@ -10,7 +10,7 @@ public class FollowerViewModel extends ViewModel {
 
     public FollowerViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is follower fragment");
+//        mText.setValue("This is follower fragment");
     }
 
     public LiveData<String> getText() {

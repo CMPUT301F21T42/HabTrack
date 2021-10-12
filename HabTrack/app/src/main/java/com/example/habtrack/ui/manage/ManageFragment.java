@@ -1,9 +1,13 @@
 package com.example.habtrack.ui.manage;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,12 +16,34 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.habtrack.CustomList;
+import com.example.habtrack.Habit;
+import com.example.habtrack.MainActivity;
+import com.example.habtrack.R;
 import com.example.habtrack.databinding.FragmentManageBinding;
+import com.example.habtrack.ui.edithabit.EdithabitFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 public class ManageFragment extends Fragment {
 
     private ManageViewModel manageViewModel;
     private FragmentManageBinding binding;
+
+    ListView habitList;
+    ArrayList<Habit> dataList;
+    ArrayAdapter<Habit> habitAdapter;
+
+    FirebaseFirestore db;
+    final String TAG = "Sample";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -27,13 +53,37 @@ public class ManageFragment extends Fragment {
         binding = FragmentManageBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textManage;
-        manageViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        habitList = binding.habitList;
+        dataList = new ArrayList<>();
+        habitAdapter = new CustomList(getContext(), dataList);
+        habitList.setAdapter(habitAdapter);
+
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("Habits");
+
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
+                    FirebaseFirestoreException error) {
+                dataList.clear();
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
+                {
+                    //Log.d(TAG, String.valueOf(doc.getData().get("Habit")));
+                    Habit habit = doc.toObject(Habit.class);
+                    dataList.add(habit); // Adding the habit from FireStore
+                }
+                habitAdapter.notifyDataSetChanged();
             }
         });
+
+        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                EdithabitFragment.newInstance(dataList.get(position))
+                        .show(getParentFragmentManager(), "EDIT_HABIT");
+            }
+        });
+
         return root;
     }
 

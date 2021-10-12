@@ -10,7 +10,7 @@ public class MydayViewModel extends ViewModel {
 
     public MydayViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is myday fragment");
+//        mText.setValue("This is myday fragment");
     }
 
     public LiveData<String> getText() {

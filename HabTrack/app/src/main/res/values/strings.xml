@@ -14,5 +14,14 @@
     <string name="menu_profile">Profile</string>
     <string name="menu_follower">Follower</string>
     <string name="menu_following">Following</string>
+    <string name="plan_str">M T W T F S S</string>
+
+    <string name="dash">-</string>
+    <string name="date_formatter">%1$s-%2$s-%3$s</string>
+    <string name="date_prompt">"Date to start: "</string>
+    <string name="year_format">yyyy</string>
+    <string name="month_format">MM</string>
+    <string name="day_format">dd</string>
+    <string name="error_message">Invalid %1$s entry: please try again.</string>
 
 </resources>
