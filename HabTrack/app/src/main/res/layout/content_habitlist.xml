@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="15dp"
         android:text="Title"
-        android:textSize="30sp">
-    </TextView>
+        android:textSize="30sp" />
 
     <ProgressBar
         android:id="@+id/progressBar"

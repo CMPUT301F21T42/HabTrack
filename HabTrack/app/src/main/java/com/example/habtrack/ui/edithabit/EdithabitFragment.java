@@ -109,13 +109,13 @@ public class EdithabitFragment extends DialogFragment {
         reason = binding.reasonEditText;
 
         plan = new ArrayList<>();
+        plan.add(binding.sundayCheckBox);
         plan.add(binding.mondayCheckBox);
         plan.add(binding.tuesdayCheckBox);
         plan.add(binding.wednesdayCheckBox);
         plan.add(binding.thursdayCheckBox);
         plan.add(binding.fridayCheckBox);
         plan.add(binding.saturdayCheckBox);
-        plan.add(binding.sundayCheckBox);
 
         Date selectedDate = Calendar.getInstance().getTime();
 

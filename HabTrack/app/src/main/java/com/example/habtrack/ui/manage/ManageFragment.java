@@ -1,29 +1,22 @@
 package com.example.habtrack.ui.manage;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.habtrack.CustomList;
+import com.example.habtrack.HabitListAdapter;
 import com.example.habtrack.Habit;
-import com.example.habtrack.MainActivity;
-import com.example.habtrack.R;
 import com.example.habtrack.databinding.FragmentManageBinding;
 import com.example.habtrack.ui.edithabit.EdithabitFragment;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -55,7 +48,7 @@ public class ManageFragment extends Fragment {
 
         habitList = binding.habitList;
         dataList = new ArrayList<>();
-        habitAdapter = new CustomList(getContext(), dataList);
+        habitAdapter = new HabitListAdapter(getContext(), dataList);
         habitList.setAdapter(habitAdapter);
 
         db = FirebaseFirestore.getInstance();

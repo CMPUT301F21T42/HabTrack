@@ -13,11 +13,11 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class CustomList extends ArrayAdapter<Habit> {
+public class HabitListAdapter extends ArrayAdapter<Habit> {
     private ArrayList<Habit> habits;
     private Context context;
 
-    public CustomList(Context context, ArrayList<Habit> habits) {
+    public HabitListAdapter(Context context, ArrayList<Habit> habits) {
         super(context, 0, habits);
         this.habits = habits;
         this.context = context;
@@ -29,13 +29,12 @@ public class CustomList extends ArrayAdapter<Habit> {
 
         View view = convertView;
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.content, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.content_habitlist, parent, false);
         }
 
         Habit habit = habits.get(position);
 
         TextView title = view.findViewById(R.id.title_text);
-
         title.setText(habit.getTitle());
         // plan.setText();
 
