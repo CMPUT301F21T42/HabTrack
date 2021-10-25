@@ -22,6 +22,7 @@ import java.util.Date;
  * This class represents a habit
  */
 public class Habit implements Serializable, Comparable<Habit> {
+    private HabitHandler hh = new HabitHandler();
     private String title;
     private String reason;
     private Date startDate;
@@ -39,8 +40,16 @@ public class Habit implements Serializable, Comparable<Habit> {
      * @param startDate the {@link Date} to start the habit
      * @param plan the {@link ArrayList} that stores {@link Boolean} values
      *             on weekly occurrence of the habit
+     * @throws IllegalArgumentException
+     * This constructor can throw an {@link IllegalArgumentException}
+     * if the title {@link String} or the reason {@link String} is illegal
      */
     public Habit(String title, String reason, Date startDate, ArrayList<Boolean> plan) {
+        if (!hh.isLegalTitle(title)) {
+            throw new IllegalArgumentException("a habit title has up to 20 characters and cannot be empty");
+        } else if (!hh.isLegalReason(reason)) {
+            throw new IllegalArgumentException("a habit reason has up to 30 characters");
+        }
         this.title = title;
         this.reason = reason;
         this.startDate = startDate;
@@ -60,9 +69,17 @@ public class Habit implements Serializable, Comparable<Habit> {
      *             on weekly occurrence of the habit
      * @param progressNumerator counter for the number of events
      * @param progressDenominator counter for the total number of habit planned
+     * @throws IllegalArgumentException
+     * This constructor can throw an {@link IllegalArgumentException}
+     * if the title {@link String} or the reason {@link String} is illegal
      */
     public Habit(String title, String reason, Date startDate, ArrayList<Boolean> plan,
                  int progressNumerator, int progressDenominator) {
+        if (!hh.isLegalTitle(title)) {
+            throw new IllegalArgumentException("a habit title has up to 20 characters and cannot be empty");
+        } else if (!hh.isLegalReason(reason)) {
+            throw new IllegalArgumentException("a habit reason has up to 30 characters");
+        }
         this.title = title;
         this.reason = reason;
         this.startDate = startDate;
@@ -83,8 +100,13 @@ public class Habit implements Serializable, Comparable<Habit> {
     /**
      * Sets the {@link Habit#title} of this {@link Habit} object
      * @param title of type {@link String}
+     * @throws IllegalArgumentException
+     * This method can throw an {@link IllegalArgumentException}
+     * if the title {@link String} is empty or over 20 characters
      */
     public void setTitle(String title) {
+        if (!hh.isLegalTitle(title))
+            throw new IllegalArgumentException("a habit title has up to 20 characters and cannot be empty");
         this.title = title;
     }
 
@@ -99,8 +121,13 @@ public class Habit implements Serializable, Comparable<Habit> {
     /**
      * Sets the {@link Habit#reason} of this {@link Habit} object
      * @param reason of type {@link String}
+     * @throws IllegalArgumentException
+     * This method can throw an {@link IllegalArgumentException}
+     * if the reason {@link String} is over 30 characters
      */
     public void setReason(String reason) {
+        if (!hh.isLegalReason(reason))
+            throw new IllegalArgumentException("a habit reason has up to 30 characters");
         this.reason = reason;
     }
 

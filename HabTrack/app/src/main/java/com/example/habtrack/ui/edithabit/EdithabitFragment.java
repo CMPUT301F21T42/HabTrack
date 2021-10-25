@@ -1,3 +1,16 @@
+/** Copyright 2021
+ * Raunak Agarwal, Revanth Atmakuri, Mattheas Jamieson,
+ * Jenish Patel, Jasmine Wadhwa, Wendy Zhang
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * CMPUT301F21T42 Project: HabTrack <br>
+ * To help someone who wants to track their habits.
+ * The {@code EdithabitFragment} class
+ */
 package com.example.habtrack.ui.edithabit;
 
 import android.app.AlertDialog;
@@ -26,11 +39,16 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.example.habtrack.Habit;
+import com.example.habtrack.HabitHandler;
 import com.example.habtrack.R;
 import com.example.habtrack.databinding.FragmentEdithabitBinding;
 import com.example.habtrack.databinding.FragmentEventsBinding;
 import com.example.habtrack.ui.manage.ManageViewModel;
 
+/**
+ * This class is used to create a fragment that will enable the user to
+ * add/delete/edit and view their habit data
+ */
 public class EdithabitFragment extends DialogFragment {
 
     private EdithabitViewModel edithabitViewModel;
@@ -64,6 +82,11 @@ public class EdithabitFragment extends DialogFragment {
         }
     }
 
+    /**
+     * This function creates a new instance of the habit selected and displays it in the fragment.
+     * @param habit instance of the Habit class object selected by user.
+     * @return fragment with its data.
+     */
     public static EdithabitFragment newInstance(Habit habit) {
         Bundle args = new Bundle();
         args.putSerializable("habit", habit);
@@ -73,6 +96,15 @@ public class EdithabitFragment extends DialogFragment {
         return fragment;
     }
 
+    /**
+     * The function returns the calender date for the input date. But if there is
+     * parsing error in the date provided by the user then it returns null.
+     *
+     *
+     * @param date string in the form of dat
+     * @param inFormat Format to convert date from string format to date format.
+     * @return inputDate the date entered by user in calender format.
+     */
     private Calendar parseDate(String date, SimpleDateFormat inFormat) {
         Calendar inputDate = Calendar.getInstance();
         inFormat.setLenient(false);
@@ -85,6 +117,17 @@ public class EdithabitFragment extends DialogFragment {
         return inputDate;
     }
 
+    /**
+     *  Returns a dialog object when user clicks on an object of Habit.
+     *  <p>
+     *  This function open up a fragment and extracts the information of the specific habit
+     *  of the respective user.
+     *  </p>
+     *
+     * @param savedInstanceState instance of the habit bundle.
+     *
+     * @return
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -159,18 +202,24 @@ public class EdithabitFragment extends DialogFragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        HabitHandler hh = new HabitHandler();
+
+                        String t = title.getText().toString();
+                        String r = reason.getText().toString();
                         String dateInput = getString(R.string.date_formatter,
                                 year.getText().toString(), month.getText().toString(), day.getText().toString());
-                        if (parseDate(dateInput, inFormat) == null) {
+                        ArrayList<Boolean> p = new ArrayList<>();
+                        for (int i = 0; i < plan.size(); i++)
+                            p.add(plan.get(i).isChecked() ? true : false);
+
+                        if (!hh.isLegalTitle(t)) {
+                            Toast.makeText(getContext(), getString((R.string.error_message), "title"), Toast.LENGTH_SHORT).show();
+                        } else if (!hh.isLegalReason(r)) {
+                            Toast.makeText(getContext(), getString((R.string.error_message), "reason"), Toast.LENGTH_SHORT).show();
+                        } else if (!hh.isLegalStartDate(dateInput)) {
                             Toast.makeText(getContext(), getString((R.string.error_message), "date"), Toast.LENGTH_SHORT).show();
                         } else {
-                            String t = title.getText().toString();
-                            String r = reason.getText().toString();
                             Date startD = parseDate(dateInput, inFormat).getTime();
-                            ArrayList<Boolean> p = new ArrayList<>();
-                            for (int i = 0; i < plan.size(); i++)
-                                p.add(plan.get(i).isChecked() ? true : false);
-
                             listener.onOkPressed(new Habit(t, r, startD, p));
 
 //                            if (selectedHabit == null) {

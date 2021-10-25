@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.habtrack.HabitListAdapter;
 import com.example.habtrack.Habit;
 import com.example.habtrack.databinding.FragmentManageBinding;
 import com.example.habtrack.ui.edithabit.EdithabitFragment;

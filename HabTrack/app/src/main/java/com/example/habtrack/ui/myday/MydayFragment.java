@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -15,10 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.habtrack.Habit;
-import com.example.habtrack.MydayAdapter;
 import com.example.habtrack.OnItemClickListener;
 import com.example.habtrack.databinding.FragmentMydayBinding;
-import com.example.habtrack.ui.edithabit.EdithabitFragment;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -77,7 +74,8 @@ public class MydayFragment extends Fragment {
                     //Log.d(TAG, String.valueOf(doc.getData().get("Habit")));
                     Calendar today = Calendar.getInstance();
                     Habit habit = doc.toObject(Habit.class);
-                    if (habit.getPlan().get(today.get(Calendar.DAY_OF_WEEK) - 1))
+                    if (!habit.getStartDate().after(today.getTime()) &&
+                            habit.getPlan().get(today.get(Calendar.DAY_OF_WEEK) - 1))
                         dataList.add(habit); // Adding the habit from FireStore
                 }
                 mydayAdapter.notifyDataSetChanged();
