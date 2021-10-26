@@ -25,6 +25,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+/**
+ * The purpose of this class is to enable the user to view their habits
+ * and click on individual ones to edit them.
+ */
+
 public class ManageFragment extends Fragment {
 
     private ManageViewModel manageViewModel;
@@ -37,6 +42,25 @@ public class ManageFragment extends Fragment {
     FirebaseFirestore db;
     final String TAG = "Sample";
 
+    /**
+     *
+     * <p>
+     *     The purpose of this View is for the user to be able to see the home page
+     *     which contains a list of all of their habits.
+     * </p>
+     * <p>
+     *     This method extracts the information of the user from the database to
+     *     display it on the home screen.
+     * </p>
+     * <p>
+     *     It also creates the onClickListeners for each item in the list so as
+     *     the user can click on it to edit it. This is done using fragments.
+     * </p>
+     * @param inflater Layout for the entire page
+     * @param container Container to keep all the data
+     * @param savedInstanceState Saved user data
+     * @return View that enables the user to look at all their Habits.
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         manageViewModel =
