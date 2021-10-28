@@ -1,3 +1,16 @@
+/** Copyright 2021
+ * Raunak Agarwal, Revanth Atmakuri, Mattheas Jamieson,
+ * Jenish Patel, Jasmine Wadhwa, Wendy Zhang
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * CMPUT301F21T42 Project: HabTrack <br>
+ * To help someone who wants to track their habits.
+ * The {@code MydayFragment} class
+ */
 package com.example.habtrack.ui.myday;
 
 import android.os.Bundle;
@@ -32,6 +45,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * This class enables the user to view their habits for the day
+ * and also check them off, once they are completed.
+ */
 public class MydayFragment extends Fragment {
 
     private MydayViewModel mydayViewModel;
@@ -43,7 +60,22 @@ public class MydayFragment extends Fragment {
 
     FirebaseDatabase db;
     final String TAG = "Sample";
-
+    
+    /**
+     *<p>
+     *     This method creates a view which has the list of all the habits that the
+     *     user is supposed to follow today.
+     *</p>
+     * <p>
+     *     There is an additional checkbox along with the list items. It gets ticked
+     *     when the user clicks on it, after completing a habit.
+     * </p>
+     *
+     * @param inflater Layout for the screen.
+     * @param container Container to keep the data in.
+     * @param savedInstanceState Load the saved data of the user.
+     * @return View of the page for managing today's habits.
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mydayViewModel =
@@ -119,7 +151,13 @@ public class MydayFragment extends Fragment {
 
         return root;
     }
-
+    
+    /**
+     * Returns the Calender object with the new time set.
+     *
+     * @param date date entered by user
+     * @return Calender static object with a new time set by this function.
+     */
     public static Calendar toCalendar(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
