@@ -116,7 +116,10 @@ public class UpdateAccountActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     progressBar.setVisibility(View.GONE);
                 } else {
-                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                    updateEmail.setError(task.getException().getMessage());
+                    updateEmail.requestFocus();
+                    return;
                 }
             }
         });
@@ -129,7 +132,10 @@ public class UpdateAccountActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                     startActivity(new Intent(context, UserProfileActivity.class));
                 } else {
-                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                    updateUserName.setError(task.getException().getMessage());
+                    updateUserName.requestFocus();
+                    return;
                 }
             }
         });
@@ -149,6 +155,7 @@ public class UpdateAccountActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     startActivity(new Intent(context, MainActivity.class));
                                 } else {
+                                    progressBar.setVisibility(View.GONE);
                                     Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             }
@@ -157,10 +164,11 @@ public class UpdateAccountActivity extends AppCompatActivity {
                         updateAccountHandler.deleteAccountFromAuthentication().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
+                                    progressBar.setVisibility(View.GONE);
                                     startActivity(new Intent(context, MainActivity.class));
                                 } else {
+                                    progressBar.setVisibility(View.GONE);
                                     Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             }
