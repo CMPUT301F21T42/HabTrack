@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HabTrack">
         <activity
+            android:name=".UserLoginStatusActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".UpdateAccountActivity"
             android:exported="true" />
         <activity
@@ -26,11 +35,6 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
