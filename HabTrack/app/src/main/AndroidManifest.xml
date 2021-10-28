@@ -10,10 +10,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HabTrack">
         <activity
+            android:name=".UpdateAccountActivity"
+            android:exported="true" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.HabTrack.NoActionBar">
+            android:theme="@style/Theme.HabTrack.NoActionBar" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -21,6 +21,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.habtrack.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
-    FirebaseFirestore db;
+    FirebaseDatabase db;
     final String TAG = "Sample";
 
     @Override
@@ -90,14 +92,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onOkPressed(Habit newHabit) {
-        db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Habits");
+        db = FirebaseDatabase.getInstance();
         final String habitTitle = newHabit.getTitle();
 
         if (newHabit.getTitle().length() > 0) {
-            collectionReference
-                    .document(habitTitle)
-                    .set(newHabit)
+            db.getReference("Users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child("habit")
+                    .child(habitTitle)
+                    .setValue(newHabit)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -115,6 +118,30 @@ public class MainActivity extends AppCompatActivity
                         }
                     });
         }
+//        final CollectionReference collectionReference = db.collection("Habits");
+//        final String habitTitle = newHabit.getTitle();
+//
+//        if (newHabit.getTitle().length() > 0) {
+//            collectionReference
+//                    .document(habitTitle)
+//                    .set(newHabit)
+//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void aVoid) {
+//                            // These are a method which gets executed when the task is succeeded
+//                            Log.d(TAG, "Data has been added successfully!");
+//                            //Toast.makeText(getApplicationContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            // These are a method which gets executed if there’s any problem
+//                            Log.d(TAG, "Data could not be added!" + e.toString());
+//                            Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//        }
     }
 
     @Override
@@ -123,13 +150,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onDeletePressed(Habit selectedHabit) {
-        db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Habits");
+//        db = FirebaseFirestore.getInstance();
+//        final CollectionReference collectionReference = db.collection("Habits");
+
+        db = FirebaseDatabase.getInstance();
         String title = selectedHabit.getTitle();
 
-        collectionReference
-                .document(title)
-                .delete()
+        db.getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("habit")
+                .child(title)
+                .removeValue()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

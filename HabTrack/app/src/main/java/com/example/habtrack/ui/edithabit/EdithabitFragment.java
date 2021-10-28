@@ -71,7 +71,6 @@ public class EdithabitFragment extends DialogFragment {
     }
 
     /* Boilerplate code */
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -121,18 +120,13 @@ public class EdithabitFragment extends DialogFragment {
     /**
      *  Returns a dialog object when user clicks on an object of Habit.
      *  <p>
-     *  This function opens up a fragment, extracts the information of the specific habit
-     *  of the respective user and displays it to the user for editing, deleting or just viewing
-     *  the habit and its attributes.
-     *  </p>
-     *  <p>
-     *      The user can edit the edit all the attributes of the habit on the same fragment
-     *      by clicking on the specific field to edit.
+     *  This function open up a fragment and extracts the information of the specific habit
+     *  of the respective user.
      *  </p>
      *
      * @param savedInstanceState instance of the habit bundle.
      *
-     * @return Dialog object
+     * @return
      */
     @NonNull
     @Override

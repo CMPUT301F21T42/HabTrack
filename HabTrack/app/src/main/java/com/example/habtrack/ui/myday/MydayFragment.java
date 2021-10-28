@@ -16,6 +16,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.habtrack.Habit;
 import com.example.habtrack.OnItemClickListener;
 import com.example.habtrack.databinding.FragmentMydayBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,10 +32,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * This class enables the user to view their habits for the day
- * and also check them off, once they are completed.
- */
 public class MydayFragment extends Fragment {
 
     private MydayViewModel mydayViewModel;
@@ -40,24 +41,8 @@ public class MydayFragment extends Fragment {
     ArrayList<Habit> dataList;
     ArrayAdapter<Habit> mydayAdapter;
 
-    FirebaseFirestore db;
+    FirebaseDatabase db;
     final String TAG = "Sample";
-
-    /**
-     *<p>
-     *     This method creates a view which has the list of all the habits that the
-     *     user is supposed to follow today.
-     *</p>
-     * <p>
-     *     There is an additional checkbox along with the list items. It gets ticked
-     *     when the user clicks on it, after completing a habit.
-     * </p>
-     *
-     * @param inflater Layout for the screen.
-     * @param container Container to keep the data in.
-     * @param savedInstanceState Load the saved data of the user.
-     * @return View of the page for managing today's habits.
-     */
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -81,26 +66,50 @@ public class MydayFragment extends Fragment {
         mydayAdapter = new MydayAdapter(getContext(), dataList, listener);
         mydayList.setAdapter(mydayAdapter);
 
-        db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Habits");
+        db = FirebaseDatabase.getInstance();
+        db.getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("habit")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        dataList.clear();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Calendar today = Calendar.getInstance();
+                            Habit habit = snapshot.getValue(Habit.class);
+                            if (!habit.getStartDate().after(today.getTime()) &&
+                                    habit.getPlan().get(today.get(Calendar.DAY_OF_WEEK) - 1))
+                                dataList.add(habit); // Adding the habit from FireStore
+                        }
+                        mydayAdapter.notifyDataSetChanged();
+                    }
 
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
-                    FirebaseFirestoreException error) {
-                dataList.clear();
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
-                {
-                    //Log.d(TAG, String.valueOf(doc.getData().get("Habit")));
-                    Calendar today = Calendar.getInstance();
-                    Habit habit = doc.toObject(Habit.class);
-                    if (!habit.getStartDate().after(today.getTime()) &&
-                            habit.getPlan().get(today.get(Calendar.DAY_OF_WEEK) - 1))
-                        dataList.add(habit); // Adding the habit from FireStore
-                }
-                mydayAdapter.notifyDataSetChanged();
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+//        db = FirebaseFirestore.getInstance();
+//        final CollectionReference collectionReference = db.collection("Habits");
+//
+//        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
+//                    FirebaseFirestoreException error) {
+//                dataList.clear();
+//                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
+//                {
+//                    //Log.d(TAG, String.valueOf(doc.getData().get("Habit")));
+//                    Calendar today = Calendar.getInstance();
+//                    Habit habit = doc.toObject(Habit.class);
+//                    if (!habit.getStartDate().after(today.getTime()) &&
+//                            habit.getPlan().get(today.get(Calendar.DAY_OF_WEEK) - 1))
+//                        dataList.add(habit); // Adding the habit from FireStore
+//                }
+//                mydayAdapter.notifyDataSetChanged();
+//            }
+//        });
 
 //        mydayList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -111,12 +120,6 @@ public class MydayFragment extends Fragment {
         return root;
     }
 
-    /**
-     * Returns the Calender object with the new time set.
-     *
-     * @param date date entered by user
-     * @return Calender static object with a new time set by this function.
-     */
     public static Calendar toCalendar(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
