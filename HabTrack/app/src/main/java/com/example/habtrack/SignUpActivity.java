@@ -74,7 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
      * the ID's of different views and sets up listening events for the user to touch the
      * screen/ buttons.
      *
-     * @param savedInstanceState state of application.
+     * @param  savedInstanceState state of application.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,3 +1,23 @@
+/*
+ * UserProfileActivity
+ *
+ * This source file UserProfileActivity.java serves as the the user profile screen of the app.
+ * It contains listening events for button components in the .xml layout if the user wants to
+ * logout or update their account, and will then switch to MainActivity or UpdateAccountActivity
+ * respectively. This activity also accesses the FireBase database to retrieve current username
+ * and email to display. When this activity is opened it will check for any change in the user's
+ * info, e.g the user has just updated their account username and/or password and will update
+ * the display appropriately.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * October 27, 2021
+ *
+ * Copyright notice
+ */
+
 package com.example.habtrack;
 
 import android.content.Context;
@@ -21,6 +41,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * UserProfileActivity centers around the user profile of the HabTrack application. This class
+ * contains onClick button listening events for the "logout" and "update account" buttons. And
+ * lastly when the activity is created the class will ensure the username and email displayed
+ * are the most up to date version.
+ *
+ * @author Jenish
+ * @see MainActivity
+ * @see UpdateAccountActivity
+ * @version 1.0
+ * @since 1.0
+ */
 public class UserProfileActivity extends AppCompatActivity {
 
     Context context = this;
@@ -40,6 +72,15 @@ public class UserProfileActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     String userID;
 
+    /**
+     * onCreate() method is called when the screen of the application is changed to the
+     * user profile. It finds the views of all components defined in the xml file. It will
+     * also retrieve username and email of the current user from the DB to display.
+     * Button listening events are also present that changes the state/ screen of
+     * dependent on how the user interacts with the screen.
+     *
+     * @param  savedInstanceState state of application.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

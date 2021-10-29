@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f753262e-7641-4f6a-8f86-eae3154d74c5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/CredentialVerifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/CredentialVerifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/LoginHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/LoginHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/SignUpActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/SignUpActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/SignUpHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/SignUpHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/UserProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/HabTrack/app/src/main/java/com/example/habtrack/UserProfileActivity.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

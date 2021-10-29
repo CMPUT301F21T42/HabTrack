@@ -5,7 +5,7 @@
  * a login/ signup page along with its Buttons, progressBar, editText, etc. It waits for user
  * input, i.e signup or login and then acts on the information/ action provided to either
  * start a new activity (SignUpActivity or UserProfileActivity) or remain on the current activity
- * and reprompt user to enter valid information.
+ * and re-prompt user to enter valid information.
  *
  * No known outstanding issues.
  *
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity
      * events for when the user touches the screen/ button. It can be thought of in some sense
      * as a constructor for the class.
      *
-     * @param savedInstanceState state of application.
+     * @param  savedInstanceState state of application.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
