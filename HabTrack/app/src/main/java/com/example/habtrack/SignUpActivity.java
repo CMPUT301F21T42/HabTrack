@@ -115,12 +115,15 @@ public class SignUpActivity extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                                 startActivity(new Intent(context, MainActivity.class));
                             } else {
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
                     });
                 } else {
-                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                    newEmail.setError(task.getException().getMessage());
+                    newEmail.requestFocus();
                 }
             }
         });
