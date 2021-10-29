@@ -74,7 +74,6 @@ public class SignUpHandler {
      *
      * @return task     Returns a task object containing information about the status of the
      *                  database access.
-     *
      */
     public Task<AuthResult> register() {
         Task<AuthResult> task = mAuth.createUserWithEmailAndPassword(email, password);
