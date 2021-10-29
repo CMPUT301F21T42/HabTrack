@@ -1,3 +1,24 @@
+/*
+ * SignUpActivity
+ *
+ * This source file SignUpActivity.java serves as certain state/ screen of the application that
+ * handles the case of when a user attempts to create a profile. It centers around a signup page
+ * that contains EditTexts where a user enters information from email to password, as well as
+ * a Button for when they are ready to submit or want to return to the login page (MainActivity).
+ * Textviews are present to help guide the user & the page has a progress bar too. If the user
+ * presses the sign up button and attempts to register themselves. If registration is successful
+ * then the application returns to the MainActivity. Else it will notify the user about
+ * invalid inputs.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * October 27, 2021
+ *
+ * Copyright notice
+ */
+
 package com.example.habtrack;
 
 import android.content.Context;
@@ -17,6 +38,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
+/**
+ * SignUpActivity is the starting activity of the HabTrack Application. This class contains onClick
+ * button listening events for the "login" and "signup" button. It also contains method calls
+ * to verify user inputs of email and password if the user attempts to login. And lastly it
+ * contains an instance of the LoginHandler in case of an attempted login with potentially valid
+ * credentials. Depending on the user inputs/ actions a UserProfileActivity or SignUpActivity
+ * activity may be started.
+ *
+ * @author Jenish
+ * @see MainActivity
+ * @see CredentialVerifier
+ * @see SignUpHandler
+ * @version 1.0
+ * @since 1.0
+ */
 public class SignUpActivity extends AppCompatActivity {
 
     final Context context = this;
@@ -33,6 +69,13 @@ public class SignUpActivity extends AppCompatActivity {
 
     Button confirmSignUp;
 
+    /**
+     * onCreate() is called when Activity is created (similar to a constructor) and it finds
+     * the ID's of different views and sets up listening events for the user to touch the
+     * screen/ buttons.
+     *
+     * @param savedInstanceState state of application.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +115,12 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Reads user input for username, email, password & confirmed password then checks the
+     * validity of inputs, setting appropriate error messages and snapping cursor to
+     * appropriate EditText if any are invalid. Then attempts to add user profile to database
+     * and returns to MainActivity if successful.
+     */
     private void registerUser() {
         String userName = newUserName.getText().toString().trim();
         String email = newEmail.getText().toString().trim();

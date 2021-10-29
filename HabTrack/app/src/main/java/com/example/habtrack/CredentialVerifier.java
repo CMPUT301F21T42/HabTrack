@@ -1,3 +1,22 @@
+/*
+ * CredentialVerifier
+ *
+ * This source file CredentialVerifier.java serves as a object that receives user input
+ * that includes username, password & email and proceeds to check if it meets the criteria
+ * to be considered valid. If a certain input is valid the method called simply returns
+ * true, if the input fails a class variable String FailureMessage is updated depending on
+ * why the input failed. It should also be noted all attributes and methods are declared
+ * static, so this class is never instantiated.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * October 27, 2021
+ *
+ * Copyright notice
+ */
+
 package com.example.habtrack;
 
 import android.util.Patterns;
