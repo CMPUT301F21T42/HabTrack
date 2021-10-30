@@ -50,5 +50,4 @@ public class UserInfoTest {
         user.setPassword("password2");
         assertEquals("password2", user.getPassword());
     }
-
 }

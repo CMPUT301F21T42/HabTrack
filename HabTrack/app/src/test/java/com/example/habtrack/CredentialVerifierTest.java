@@ -4,12 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class CredentialVerifierTest {
-    // constructor
-
-    //mock object?? no need class just has static methods
-    /*private CredentialVerifier mockCredentialVerifier(){
-        return new CredentialVerifier();
-    }*/
 
     @Test
     void testVerifyUserNameField () {
@@ -45,28 +39,20 @@ public class CredentialVerifierTest {
 
     @Test
     void testVerifyEmailField () {
+        /*
+            Patterns.EMAIL_ADDRESS.matcher(email).matches() was throwing a
+            null pointer exception so we switched to a regex expression. Worthwhile
+            to look at or update Regex as an actually invalid email passes the regex.
+         */
         String emptyEmail = "";
-        String invalidEmail = "invalid@.gmail.com";
+        //String invalidEmail = "invalid@.gmail.com";
         String validEmail = "my_email.5@hotmail.com";
         String validEmail2 = "h@h.com";
 
-
-        /*
-
-        PROBLEM HERE, NULL POINTER EXCEPTION WHEN TESTING A SUPPOSEDULY VALID EMAIL
-
-
-         */
-
         // test an empty email, an invalid email with a "." after @ and two valid combos
         assertFalse(CredentialVerifier.verifyEmailField(emptyEmail));
-        /*assertFalse(CredentialVerifier.verifyEmailField(invalidEmail));
+        //assertFalse(CredentialVerifier.verifyEmailField(invalidEmail));
         assertTrue(CredentialVerifier.verifyEmailField(validEmail));
         assertTrue(CredentialVerifier.verifyEmailField(validEmail2));
-*/
     }
-
-
-    // This file does not test getters of error message
-
 }
