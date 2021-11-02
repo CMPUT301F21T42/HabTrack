@@ -26,7 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
  * and FireStore DB when an attempt to sign up is made.
  *
  * @author Jenish
- * @see userInfo
+ * @see UserInfo
  * @see SignUpActivity
  * @version 1.0
  * @since 1.0

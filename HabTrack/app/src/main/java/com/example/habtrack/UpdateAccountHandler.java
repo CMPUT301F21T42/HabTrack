@@ -82,7 +82,7 @@ public class UpdateAccountHandler {
      * This method attempts to update a email for the current user in the DB. It returns a task
      * object that contains info about the DB interaction and if it was successful or not.
      *
-     * @param userName  A {@link String} that represents a new email that the user
+     * @param email  A {@link String} that represents a new email that the user
      *                  wants associated with their account, replacing the current email.
      * @return task     Returns a task object containing information about the status of the
      *                  database access.

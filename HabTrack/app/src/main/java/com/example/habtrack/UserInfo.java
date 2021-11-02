@@ -89,7 +89,7 @@ public class UserInfo {
     /**
      * This method sets the email of a given object to the provided email.
      *
-     * @param userName  Takes input of userName of type {@link String}.
+     * @param email  Takes input of userName of type {@link String}.
      */
     public void setEmail(String email) {
         this.email = email;
@@ -107,7 +107,7 @@ public class UserInfo {
     /**
      * This method sets the password of a given object to the provided password.
      *
-     * @param userName  Takes input of userName of type {@link String}.
+     * @param password  Takes input of userName of type {@link String}.
      */
     public void setPassword(String password) {
         this.password = password;
