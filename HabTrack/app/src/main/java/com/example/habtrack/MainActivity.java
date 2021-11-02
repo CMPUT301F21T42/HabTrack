@@ -48,12 +48,11 @@ import java.util.HashMap;
 import com.example.habtrack.ui.edithabit.EdithabitFragment;
 
 /**
- * MainActivty is the starting activity of the HabTrack Application. This class contains onClick
- * button listening events for the "login" and "signup" button. It also contains method calls
- * to verify user inputs of email and password if the user attempts to login. And lastly it
- * contains an instance of the LoginHandler in case of an attempted login with potentially valid
- * credentials. Depending on the user inputs/ actions a UserProfileActivity or SignUpActivity
- * activity may be started.
+ * This class contains onClick button listening events for the "login" and "signup" button. It also
+ * contains method calls to verify user inputs of email and password if the user attempts to login.
+ * And lastly it contains an instance of the LoginHandler in case of an attempted login with
+ * potentially valid credentials. Depending on the user inputs/ actions a UserProfileActivity or
+ * SignUpActivity activity may be started.
  *
  * @author Jenish
  * @see UserProfileActivity
