@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
 //                    startActivity(new Intent(context, UserProfileActivity.class));
                     startActivity(new Intent(context, MainActivity.class));
+                    finish();
                 } else {
                     progressBar.setVisibility(View.GONE);
                     loginEmail.setError(task.getException().getMessage());
