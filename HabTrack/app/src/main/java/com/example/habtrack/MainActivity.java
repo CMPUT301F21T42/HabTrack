@@ -28,12 +28,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import com.example.habtrack.ui.edithabit.EdithabitFragment;
+import com.example.habtrack.ui.edithabit.AddhabitFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        EdithabitFragment.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new EdithabitFragment().show(getSupportFragmentManager(), "ADD_HABIT");
+                new AddhabitFragment().show(getSupportFragmentManager(), "ADD_HABIT");
             }
         });
 
@@ -103,92 +101,5 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
         return true;
-    }
-
-    @Override
-    public void onOkPressed(Habit newHabit) {
-        db = FirebaseDatabase.getInstance();
-        final String habitTitle = newHabit.getTitle();
-
-        if (newHabit.getTitle().length() > 0) {
-            db.getReference("Users")
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .child("habit")
-                    .child(habitTitle)
-                    .setValue(newHabit)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            // These are a method which gets executed when the task is succeeded
-                            Log.d(TAG, "Data has been added successfully!");
-                            //Toast.makeText(getApplicationContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // These are a method which gets executed if there’s any problem
-                            Log.d(TAG, "Data could not be added!" + e.toString());
-                            Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
-//        final CollectionReference collectionReference = db.collection("Habits");
-//        final String habitTitle = newHabit.getTitle();
-//
-//        if (newHabit.getTitle().length() > 0) {
-//            collectionReference
-//                    .document(habitTitle)
-//                    .set(newHabit)
-//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                        @Override
-//                        public void onSuccess(Void aVoid) {
-//                            // These are a method which gets executed when the task is succeeded
-//                            Log.d(TAG, "Data has been added successfully!");
-//                            //Toast.makeText(getApplicationContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            // These are a method which gets executed if there’s any problem
-//                            Log.d(TAG, "Data could not be added!" + e.toString());
-//                            Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//        }
-    }
-
-    @Override
-    public void onOkPressed(Habit selectedHabit, Habit newHabit) {
-    }
-
-    @Override
-    public void onDeletePressed(Habit selectedHabit) {
-//        db = FirebaseFirestore.getInstance();
-//        final CollectionReference collectionReference = db.collection("Habits");
-
-        db = FirebaseDatabase.getInstance();
-        String title = selectedHabit.getTitle();
-
-        db.getReference("Users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("habit")
-                .child(title)
-                .removeValue()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // These are a method which gets executed when the task is succeeded
-                        Log.d(TAG, "Data has been deleted successfully!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // These are a method which gets executed if there’s any problem
-                        Log.d(TAG, "Data could not be deleted!" + e.toString());
-                    }
-                });
     }
 }

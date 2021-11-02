@@ -22,6 +22,7 @@
     <string name="year_format">yyyy</string>
     <string name="month_format">MM</string>
     <string name="day_format">dd</string>
+    <string name="date_display">"Date started: %1$s</string>
     <string name="error_message">Invalid %1$s entry: please try again.</string>
 
 </resources>

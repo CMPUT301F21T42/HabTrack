@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.edithabit.EdithabitFragment" >
+    tools:context=".ui.edithabit.AddhabitFragment" >
 
     <EditText
         android:id="@+id/title_editText"
@@ -30,12 +30,52 @@
         android:hint="Reason"
         android:inputType="textPersonName" />
 
-    <TextView
-        android:id="@+id/date_textView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:text="date" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/date_prompt" />
+
+        <EditText
+            android:id="@+id/year_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxEms="4"
+            android:maxLength="4"
+            android:hint="@string/year_format"
+            android:inputType="number" />
+        <TextView
+            android:id="@+id/dash1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dash" />
+        <EditText
+            android:id="@+id/month_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="2"
+            android:maxLength="2"
+            android:hint="@string/month_format"
+            android:inputType="number" />
+        <TextView
+            android:id="@+id/dash2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dash" />
+        <EditText
+            android:id="@+id/day_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="2"
+            android:maxLength="2"
+            android:hint="@string/day_format"
+            android:inputType="number" />
+    </LinearLayout>
 
     <Switch
         android:id="@+id/ispublic_switch"

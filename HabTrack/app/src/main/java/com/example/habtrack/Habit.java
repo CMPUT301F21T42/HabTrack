@@ -1,6 +1,4 @@
-/** Copyright 2021
- * Raunak Agarwal, Revanth Atmakuri, Mattheas Jamieson,
- * Jenish Patel, Jasmine Wadhwa, Wendy Zhang
+/** Copyright 2021 Wendy Zhang
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,18 +21,74 @@ import java.util.Date;
  */
 public class Habit implements Serializable, Comparable<Habit> {
     private HabitHandler hh = new HabitHandler();
+
+    /**
+     * This variable contains a unique identifier for this {@link Habit} object.
+     * It is generated at the time of construction and cannot be edited.
+     * This variable is of type {@link String}.
+     */
+    private String id;
+
+    /**
+     * This variable is an indicator for whether the {@link Habit} object
+     * is public or not (private).
+     * This variable is of type boolean.
+     */
+    private boolean isPublic;
+
+    /**
+     * This variable contains the title for this {@link Habit} object.
+     * This variable is of type {@link String} with up to 20 characters.
+     */
     private String title;
+
+
+    /**
+     * This variable contains the reason for this {@link Habit} object.
+     * This variable is of type {@link String} with up to 30 characters.
+     */
     private String reason;
+
+    /**
+     * This variable contains the start date for this {@link Habit} object.
+     * This variable is of type {@link Date}.
+     */
     private Date startDate;
+
+    /**
+     * This variable contains a plan for what days of the week
+     * it should regularly occur. [US 01.02.01]
+     * The ArrayList index indicates days of a week
+     * 0 : SUN; 1 : MON; 2 : TUE; 3 : WED; 4 : THU; 5 : FRI; 6 : SAT
+     * The value at a specific index is {@link Boolean#TRUE} if the habit is planned for the day;
+     * {@link Boolean#FALSE} otherwise.
+     * This variable if of type {@link ArrayList}.
+     */
     private ArrayList<Boolean> plan;
+
+    /**
+     * This variable contains a indicator (percentage of event over total scheduled occurrences)
+     * to show how closely the user is following its plan over time.
+     * This variable is of type int.
+     */
     private int progress;
+
+    /**
+     * This variable contains the count of events completed.
+     * This variable is of type int.
+     */
     private int progressNumerator;
+
+    /**
+     * This variable contains the count of total scheduled occurrences of this {@link Habit}.
+     * This variable is of type int.
+     */
     private int progressDenominator;
 
     public Habit() {}
 
     /**
-     * Constructs a habit object with the given title, reason, startDate and plan
+     * Constructs a {@link Habit} object with the given title, reason, startDate and plan
      * @param title a {@link String} with up to 20 characters
      * @param reason a {@link String} with up to 30 characters
      * @param startDate the {@link Date} to start the habit
@@ -44,7 +98,7 @@ public class Habit implements Serializable, Comparable<Habit> {
      * This constructor can throw an {@link IllegalArgumentException}
      * if the title {@link String} or the reason {@link String} is illegal
      */
-    public Habit(String title, String reason, Date startDate, ArrayList<Boolean> plan) {
+    public Habit(String title, String reason, Date startDate, ArrayList<Boolean> plan, boolean isPublic) {
         if (!hh.isLegalTitle(title)) {
             throw new IllegalArgumentException("a habit title has up to 20 characters and cannot be empty");
         } else if (!hh.isLegalReason(reason)) {
@@ -54,39 +108,19 @@ public class Habit implements Serializable, Comparable<Habit> {
         this.reason = reason;
         this.startDate = startDate;
         this.plan = plan;
+        this.isPublic = isPublic;
         this.progress = 0;
         this.progressNumerator = 0;
         this.progressDenominator = 0;
+        this.id = Calendar.getInstance().getTime().toString();
     }
 
     /**
-     * Constructs a habit object with the given title, reason, startDate,
-     * plan, progressNumerator and progressDenominator
-     * @param title a {@link String} with up to 20 characters
-     * @param reason a {@link String} with up to 30 characters
-     * @param startDate the {@link Date} to start the habit
-     * @param plan the {@link ArrayList} that stores {@link Boolean} values
-     *             on weekly occurrence of the habit
-     * @param progressNumerator counter for the number of events
-     * @param progressDenominator counter for the total number of habit planned
-     * @throws IllegalArgumentException
-     * This constructor can throw an {@link IllegalArgumentException}
-     * if the title {@link String} or the reason {@link String} is illegal
+     * Returns the {@link Habit#id} of this {@link Habit} object
+     * @return id of type {@link String}
      */
-    public Habit(String title, String reason, Date startDate, ArrayList<Boolean> plan,
-                 int progressNumerator, int progressDenominator) {
-        if (!hh.isLegalTitle(title)) {
-            throw new IllegalArgumentException("a habit title has up to 20 characters and cannot be empty");
-        } else if (!hh.isLegalReason(reason)) {
-            throw new IllegalArgumentException("a habit reason has up to 30 characters");
-        }
-        this.title = title;
-        this.reason = reason;
-        this.startDate = startDate;
-        this.plan = plan;
-        this.progress = progressNumerator / progressDenominator;
-        this.progressNumerator = progressNumerator;
-        this.progressDenominator = progressDenominator;
+    public String getId() {
+        return id;
     }
 
     /**
@@ -145,6 +179,22 @@ public class Habit implements Serializable, Comparable<Habit> {
      */
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
+    }
+
+    /**
+     * Returns the {@link Habit#isPublic} of this {@link Habit} object
+     * @return true if public, false otherwise
+     */
+    public boolean getIsPublic() {
+        return isPublic;
+    }
+
+    /**
+     * Sets the {@link Habit#isPublic} of this {@link Habit} object
+     * @param isPublic true if public, false otherwise
+     */
+    public void setIsPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     /**
