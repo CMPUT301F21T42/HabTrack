@@ -1,6 +1,4 @@
-/** Copyright 2021
- * Raunak Agarwal, Revanth Atmakuri, Mattheas Jamieson,
- * Jenish Patel, Jasmine Wadhwa, Wendy Zhang
+/** Copyright 2021 Raunak Agarwal, Wendy Zhang
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -158,7 +156,7 @@ public class MydayFragment extends Fragment {
      * @param date date entered by user
      * @return Calender static object with a new time set by this function.
      */
-    public static Calendar toCalendar(Date date) {
+    private static Calendar toCalendar(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal;
