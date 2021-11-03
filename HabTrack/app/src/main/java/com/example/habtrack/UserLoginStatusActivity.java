@@ -26,5 +26,7 @@ public class UserLoginStatusActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(context, LoginActivity.class));
         }
+        finish();
     }
+
 }

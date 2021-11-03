@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity
         if (item.getItemId() == R.id.nav_profile) {
             Intent intent = new Intent(this, UserProfileActivity.class);
             startActivity(intent);
+            finish();
         }
         return true;
     }

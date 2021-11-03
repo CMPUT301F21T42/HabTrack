@@ -77,9 +77,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     progressBar.setVisibility(View.GONE);
-//                    startActivity(new Intent(context, UserProfileActivity.class));
-                    startActivity(new Intent(context, MainActivity.class));
-                    finish();
+                    goToMainActivity();
                 } else {
                     progressBar.setVisibility(View.GONE);
                     loginEmail.setError(task.getException().getMessage());
@@ -88,6 +86,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    public void goToMainActivity() {
+        startActivity(new Intent(context, MainActivity.class));
+        finish();
     }
 }
