@@ -39,18 +39,16 @@ import java.util.ArrayList;
  */
 
 public class ManageFragment extends Fragment {
+    final String TAG = "Sample";
 
-    private ManageViewModel manageViewModel;
+//    private ManageViewModel manageViewModel;
     private FragmentManageBinding binding;
     private FirestoreManager firestoreManager;
 
-    RecyclerView habitList;
-    ArrayList<Habit> dataList;
-    RecyclerView.Adapter<ItemViewHolder> habitAdapter;
+    private RecyclerView habitList;
+    private ArrayList<Habit> dataList;
+    private RecyclerView.Adapter<ItemViewHolder> habitAdapter;
 
-    FirebaseDatabase db;
-    final String TAG = "Sample";
-    
     /**
      *
      * <p>
@@ -70,10 +68,11 @@ public class ManageFragment extends Fragment {
      * @param savedInstanceState Saved user data
      * @return View that enables the user to look at all their Habits.
      */
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        manageViewModel =
-                new ViewModelProvider(this).get(ManageViewModel.class);
+//        manageViewModel =
+//                new ViewModelProvider(this).get(ManageViewModel.class);
 
         binding = FragmentManageBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

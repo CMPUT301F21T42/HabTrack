@@ -48,16 +48,16 @@ import java.util.Date;
  * and also check them off, once they are completed.
  */
 public class MydayFragment extends Fragment {
+    final String TAG = "Sample";
 
-    private MydayViewModel mydayViewModel;
+//    private MydayViewModel mydayViewModel;
     private FragmentMydayBinding binding;
 
-    ListView mydayList;
-    ArrayList<Habit> dataList;
-    ArrayAdapter<Habit> mydayAdapter;
+    private ListView mydayList;
+    private ArrayList<Habit> dataList;
+    private ArrayAdapter<Habit> mydayAdapter;
 
     FirebaseFirestore db;
-    final String TAG = "Sample";
     
     /**
      *<p>
@@ -74,10 +74,11 @@ public class MydayFragment extends Fragment {
      * @param savedInstanceState Load the saved data of the user.
      * @return View of the page for managing today's habits.
      */
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mydayViewModel =
-                new ViewModelProvider(this).get(MydayViewModel.class);
+//        mydayViewModel =
+//                new ViewModelProvider(this).get(MydayViewModel.class);
 
         binding = FragmentMydayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -127,18 +128,6 @@ public class MydayFragment extends Fragment {
 //        });
 
         return root;
-    }
-    
-    /**
-     * Returns the Calender object with the new time set.
-     *
-     * @param date date entered by user
-     * @return Calender static object with a new time set by this function.
-     */
-    private static Calendar toCalendar(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal;
     }
 
     @Override

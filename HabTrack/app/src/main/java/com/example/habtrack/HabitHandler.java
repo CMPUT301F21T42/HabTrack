@@ -25,30 +25,29 @@ public class HabitHandler {
     /**
      * Checks whether the given {@link String} is a legal attribute for {@link Habit} title
      * @param title the title {@link String}
-     * @return {@link Boolean#TRUE} if the {@link String} argument has up to 20 characters and is not empty;
-     * {@link Boolean#FALSE} otherwise
+     * @return true if the {@link String} argument has up to 20 characters and is not empty;
+     * false otherwise
      */
-    public Boolean isLegalTitle(String title) {
+    public boolean isLegalTitle(String title) {
         return title.trim().length() > 0 && title.trim().length() <= 20;
     }
 
     /**
      * Checks whether the given {@link String} is a legal attribute for {@link Habit} reason
      * @param reason the reason {@link String}
-     * @return {@link Boolean#TRUE} if the {@link String} argument has up to 30 characters;
-     * {@link Boolean#FALSE} otherwise
+     * @return true if the {@link String} argument has up to 30 characters;
+     * false otherwise
      */
-    public Boolean isLegalReason(String reason) {
+    public boolean isLegalReason(String reason) {
         return reason.trim().length() <= 30;
     }
 
     /**
      * Checks whether the given {@link String} can be parsed into a valid Date object
      * @param date the date {@link String}
-     * @return {@link Boolean#TRUE} if the {@link String} argument can be parsed;
-     * {@link Boolean#FALSE} otherwise
+     * @return true if the {@link String} argument can be parsed; false otherwise
      */
-    public Boolean isLegalStartDate(String date) {
+    public boolean isLegalStartDate(String date) {
         SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar inputDate = Calendar.getInstance();
         inFormat.setLenient(false);

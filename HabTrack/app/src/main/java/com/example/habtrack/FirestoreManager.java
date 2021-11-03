@@ -286,7 +286,7 @@ public class FirestoreManager {
      * Initializes the user defined preference ranking (habit order)
      * Pull data from firestore to fill {@link FirestoreManager#preference}
      */
-    public void initRanking() {
+    private void initRanking() {
         final CollectionReference collectionReference
                 = db.collection("Users");
 
@@ -329,7 +329,7 @@ public class FirestoreManager {
      * @param habitId of type {@link String}
      * @return a task object containing information about the status of the database access
      */
-    public Task<Void> deleteRanking(String habitId) {
+    private Task<Void> deleteRanking(String habitId) {
         preference.deleteRanking(habitId);
         return db.collection("Users")
                  .document(userId)
@@ -341,7 +341,7 @@ public class FirestoreManager {
      * @param position of type int
      * @return a task object containing information about the status of the database access
      */
-    public Task<Void> deleteRanking(int position) {
+    private Task<Void> deleteRanking(int position) {
         String id = preference.getHabitRanking().get(position);
         return deleteRanking(id);
     }
