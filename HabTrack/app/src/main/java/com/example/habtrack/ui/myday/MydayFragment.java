@@ -56,7 +56,7 @@ public class MydayFragment extends Fragment {
     ArrayList<Habit> dataList;
     ArrayAdapter<Habit> mydayAdapter;
 
-    FirebaseDatabase db;
+    FirebaseFirestore db;
     final String TAG = "Sample";
     
     /**
@@ -96,50 +96,29 @@ public class MydayFragment extends Fragment {
         mydayAdapter = new MydayAdapter(getContext(), dataList, listener);
         mydayList.setAdapter(mydayAdapter);
 
-        db = FirebaseDatabase.getInstance();
-        db.getReference("Users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("habit")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        dataList.clear();
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Calendar today = Calendar.getInstance();
-                            Habit habit = snapshot.getValue(Habit.class);
-                            if (!habit.getStartDate().after(today.getTime()) &&
-                                    habit.getPlan().get(today.get(Calendar.DAY_OF_WEEK) - 1))
-                                dataList.add(habit); // Adding the habit from FireStore
-                        }
-                        mydayAdapter.notifyDataSetChanged();
-                    }
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference
+                = db.collection("Users")
+                    .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .collection("Habits");
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-//        db = FirebaseFirestore.getInstance();
-//        final CollectionReference collectionReference = db.collection("Habits");
-//
-//        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
-//                    FirebaseFirestoreException error) {
-//                dataList.clear();
-//                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
-//                {
-//                    //Log.d(TAG, String.valueOf(doc.getData().get("Habit")));
-//                    Calendar today = Calendar.getInstance();
-//                    Habit habit = doc.toObject(Habit.class);
-//                    if (!habit.getStartDate().after(today.getTime()) &&
-//                            habit.getPlan().get(today.get(Calendar.DAY_OF_WEEK) - 1))
-//                        dataList.add(habit); // Adding the habit from FireStore
-//                }
-//                mydayAdapter.notifyDataSetChanged();
-//            }
-//        });
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
+                                @Nullable FirebaseFirestoreException error) {
+                dataList.clear();
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
+                {
+                    //Log.d(TAG, String.valueOf(doc.getData().get("Habit")));
+                    Calendar today = Calendar.getInstance();
+                    Habit habit = doc.toObject(Habit.class);
+                    if (!habit.getStartDate().after(today.getTime()) &&
+                            habit.getPlan().get(today.get(Calendar.DAY_OF_WEEK) - 1))
+                        dataList.add(habit); // Adding the habit from FireStore
+                }
+                mydayAdapter.notifyDataSetChanged();
+            }
+        });
 
 //        mydayList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override

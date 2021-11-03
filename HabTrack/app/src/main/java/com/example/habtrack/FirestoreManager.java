@@ -13,24 +13,33 @@
 
 package com.example.habtrack;
 
-import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
 public class FirestoreManager {
-    private FirebaseDatabase db;
+    private FirebaseFirestore db;
     final String TAG = "Sample";
 
     /**
@@ -79,8 +88,7 @@ public class FirestoreManager {
      */
     private FirestoreManager(String userId) {
         this.userId = userId;
-        this.db = FirebaseDatabase.getInstance();
-//        this.db = FirebaseFirestore.getInstance();
+        this.db = FirebaseFirestore.getInstance();
         initRanking();
     }
 
@@ -111,50 +119,44 @@ public class FirestoreManager {
      * and {@link FirestoreManager#habitCacheList}
      */
     private void initListener(){
-        db.getReference("Users")
-                .child(userId)
-                .child("habit")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        habitCacheMap.clear();
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Habit habit = snapshot.getValue(Habit.class);
-                            habitCacheMap.put(habit.getId(), habit);
+        final CollectionReference collectionReference
+                = db.collection("Users")
+                    .document(userId)
+                    .collection("Habits");
+
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
+                                @Nullable FirebaseFirestoreException error) {
+                habitCacheMap.clear();
+                for (DocumentSnapshot doc: queryDocumentSnapshots) {
+                    Habit habit = doc.toObject(Habit.class);
+                    habitCacheMap.put(habit.getId(), habit);
+                }
+
+                if (preference.getHabitRanking().size() < habitCacheMap.size()) {
+                    // If we have a habit that for whatever reason does not have a ranking
+                    // Give it a default ranking
+                    for (Habit habit : habitCacheMap.values()) {
+                        if (!preference.getHabitRanking().contains(habit.getId())) {
+                            addRanking(habit.getId());
                         }
-                        if (preference.getHabitRanking().size() != habitCacheMap.size())
-                            return;
-
-                        habitCacheList.clear();
-                        for (String item : preference.getHabitRanking())
-                            habitCacheList.add(habitCacheMap.get(item));
-                        if (listener != null)
-                            listener.onDataChange();
                     }
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
+                habitCacheList.clear();
+                for (String id : preference.getHabitRanking())
+                    if(!habitCacheMap.containsKey(id)){
+                        // If instead we have a ranking that does not correspond to any habit
+                        // Simply remove it
+                        deleteRanking(id);
+                    }else {
+                        habitCacheList.add(habitCacheMap.get(id));
                     }
-                });
-
-//        db = FirebaseFirestore.getInstance();
-//        final CollectionReference collectionReference = db.collection("Habits");
-//
-//        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
-//                    FirebaseFirestoreException error) {
-//                dataList.clear();
-//                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
-//                {
-//                    //Log.d(TAG, String.valueOf(doc.getData().get("Habit")));
-//                    Habit habit = doc.toObject(Habit.class);
-//                    dataList.add(habit); // Adding the habit from FireStore
-//                }
-//                habitAdapter.notifyDataSetChanged();
-//            }
-//        });
+                if (listener != null)
+                    listener.onDataChange();
+            }
+        });
     }
 
     /**
@@ -179,43 +181,44 @@ public class FirestoreManager {
      * @param newHabit of type {@link Habit}
      */
     public void addHabit(Habit newHabit) {
-        addRanking(newHabit.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        // First add a ranking
+        Task task = addRanking(newHabit.getId());
+
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    db.getReference("Users")
-                            .child(userId)
-                            .child("habit")
-                            .child(newHabit.getId())
-                            .setValue(newHabit);
-                } else {
-                    return;
-                }
+            public void onSuccess(Void aVoid) {
+                final CollectionReference collectionReference
+                        = db.collection("Users")
+                            .document(userId)
+                            .collection("Habits");
+
+                collectionReference
+                        .document(newHabit.getId())
+                        .set(newHabit)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // These are a method which gets executed when the task is succeeded
+                                Log.d(TAG, "Data has been added successfully!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // These are a method which gets executed if there’s any problem
+                                Log.d(TAG, "Data could not be added!" + e.toString());
+                                // TODO: If ranking added successfully but habit failed to add, should remove ranking
+                            }
+                        });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // These are a method which gets executed if there’s any problem
+                Log.d(TAG, "Data could not be added!" + e.toString());
             }
         });
-
-//        final CollectionReference collectionReference = db.collection("Habits");
-//        final String habitTitle = newHabit.getTitle();
-//
-//        collectionReference
-//                .document(habitTitle)
-//                .set(newHabit)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        // These are a method which gets executed when the task is succeeded
-//                        Log.d(TAG, "Data has been added successfully!");
-//                        Toast.makeText(context, "SUCCESS", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        // These are a method which gets executed if there’s any problem
-//                        Log.d(TAG, "Data could not be added!" + e.toString());
-//                        Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
     }
 
     /**
@@ -223,18 +226,41 @@ public class FirestoreManager {
      * @param selectedHabit of type {@link Habit}
      */
     public void deleteHabit(Habit selectedHabit) {
-        deleteRanking(selectedHabit.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        // First delete a ranking
+        Task task = deleteRanking(selectedHabit.getId());
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    db.getReference("Users")
-                            .child(userId)
-                            .child("habit")
-                            .child(selectedHabit.getId())
-                            .removeValue();
-                } else {
-                    return;
-                }
+            public void onSuccess(Void aVoid) {
+                final CollectionReference collectionReference
+                        = db.collection("Users")
+                            .document(userId)
+                            .collection("Habits");
+
+                collectionReference
+                        .document(selectedHabit.getId())
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // These are a method which gets executed when the task is succeeded
+                                Log.d(TAG, "Data has been added successfully!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // These are a method which gets executed if there’s any problem
+                                Log.d(TAG, "Data could not be added!" + e.toString());
+                                // TODO: If ranking delete successfully but habit failed to delete, what to do here?
+                            }
+                        });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // These are a method which gets executed if there’s any problem
+                Log.d(TAG, "Data could not be added!" + e.toString());
             }
         });
     }
@@ -249,11 +275,11 @@ public class FirestoreManager {
         selectedHabit.setReason(updatedHabit.getReason());
         selectedHabit.setPlan(updatedHabit.getPlan());
 
-        db.getReference("Users")
-                .child(userId)
-                .child("habit")
-                .child(selectedHabit.getId())
-                .setValue(selectedHabit);
+        db.collection("Users")
+                .document(userId)
+                .collection("Habits")
+                .document(selectedHabit.getId())
+                .set(selectedHabit);
     }
 
     /**
@@ -261,21 +287,25 @@ public class FirestoreManager {
      * Pull data from firestore to fill {@link FirestoreManager#preference}
      */
     public void initRanking() {
-        db.getReference("Users")
-                .child(userId)
-                .child("preference")
-                .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        final CollectionReference collectionReference
+                = db.collection("Users");
+
+        collectionReference
+                .document(userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener() {
                     @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    public void onComplete(Task task) {
                         if (!task.isSuccessful()) {
                             Log.e("firebase", "Error getting data", task.getException());
                         }
                         else {
-                            Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                            DataSnapshot snapshot = (DataSnapshot) task.getResult();
-                            UserPreference p = snapshot.getValue(UserPreference.class);
+                            Log.d("firebase", String.valueOf(task.getResult()));
+                            DocumentSnapshot snapshot = (DocumentSnapshot) task.getResult();
+                            UserPreference p = snapshot.get("preference", UserPreference.class);
                             if (p != null)
                                 preference.setHabitRanking(p.getHabitRanking());
+
                             initListener();
                         }
                     }
@@ -287,13 +317,11 @@ public class FirestoreManager {
      * @param habitId of type {@link String}
      * @return a task object containing information about the status of the database access
      */
-    public Task<Void> addRanking(String habitId) {
+    private Task<Void> addRanking(String habitId) {
         preference.addRanking(habitId);
-        Task<Void> task = db.getReference("Users")
-                .child(userId)
-                .child("preference")
-                .setValue(preference);
-        return task;
+        return db.collection("Users")
+                 .document(userId)
+                 .update("preference", preference);
     }
 
     /**
@@ -303,11 +331,9 @@ public class FirestoreManager {
      */
     public Task<Void> deleteRanking(String habitId) {
         preference.deleteRanking(habitId);
-        Task<Void> task = db.getReference("Users")
-                .child(userId)
-                .child("preference")
-                .setValue(preference);
-        return task;
+        return db.collection("Users")
+                 .document(userId)
+                 .update("preference", preference);
     }
 
     /**
@@ -315,13 +341,9 @@ public class FirestoreManager {
      * @param position of type int
      * @return a task object containing information about the status of the database access
      */
-    public void deleteRanking(int position) {
-//        loadRanking();
-        preference.deleteRanking(position);
-        db.getReference("Users")
-                .child(userId)
-                .child("preference")
-                .setValue(preference);
+    public Task<Void> deleteRanking(int position) {
+        String id = preference.getHabitRanking().get(position);
+        return deleteRanking(id);
     }
 
     /**
@@ -329,15 +351,12 @@ public class FirestoreManager {
      * @param fromPosition the initial position of the impacted item
      * @param toPosition the final position of the impacted item
      */
-    public void swapRanking(int fromPosition, int toPosition) {
+    public Task<Void> swapRanking(int fromPosition, int toPosition) {
         preference.swapRanking(fromPosition, toPosition);
-        db.getReference("Users")
-                .child(userId)
-                .child("preference")
-                .setValue(preference);
-        return;
+        return db.collection("Users")
+                 .document(userId)
+                 .update("preference", preference);
     }
-
 
     /**
      * Returns a {@link Habit} with its unique identifier
@@ -347,5 +366,4 @@ public class FirestoreManager {
     public Habit getHabit(String habitId) {
         return habitCacheMap.get(habitId);
     }
-
 }
