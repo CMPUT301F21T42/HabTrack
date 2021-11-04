@@ -1,3 +1,20 @@
+/*
+ * SignUpActivity
+ *
+ * This source file SignUpActivity.java serves as certain state/ screen of the application that
+ * handles the case of when a user attempts to login with their credentials. It checks if the
+ * the inputted credentials is valid, by authenticating it with Firebase authentication APIs.
+ * If the login is successful then the application returns to the MainActivity, Else it will
+ * notify the user about wrong email or password.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * November 3rd, 2021
+ *
+ * Copyright notice
+ */
 package com.example.habtrack;
 
 import android.content.Context;
@@ -56,6 +73,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Reads user input for email and password then checks the validity of inputs, setting
+     * appropriate error messages and snapping cursor to appropriate EditText if any are invalid.
+     * Then attempts to log-in user via Firebase Authentication APIs and returns to MainActivity
+     * if successful, else warns user of incorrect email or password
+     */
     public void loginUser() {
         String email = loginEmail.getText().toString().trim();
         String password = loginPassword.getText().toString().trim();
@@ -88,6 +111,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method starts the main activity and finishes current
+     * activity
+     */
     public void goToMainActivity() {
         startActivity(new Intent(context, MainActivity.class));
         finish();

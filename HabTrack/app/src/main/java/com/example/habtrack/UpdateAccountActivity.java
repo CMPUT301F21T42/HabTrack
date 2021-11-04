@@ -1,3 +1,20 @@
+/*
+ * UpdateAccountActivity
+ *
+ * This source file UpdateAccountActivity.java serves as certain state/ screen of the application
+ * that handles the case of when a user attempts to update their account. It centers around a
+ * update page containing EditTexts where their username and email can be changed as well as
+ * buttons to save their changes or delete their account.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * October 29, 2021
+ *
+ * Copyright notice
+ */
+
 package com.example.habtrack;
 
 import android.content.Context;
@@ -31,6 +48,23 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+/**
+ * UpdateAccountActivity centers around the update account screen of the HabTrack application. It
+ * retrieves the current username & email from the DB to display. These values can be changed
+ * and then saved if possible. There are button listening events for if the user saves their changes
+ * or deletes the account altogether. The class contains two main methods, updateAccount() &
+ * deleteAccount() that are called in response to button presses. For updateAccount() it validates
+ * user inputs and then interacts witht the DB through an instance of the UpdateAccountHandler class.
+ * DeleteAccount() method uses the same UpdateAccountHandler() instance to delete the user from the
+ * DB.
+ *
+ * @author Jenish
+ * @see CredentialVerifier
+ * @see UpdateAccountHandler
+ * @see MainActivity
+ * @version 1.0
+ * @since 1.0
+ */
 public class UpdateAccountActivity extends AppCompatActivity {
 
     Context context = this;
@@ -45,6 +79,13 @@ public class UpdateAccountActivity extends AppCompatActivity {
 
     UpdateAccountHandler updateAccountHandler = new UpdateAccountHandler();
 
+    /**
+     * onCreate() is called when Activity is created (similar to a constructor) and it finds
+     * the ID's of different views and sets up listening events for the user to touch the
+     * screen/ buttons.
+     *
+     * @param  savedInstanceState state of application.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +127,10 @@ public class UpdateAccountActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method retrieves the text from the userName and email EditText's, checks the validity
+     * of them using the CredentialVerifier class and then updates the values in the DB.
+     */
     public void updateAccount() {
         String userName = updateUserName.getText().toString().trim();
         String email = updateEmail.getText().toString().trim();
@@ -153,6 +198,11 @@ public class UpdateAccountActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method attempts to delete the account that is currently signed in. It creates and
+     * AlertDialog to prompt the user if they are certain they wish to delete their account. If
+     * so the instance of updateAccountHandler is used to delete the account from the DB.
+     */
     public void deleteAccount() {
         new AlertDialog.Builder(context)
                 .setTitle("Delete Account")
@@ -193,16 +243,29 @@ public class UpdateAccountActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * This method turns on the visibility of android objects on the
+     * current view. Usually used after data from db is successfully
+     * extracted
+     */
     public void initializeView() {
         saveChanges.setVisibility(View.VISIBLE);
         deleteAccount.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * This method starts the login activity and finishes current
+     * activity
+     */
     public void goToLoginActivity() {
         startActivity(new Intent(context, LoginActivity.class));
         finish();
     }
 
+    /**
+     * This method starts the user profile activity and finishes current
+     * activity
+     */
     public void goToUserProfileActivity() {
         startActivity(new Intent(context, UserProfileActivity.class));
         finish();

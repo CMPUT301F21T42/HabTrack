@@ -1,3 +1,18 @@
+/*
+ * SignUpHandler
+ *
+ * This file UserLoginStatusActivity.class handles the initial control block when app
+ * is launch. It checks if an user session is active, if so then the user is taken to
+ * the MainActivity.java, otherwise the user is taken to the loginActivity.java.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * November 3rd, 2021
+ *
+ * Copyright notice
+ */
 package com.example.habtrack;
 
 import androidx.appcompat.app.AppCompatActivity;
