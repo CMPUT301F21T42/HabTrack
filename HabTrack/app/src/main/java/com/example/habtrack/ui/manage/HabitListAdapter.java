@@ -17,20 +17,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.habtrack.FirestoreManager;
 import com.example.habtrack.Habit;
-import com.example.habtrack.MainActivity;
 import com.example.habtrack.R;
-import com.example.habtrack.databinding.FragmentEdithabitBinding;
 import com.example.habtrack.ui.edithabit.EdithabitFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -41,19 +35,19 @@ public class HabitListAdapter extends RecyclerView.Adapter<ItemViewHolder>
         implements ItemTouchHelperAdapter {
     private ArrayList<Habit> habits;
     private Context context;
-    private FragmentManager fm;
+    private FragmentManager fragmentManager;
     private FirestoreManager firestoreManager;
 
     /**
      * Constructs an adapter with
      * @param context the current context
      * @param habits the arrayList of habits {@link Habit}
-     * @param fm the parent fragment manager
+     * @param fragmentManager the parent fragment manager
      */
-    public HabitListAdapter(Context context, ArrayList<Habit> habits, FragmentManager fm) {
+    public HabitListAdapter(Context context, ArrayList<Habit> habits, FragmentManager fragmentManager) {
         this.habits = habits;
         this.context = context;
-        this.fm = fm;
+        this.fragmentManager = fragmentManager;
     }
 
     /**
@@ -86,7 +80,7 @@ public class HabitListAdapter extends RecyclerView.Adapter<ItemViewHolder>
             public void onClick(View v) {
                 int pos = holder.getAdapterPosition();
                 EdithabitFragment.newInstance(habits.get(pos))
-                        .show(fm, "EDIT_HABIT");
+                        .show(fragmentManager, "EDIT_HABIT");
             }
         });
     }

@@ -62,17 +62,17 @@ public class UserPreference {
 
     /**
      * Updates the list when a selected {@link Habit} is deleted
-     * @param position the position of the {@link Habit}
-     */
-    public void deleteRanking(int position) {
-        habitRanking.remove(position);
-    }
-
-    /**
-     * Updates the list when a selected {@link Habit} is deleted
      * @param str the unique identifier of the {@link Habit}
      */
     public void deleteRanking(String str) {
         habitRanking.remove(str);
+    }
+    
+    /**
+     * Updates the list when a selected {@link Habit} is deleted
+     * @param position the position of the {@link Habit}
+     */
+    public void deleteRanking(int position) {
+        habitRanking.remove(position);
     }
 }

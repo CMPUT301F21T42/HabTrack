@@ -47,11 +47,9 @@ import com.google.firebase.database.FirebaseDatabase;
  * edit/delete and view their habit data
  */
 public class EdithabitFragment extends DialogFragment {
-
-    FirebaseDatabase db;
     final String TAG = "Sample";
 
-    private EdithabitViewModel edithabitViewModel;
+//    private EdithabitViewModel edithabitViewModel;
     private FragmentEdithabitBinding binding;
 
     private TextView date;
@@ -99,8 +97,8 @@ public class EdithabitFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        edithabitViewModel =
-                new ViewModelProvider(this).get(EdithabitViewModel.class);
+//        edithabitViewModel =
+//                new ViewModelProvider(this).get(EdithabitViewModel.class);
 
         binding = FragmentEdithabitBinding.inflate(LayoutInflater.from(getContext()));
         View root = binding.getRoot();

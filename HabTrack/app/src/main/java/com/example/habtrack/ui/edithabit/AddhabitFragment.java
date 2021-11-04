@@ -47,11 +47,9 @@ import java.util.Date;
  * add a habit
  */
 public class AddhabitFragment extends DialogFragment {
-
-    FirebaseDatabase db;
     final String TAG = "Sample";
 
-    private EdithabitViewModel edithabitViewModel;
+//    private EdithabitViewModel edithabitViewModel;
     private FragmentAddhabitBinding binding;
 
     private EditText year, month, day;
@@ -105,8 +103,8 @@ public class AddhabitFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        edithabitViewModel =
-                new ViewModelProvider(this).get(EdithabitViewModel.class);
+//        edithabitViewModel =
+//                new ViewModelProvider(this).get(EdithabitViewModel.class);
 
         binding = FragmentAddhabitBinding.inflate(LayoutInflater.from(getContext()));
         View root = binding.getRoot();
@@ -200,11 +198,10 @@ public class AddhabitFragment extends DialogFragment {
      * Adds the new habit to the firestore database
      * @param newHabit of type {@link Habit}
      */
-    public void onOkPressed(Habit newHabit) {
+    private void onOkPressed(Habit newHabit) {
         firestoreManager = FirestoreManager.getInstance(
                 FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         firestoreManager.addHabit(newHabit);
     }
-
 }
