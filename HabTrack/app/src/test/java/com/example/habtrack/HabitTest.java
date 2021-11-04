@@ -13,27 +13,33 @@ import java.util.GregorianCalendar;
 
 public class HabitTest {
 
+    private Habit mockHabit() {
+        ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
+        Collections.fill(plan, true);
+        return new Habit("Title","", Calendar.getInstance().getTime(), plan, true);
+    }
+
     @Test
     void createExceptionTest() {
         ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
         Collections.fill(plan, true);
         assertThrows(IllegalArgumentException.class,
                 () -> {new Habit("", "",
-                        Calendar.getInstance().getTime(), plan);});
+                        Calendar.getInstance().getTime(), plan, true);});
         assertThrows(IllegalArgumentException.class,
                 () -> {new Habit("abcdefghi jklmnopqr s", "",
-                        Calendar.getInstance().getTime(), plan);});
+                        Calendar.getInstance().getTime(), plan, true);});
         assertThrows(IllegalArgumentException.class,
                 () -> {new Habit("Title", "abcdefghi jklmnopqr stuvwxyz ABC",
-                        Calendar.getInstance().getTime(), plan);});
+                        Calendar.getInstance().getTime(), plan, true);});
     }
 
     @Test
     void equalsTest() {
         ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
         Collections.fill(plan, true);
-        Habit habit1 = new Habit("Title","", Calendar.getInstance().getTime(), plan);
-        Habit habit2 = new Habit("Title","", Calendar.getInstance().getTime(), plan);
+        Habit habit1 = mockHabit();
+        Habit habit2 = new Habit("Title","", Calendar.getInstance().getTime(), plan, true);
         assertEquals(habit1, habit2);
     }
 
@@ -41,8 +47,8 @@ public class HabitTest {
     void compareToTest() {
         ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
         Collections.fill(plan, true);
-        Habit habit1 = new Habit("1","", Calendar.getInstance().getTime(), plan);
-        Habit habit2 = new Habit("2","", Calendar.getInstance().getTime(), plan);
+        Habit habit1 = new Habit("1","", Calendar.getInstance().getTime(), plan, true);
+        Habit habit2 = new Habit("2","", Calendar.getInstance().getTime(), plan, true);
 
         ArrayList<Habit> habits1 = new ArrayList<>();
         habits1.add(habit2);
@@ -62,7 +68,7 @@ public class HabitTest {
     void getTitleTest() {
         ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
         Collections.fill(plan, true);
-        Habit habit = new Habit("Title","", Calendar.getInstance().getTime(), plan);
+        Habit habit = mockHabit();
         assertEquals("Title", habit.getTitle());
     }
 
@@ -70,7 +76,7 @@ public class HabitTest {
     void setTitleTest() {
         ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
         Collections.fill(plan, true);
-        Habit habit = new Habit("Title","", Calendar.getInstance().getTime(), plan);
+        Habit habit = mockHabit();
         assertEquals("Title", habit.getTitle());
 
         habit.setTitle("HabitTitle");
@@ -81,7 +87,7 @@ public class HabitTest {
     void setTitleExceptionTest() {
         ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
         Collections.fill(plan, true);
-        Habit habit = new Habit("Title","", Calendar.getInstance().getTime(), plan);
+        Habit habit = mockHabit();
         assertThrows(IllegalArgumentException.class,
                 () -> {habit.setTitle("abcdefghi jklmnopqr s");});
     }
@@ -90,7 +96,7 @@ public class HabitTest {
     void getReasonTest() {
         ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
         Collections.fill(plan, true);
-        Habit habit = new Habit("Title","Reason", Calendar.getInstance().getTime(), plan);
+        Habit habit = new Habit("Title","Reason", Calendar.getInstance().getTime(), plan, true);
         assertEquals("Reason", habit.getReason());
     }
 
@@ -98,7 +104,7 @@ public class HabitTest {
     void setReasonTest() {
         ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
         Collections.fill(plan, true);
-        Habit habit = new Habit("Title","Reason", Calendar.getInstance().getTime(), plan);
+        Habit habit = new Habit("Title","Reason", Calendar.getInstance().getTime(), plan, true);
         assertEquals("Reason", habit.getReason());
 
         habit.setReason("UpdatedReason");
@@ -109,7 +115,7 @@ public class HabitTest {
     void setReasonExceptionTest() {
         ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
         Collections.fill(plan, true);
-        Habit habit = new Habit("Title","", Calendar.getInstance().getTime(), plan);
+        Habit habit = mockHabit();
         assertThrows(IllegalArgumentException.class,
                 () -> {habit.setReason("abcdefghi jklmnopqr stuvwxyz ABC");});
     }
@@ -119,7 +125,7 @@ public class HabitTest {
         ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
         Collections.fill(plan, true);
         Date startDate = Calendar.getInstance().getTime();
-        Habit habit = new Habit("Title","", startDate, plan);
+        Habit habit = new Habit("Title","", startDate, plan, true);
         assertEquals(startDate, habit.getStartDate());
     }
 
@@ -128,7 +134,7 @@ public class HabitTest {
         ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
         Collections.fill(plan, true);
         Date startDate = Calendar.getInstance().getTime();
-        Habit habit = new Habit("Title","", startDate, plan);
+        Habit habit = new Habit("Title","", startDate, plan, true);
         assertEquals(startDate, habit.getStartDate());
 
         Date updateDate = new GregorianCalendar(2000, Calendar.JANUARY, 1).getTime();

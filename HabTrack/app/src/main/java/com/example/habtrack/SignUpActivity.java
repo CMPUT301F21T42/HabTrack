@@ -35,8 +35,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 
 /**
  * SignUpActivity centers around the signup page of the HabTrack Application. This class contains
@@ -96,14 +99,14 @@ public class SignUpActivity extends AppCompatActivity {
         banner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(context, MainActivity.class));
+                goToLoginActivity();
             }
         });
 
         goToLoginActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(context, MainActivity.class));
+                goToLoginActivity();
             }
         });
 
@@ -157,12 +160,12 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    signUpHandler.addUserInfoToFirebaseDatabase().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    signUpHandler.addUserInfoToFirestoreDatabase().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 progressBar.setVisibility(View.GONE);
-                                startActivity(new Intent(context, MainActivity.class));
+                                goToLoginActivity();
                             } else {
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -176,6 +179,15 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * This method starts the login activity and finishes current
+     * activity
+     */
+    public void goToLoginActivity() {
+        startActivity(new Intent(context, LoginActivity.class));
+        finish();
     }
 
 }

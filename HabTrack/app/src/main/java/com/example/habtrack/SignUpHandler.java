@@ -19,7 +19,12 @@ package com.example.habtrack;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 /**
  * SignUpHandler class is a class that handles the interaction between the android application
@@ -33,6 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class SignUpHandler {
     public FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    public FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /**
      * This variable contains the userName that shall be used to attempt to register user.
@@ -80,12 +86,10 @@ public class SignUpHandler {
         return task;
     }
 
-    public Task<Void> addUserInfoToFirebaseDatabase() {
-        com.example.habtrack.UserInfo userInfo = new com.example.habtrack.UserInfo(userName, email, password);
-        Task<Void> task = FirebaseDatabase.getInstance().getReference("Users")
-                .child(mAuth.getCurrentUser().getUid())
-                .setValue(userInfo);
-        return task;
+    public Task<Void> addUserInfoToFirestoreDatabase() {
+        UserInfo userInfo = new UserInfo(userName, email, password);
+        return db.collection("Users").document(mAuth.getCurrentUser().getUid())
+                .set(userInfo.convertToKeyValuePair());
     }
 
 }

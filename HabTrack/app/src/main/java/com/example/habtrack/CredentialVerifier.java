@@ -1,7 +1,7 @@
 /*
  * CredentialVerifier
  *
- * This source file CredentialVerifier.java serves as a object that receives user input
+ * This source file CredentialVerifier.java serves as an object that receives user input
  * that includes username, password & email and proceeds to check if it meets the criteria
  * to be considered valid. If a certain input is valid the method called simply returns
  * true, if the input fails a class variable String FailureMessage is updated depending on
@@ -24,7 +24,12 @@ import android.util.Patterns;
 /**
  * CredentialVerifier class contains static attributes and static methods that are used to
  * verify user inputted email, password and usernames. If a input is deemed to be invalid the class
- * will update static String attributes to hold an appropriate error message.
+ * will update static String attributes to hold an appropriate error message. For
+ * verifyUserNameField method a valid username has a length of 1 or more and does not contain any
+ * numbers. For verifyPasswordFieldIsEmpty, a password must have a length >0. For
+ * verifyPasswordFieldLength method the length must be greater than 7 characters. For
+ * verifyEmailField the email must have a length thats not zero and match the regex expression
+ * for a valid email.
  *
  * @author Jenish
  * @see MainActivity
@@ -61,7 +66,8 @@ public class CredentialVerifier {
     /**
      * This method returns a {@link boolean} dependent on if the userName meets the criteria
      * to be valid. It also updates userNameVerifyFailureMessage if the userName is invalid.
-     * Method parameter userName is expected to be non null.
+     * Method parameter userName is expected to be non null. Criteria for valid username is
+     * non zero length and does not contain any numbers.
      *
      * @param userName  Takes input of userName of type {@link String}.
      * @return          The return type is {@link boolean}.

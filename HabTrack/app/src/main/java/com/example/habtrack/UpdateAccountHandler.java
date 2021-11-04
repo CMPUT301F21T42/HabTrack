@@ -16,11 +16,21 @@
 
 package com.example.habtrack;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import org.w3c.dom.Document;
 
 /**
  * UpdateAccountHandler class is a class that handles the interaction between the android application
@@ -37,7 +47,7 @@ public class UpdateAccountHandler {
 
     FirebaseAuth mAuth;
     FirebaseUser user;
-    DatabaseReference databaseReference;
+    FirebaseFirestore db;
     String userID;
 
     /**
@@ -48,17 +58,8 @@ public class UpdateAccountHandler {
     public UpdateAccountHandler() {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+        db = FirebaseFirestore.getInstance();
         userID = user.getUid();
-    }
-
-    /**
-     * This method returns a reference to the DB associated with this object.
-     *
-     * @return DatabaseReference     Returns a DatabaseReference object.
-     */
-    public DatabaseReference getDatabaseReference() {
-        return databaseReference.child(userID);
     }
 
     /**
@@ -70,11 +71,10 @@ public class UpdateAccountHandler {
      * @return task     Returns a task object containing information about the status of the
      *                  database access.
      */
-    public Task<Void> updateUserNameInFireBaseDatabase(String userName) {
-        Task<Void> task = databaseReference
-                .child(userID)
-                .child("userName")
-                .setValue(userName);
+    public Task<Void> updateUserNameInFirestoreDatabase(String userName) {
+        Task<Void> task = db.collection("Users")
+                .document(userID)
+                .update("userName", userName);
         return task;
     }
 
@@ -82,28 +82,56 @@ public class UpdateAccountHandler {
      * This method attempts to update a email for the current user in the DB. It returns a task
      * object that contains info about the DB interaction and if it was successful or not.
      *
-     * @param email  A {@link String} that represents a new email that the user
+     * @param email     A {@link String} that represents a new email that the user
      *                  wants associated with their account, replacing the current email.
      * @return task     Returns a task object containing information about the status of the
      *                  database access.
      */
-    public Task<Void> updateEmailInFireBaseDatabase(String email) {
-        Task<Void> task = databaseReference
-                .child(userID)
-                .child("email")
-                .setValue(email);
+    public Task<Void> updateEmailInFirestoreDatabase(String email) {
+        Task<Void> task = db.collection("Users")
+                .document(userID)
+                .update("email", email);
         return task;
     }
 
+    /**
+     * This method attempts to update the email of the current user in Firebase Authentication.
+     * It returns a task object that contains info about the authentication interaction and if it was
+     * successful or not.
+     *
+     * @param email  A {@link String} that represents a new email that the user
+     *                  wants associated with their account, replacing the current email.
+     * @return task     Returns a task object containing information about the status of the
+     *                  authentication access.
+     */
     public Task<Void> updateAuthentication(String email) {
         return user.updateEmail(email);
     }
 
+    /**
+     * This method attempts to delete the account of the current user from the Firebase Authentication.
+     * It returns a task object that contains info about the authentication interaction and if it was
+     * successful or not.
+     *
+     * @return task     Returns a task object containing information about the status of the
+     *                  deletion of user account from Firebase authentication
+     */
     public Task<Void> deleteAccountFromAuthentication() {
         return user.delete();
     }
 
-    public Task<Void> deleteAccountFromDatabase() {
-        return databaseReference.child(userID).removeValue();
+    /**
+     * This method attempts to delete the account of the current user from the Firestore db.
+     * It returns a task object that contains info about the authentication interaction and if it was
+     * successful or not.
+     *
+     * @return task     Returns a task object containing information about the status of the
+     *                  deletion of user account from Firestore db
+     */
+    public Task<Void> deleteAccountFromFirestoreDatabase() {
+        Task<Void> task = db.collection("Users")
+                .document(userID)
+                .delete();
+        return task;
     }
 }
