@@ -160,7 +160,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    signUpHandler.addUserInfoToFirebaseDatabase().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    signUpHandler.addUserInfoToFirestoreDatabase().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {

@@ -71,7 +71,7 @@ public class UpdateAccountHandler {
      * @return task     Returns a task object containing information about the status of the
      *                  database access.
      */
-    public Task<Void> updateUserNameInFireBaseDatabase(String userName) {
+    public Task<Void> updateUserNameInFirestoreDatabase(String userName) {
         Task<Void> task = db.collection("Users")
                 .document(userID)
                 .update("userName", userName);
@@ -87,7 +87,7 @@ public class UpdateAccountHandler {
      * @return task     Returns a task object containing information about the status of the
      *                  database access.
      */
-    public Task<Void> updateEmailInFireBaseDatabase(String email) {
+    public Task<Void> updateEmailInFirestoreDatabase(String email) {
         Task<Void> task = db.collection("Users")
                 .document(userID)
                 .update("email", email);
@@ -128,7 +128,7 @@ public class UpdateAccountHandler {
      * @return task     Returns a task object containing information about the status of the
      *                  deletion of user account from Firestore db
      */
-    public Task<Void> deleteAccountFromDatabase() {
+    public Task<Void> deleteAccountFromFirestoreDatabase() {
         Task<Void> task = db.collection("Users")
                 .document(userID)
                 .delete();

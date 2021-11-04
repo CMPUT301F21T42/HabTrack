@@ -100,7 +100,7 @@ public class UpdateAccountActivity extends AppCompatActivity {
         deleteAccount = findViewById(R.id.delete_account);
 
         progressBar.setVisibility(View.VISIBLE);
-        DocumentReference userDocumentReference = UserInfo.getUserDatabaseReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DocumentReference userDocumentReference = UserInfo.getUserDocumentReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
         userDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -171,7 +171,7 @@ public class UpdateAccountActivity extends AppCompatActivity {
         });
 
         progressBar.setVisibility(View.VISIBLE);
-        updateAccountHandler.updateUserNameInFireBaseDatabase(userName).addOnCompleteListener(new OnCompleteListener<Void>() {
+        updateAccountHandler.updateUserNameInFirestoreDatabase(userName).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -183,7 +183,7 @@ public class UpdateAccountActivity extends AppCompatActivity {
         });
 
         progressBar.setVisibility(View.VISIBLE);
-        updateAccountHandler.updateEmailInFireBaseDatabase(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+        updateAccountHandler.updateEmailInFirestoreDatabase(email).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -210,7 +210,7 @@ public class UpdateAccountActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         progressBar.setVisibility(View.VISIBLE);
-                        updateAccountHandler.deleteAccountFromDatabase().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        updateAccountHandler.deleteAccountFromFirestoreDatabase().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {

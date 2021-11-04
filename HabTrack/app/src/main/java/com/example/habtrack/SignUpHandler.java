@@ -31,7 +31,7 @@ import java.util.HashMap;
  * and FireStore DB when an attempt to sign up is made.
  *
  * @author Jenish
- * @see userInfo
+ * @see UserInfo
  * @see SignUpActivity
  * @version 1.0
  * @since 1.0
@@ -86,7 +86,7 @@ public class SignUpHandler {
         return task;
     }
 
-    public Task<Void> addUserInfoToFirebaseDatabase() {
+    public Task<Void> addUserInfoToFirestoreDatabase() {
         UserInfo userInfo = new UserInfo(userName, email, password);
         return db.collection("Users").document(mAuth.getCurrentUser().getUid())
                 .set(userInfo.convertToKeyValuePair());

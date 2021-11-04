@@ -146,7 +146,7 @@ public class UserInfo {
      *
      * @param userId  Takes input of userId of type {@link String}.
      */
-    public static DocumentReference getUserDatabaseReference(String userId) {
+    public static DocumentReference getUserDocumentReference(String userId) {
         return FirebaseFirestore.getInstance().collection("Users").document(userId);
     }
 }

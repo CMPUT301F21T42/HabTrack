@@ -144,4 +144,11 @@ public class MainActivity extends AppCompatActivity
         }
         return true;
     }
+
+    // TODO: Exit app (finish()) only when the MainActivity is in "My Day" fragment
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        finishAffinity();
+//    }
 }

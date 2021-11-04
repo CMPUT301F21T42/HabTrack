@@ -72,11 +72,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
 
-    FirebaseAuth mAuth;
-    FirebaseUser user;
-    DatabaseReference databaseReference;
-    String userID;
-
     /**
      * onCreate() method is called when the screen of the application is changed to the
      * user profile. It finds the views of all components defined in the xml file. It will
@@ -102,7 +97,7 @@ public class UserProfileActivity extends AppCompatActivity {
         updateAccount = findViewById(R.id.update_account);
 
         progressBar.setVisibility(View.VISIBLE);
-        DocumentReference userDocumentReference = UserInfo.getUserDatabaseReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DocumentReference userDocumentReference = UserInfo.getUserDocumentReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
         userDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -158,5 +153,14 @@ public class UserProfileActivity extends AppCompatActivity {
         // Once signed out, and in sign in activity, then on back press
         // user should not be able to go back
         finish();
+    }
+
+    /**
+     * Pressing back should result in user being taken
+     * to MainActivity
+     */
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(context, MainActivity.class));
     }
 }
