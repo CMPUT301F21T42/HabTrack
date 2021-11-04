@@ -16,7 +16,18 @@
 package com.example.habtrack;
 
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+
 public class UserInfo {
+
+    public final String userNameKey = "userName";
+    public final String emailKey = "email";
+    public final String passwordKey = "password";
+
     /**
      * This variable contains the userName that shall be used to store the userName of a user.
      * This var is of type {@link String}.
@@ -59,6 +70,22 @@ public class UserInfo {
         this.password = password;
     }
 
+    public HashMap<String, String> convertToKeyValuePair() {
+        HashMap<String, String> userInfoData = new HashMap<>();
+
+        userInfoData.put(userNameKey, this.userName);
+        userInfoData.put(emailKey, this.email);
+        userInfoData.put(passwordKey, this.password);
+
+        return userInfoData;
+    }
+
+    public void convertFromKeyValuePair(HashMap<String, String> userInfoData) {
+        this.userName = userInfoData.get(userNameKey);
+        this.email = userInfoData.get(emailKey);
+        this.password = userInfoData.get(passwordKey);
+    }
+
     /**
      * This method returns the userName of a given UserInfo object.
      *
@@ -89,7 +116,7 @@ public class UserInfo {
     /**
      * This method sets the email of a given object to the provided email.
      *
-     * @param userName  Takes input of userName of type {@link String}.
+     * @param email  Takes input of userName of type {@link String}.
      */
     public void setEmail(String email) {
         this.email = email;
@@ -107,9 +134,19 @@ public class UserInfo {
     /**
      * This method sets the password of a given object to the provided password.
      *
-     * @param userName  Takes input of userName of type {@link String}.
+     * @param password  Takes input of userName of type {@link String}.
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * This method returns a {@link DocumentReference} to document under "Users" collection
+     * corresponding to the provided {@link String}
+     *
+     * @param userId  Takes input of userId of type {@link String}.
+     */
+    public static DocumentReference getUserDocumentReference(String userId) {
+        return FirebaseFirestore.getInstance().collection("Users").document(userId);
     }
 }

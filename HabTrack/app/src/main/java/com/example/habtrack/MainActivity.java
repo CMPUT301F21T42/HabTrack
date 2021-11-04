@@ -140,7 +140,15 @@ public class MainActivity extends AppCompatActivity
         if (item.getItemId() == R.id.nav_profile) {
             Intent intent = new Intent(this, UserProfileActivity.class);
             startActivity(intent);
+            finish();
         }
         return true;
     }
+
+    // TODO: Exit app (finish()) only when the MainActivity is in "My Day" fragment
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        finishAffinity();
+//    }
 }

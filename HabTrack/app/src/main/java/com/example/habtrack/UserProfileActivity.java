@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,6 +41,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 /**
  * UserProfileActivity centers around the user profile of the HabTrack application. This class
@@ -67,11 +72,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
 
-    FirebaseAuth mAuth;
-    FirebaseUser user;
-    DatabaseReference databaseReference;
-    String userID;
-
     /**
      * onCreate() method is called when the screen of the application is changed to the
      * user profile. It finds the views of all components defined in the xml file. It will
@@ -96,30 +96,15 @@ public class UserProfileActivity extends AppCompatActivity {
         logout = findViewById(R.id.log_out);
         updateAccount = findViewById(R.id.update_account);
 
-        mAuth = FirebaseAuth.getInstance();
-
-        user = mAuth.getCurrentUser();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
-        userID = user.getUid();
-
         progressBar.setVisibility(View.VISIBLE);
-        databaseReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+        DocumentReference userDocumentReference = UserInfo.getUserDocumentReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        userDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 progressBar.setVisibility(View.GONE);
+                userName.setText((String) value.getData().get("userName"));
+                email.setText((String) value.getData().get("email"));
                 initializeView();
-                com.example.habtrack.UserInfo userInfo = snapshot.getValue(com.example.habtrack.UserInfo.class);
-
-                if (userInfo != null) {
-                    userName.setText(userInfo.userName);
-                    email.setText(userInfo.email);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -127,24 +112,55 @@ public class UserProfileActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAuth.signOut();
-                startActivity(new Intent(context, MainActivity.class));
+                FirebaseAuth.getInstance().signOut();
+                goToLoginActivity();
             }
         });
 
         updateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(context, com.example.habtrack.UpdateAccountActivity.class));
+                goToUpdateAccountActivity();
             }
         });
 
     }
 
-    // Possibly convert to an interface
+    /**
+     * This method turns on the visibility of android objects on the
+     * current view. Usually used after data from db is successfully
+     * extracted
+     */
     public void initializeView() {
         logout.setVisibility(View.VISIBLE);
         updateAccount.setVisibility(View.VISIBLE);
         imageView.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * This method starts the update account activity
+     */
+    public void goToUpdateAccountActivity() {
+        startActivity(new Intent(context, UpdateAccountActivity.class));
+    }
+
+    /**
+     * This method starts the login activity and finishes current
+     * activity
+     */
+    public void goToLoginActivity() {
+        startActivity(new Intent(context, LoginActivity.class));
+        // Once signed out, and in sign in activity, then on back press
+        // user should not be able to go back
+        finish();
+    }
+
+    /**
+     * Pressing back should result in user being taken
+     * to MainActivity
+     */
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(context, MainActivity.class));
     }
 }
