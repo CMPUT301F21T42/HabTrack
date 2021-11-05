@@ -20,6 +20,8 @@ import org.junit.Test;
  * email: raunak@gmail.ca
  * password: Qwerty12345
  *(otherwise they will fail)
+ * This test edit an already existing
+ * habit with the name study
  *
  */
 public class EditFragmentTest {
@@ -33,34 +35,31 @@ public class EditFragmentTest {
     }
 
     @Test
-    public void start(){
-        Activity activity = rule.getActivity();
-    }
-
-    @Test
     public void additiontest(){
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-        View v = solo.getView(R.id.nav_manage);
+        View v = solo.getView(R.id.nav_manage);// goes to manage tab
         solo.clickOnView(v, true);
-        solo.waitForActivity("Waiting", 10);
+        //clicking on the study habit to make changes to it
         solo.clickOnText("study",1);
         solo.clearEditText((EditText) solo.getView(R.id.title_editText));
         solo.enterText((EditText) solo.getView(R.id.title_editText), "studying");
         solo.waitForText("studying", 1, 2000);
-        View sunday_button = solo.getView(R.id.sunday_checkBox);
 
         solo.clickOnCheckBox(0);
         assertEquals(true,solo.isCheckBoxChecked(0));
-        solo.clickOnText("OK",1);}
+        solo.clickOnText("OK",1);
+    }
     @After
     public void resetmethod(){
+        //resets the data back to original configuration
         View v = solo.getView(R.id.nav_manage);
         solo.clickOnView(v, true);
-        solo.waitForActivity("Waiting", 10);
         solo.clickOnText("studying",1);
         solo.clearEditText((EditText) solo.getView(R.id.title_editText));
         solo.enterText((EditText) solo.getView(R.id.title_editText), "study");
         solo.clickOnCheckBox(0);
+        solo.clickOnText("OK",1);
+
     };
 }
 
