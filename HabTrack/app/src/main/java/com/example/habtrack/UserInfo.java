@@ -26,7 +26,7 @@ public class UserInfo {
 
     public final String userNameKey = "userName";
     public final String emailKey = "email";
-    public final String passwordKey = "password";
+    // public final String passwordKey = "password";
 
     /**
      * This variable contains the userName that shall be used to store the userName of a user.
@@ -75,7 +75,7 @@ public class UserInfo {
 
         userInfoData.put(userNameKey, this.userName);
         userInfoData.put(emailKey, this.email);
-        userInfoData.put(passwordKey, this.password);
+        //  userInfoData.put(passwordKey, this.password); DO NOT INCLUDE PASSWORD INSIDE THE FIRESTORE
 
         return userInfoData;
     }
@@ -83,7 +83,7 @@ public class UserInfo {
     public void convertFromKeyValuePair(HashMap<String, String> userInfoData) {
         this.userName = userInfoData.get(userNameKey);
         this.email = userInfoData.get(emailKey);
-        this.password = userInfoData.get(passwordKey);
+        // this.password = userInfoData.get(passwordKey);
     }
 
     /**
