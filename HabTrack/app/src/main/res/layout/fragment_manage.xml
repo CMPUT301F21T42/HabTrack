@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="?attr/actionBarSize"
     android:orientation="vertical"
-    tools:context=".ui.manage.ManageFragment">
+    tools:context=".ui.manage.ManageFragment"
+    android:id="@+id/managefragmentId">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/habit_list"

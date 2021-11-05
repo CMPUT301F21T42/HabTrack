@@ -89,7 +89,7 @@ public class CredentialVerifier {
      * to be valid. It also updates passwordVerifyFailureMessage if the password is invalid.
      * Method parameter password is expected to be non null.
      *
-     * @param password  Takes input of userName of type {@link String}.
+     * @param password  Takes input of password of type {@link String}.
      * @return          The return type is {@link boolean}.
      */
     public static boolean verifyPasswordFieldIsEmpty(String password) {
@@ -106,7 +106,7 @@ public class CredentialVerifier {
      * to be valid. It also updates passwordVerifyFailureMessage if the password is of an invalid
      * length. Method parameter password is expected to be non null.
      *
-     * @param password  Takes input of userName of type {@link String}.
+     * @param password  Takes input of password of type {@link String}.
      * @return          The return type is {@link boolean}.
      */
     public static boolean verifyPasswordFieldLength(String password) {
@@ -123,14 +123,14 @@ public class CredentialVerifier {
      * to be valid. It also updates emailVerifyFailureMessage if the password is of an invalid
      * criteria. Method parameter email is expected to be non null.
      *
-     * @param email  Takes input of userName of type {@link String}.
+     * @param email  Takes input of email of type {@link String}.
      * @return       The return type is {@link boolean}.
      */
     public static boolean verifyEmailField(String email) {
         if (email.isEmpty()) {
             emailVerifyFailureMessage = "Please enter a valid email";
             return false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        } else if (!email.matches("^(.+)@(.+)$")) {
             emailVerifyFailureMessage = "Please use a valid email address";
             return false;
         } else {

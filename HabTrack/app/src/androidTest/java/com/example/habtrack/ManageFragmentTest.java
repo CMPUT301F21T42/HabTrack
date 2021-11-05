@@ -14,6 +14,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+/**
+ * This test navigates to the manage tab.
+ */
 public class ManageFragmentTest {
     private Solo solo;
     @Rule
@@ -32,10 +35,8 @@ public class ManageFragmentTest {
     @Test
     public void navtomanagefrag() {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-        View v = solo.getView(R.id.nav_manage);
+        View v = solo.getView(R.id.nav_manage); //getting view of navigation tab
         solo.clickOnView(v, true);
-        solo.waitForActivity("Waiting", 10);
-        assertEquals(1,2);
-        //solo.assertCurrentActivity("Wrong Activity", HabitHandler.class);
+        solo.waitForFragmentById(R.id.managefragmentId);
     }
 }
