@@ -1,8 +1,11 @@
 /*
- * SignUpActivity
+ * LoginActivity
  *
- * This source file SignUpActivity.java serves as certain state/ screen of the application that
- * handles the case of when a user attempts to login with their credentials. It checks if the
+ * This source file LoginActivity.java serves as the entry point of the HabTrack app. It creates
+ * a login/ signup page along with its Buttons, progressBar, editText, etc. It waits for user
+ * input, i.e signup or login and then acts on the information/ action provided to either
+ * start a new activity (SignUpActivity or UserProfileActivity) or remain on the current activity
+ * and re-prompt user to enter valid information. It checks if the
  * the inputted credentials is valid, by authenticating it with Firebase authentication APIs.
  * If the login is successful then the application returns to the MainActivity, Else it will
  * notify the user about wrong email or password.
@@ -11,10 +14,11 @@
  *
  * Version 1.0
  *
- * November 3rd, 2021
+ * October 27, 2021
  *
  * Copyright notice
  */
+
 package com.example.habtrack;
 
 import android.content.Context;

@@ -1,21 +1,3 @@
-/*
- * MainActivity
- *
- * This source file MainActivity.java serves as the entry point of the HabTrack app. It creates
- * a login/ signup page along with its Buttons, progressBar, editText, etc. It waits for user
- * input, i.e signup or login and then acts on the information/ action provided to either
- * start a new activity (SignUpActivity or UserProfileActivity) or remain on the current activity
- * and re-prompt user to enter valid information.
- *
- * No known outstanding issues.
- *
- * Version 1.0
- *
- * October 27, 2021
- *
- * Copyright notice
- */
-
 package com.example.habtrack;
 
 import android.content.Intent;
