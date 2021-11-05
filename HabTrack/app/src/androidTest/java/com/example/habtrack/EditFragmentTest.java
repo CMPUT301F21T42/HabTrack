@@ -11,10 +11,17 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+/**These tests are written for the user having
+ * email: raunak@gmail.ca
+ * password: Qwerty12345
+ *(otherwise they will fail)
+ *
+ */
 public class EditFragmentTest {
     private Solo solo;
     @Rule
@@ -36,16 +43,26 @@ public class EditFragmentTest {
         View v = solo.getView(R.id.nav_manage);
         solo.clickOnView(v, true);
         solo.waitForActivity("Waiting", 10);
-        //solo.assertCurrentActivity("Wrong Activity", ManageFragment.class);
         solo.clickOnText("study",1);
         solo.clearEditText((EditText) solo.getView(R.id.title_editText));
-        solo.enterText((EditText) solo.getView(R.id.title_editText), "Studying");
-        solo.waitForText("Studying", 1, 2000);
+        solo.enterText((EditText) solo.getView(R.id.title_editText), "studying");
+        solo.waitForText("studying", 1, 2000);
         View sunday_button = solo.getView(R.id.sunday_checkBox);
-        solo.clickOnView(sunday_button);
-        //solo.clickOnCheckBox(View solo.getView(R.id.monday_checkBox));
+
         solo.clickOnCheckBox(0);
-        assertEquals(solo.isCheckBoxChecked(0),true);
-        solo.clickOnCheckBox(4);
+        assertEquals(true,solo.isCheckBoxChecked(0));
         solo.clickOnText("OK",1);}
+    @After
+    public void resetmethod(){
+        View v = solo.getView(R.id.nav_manage);
+        solo.clickOnView(v, true);
+        solo.waitForActivity("Waiting", 10);
+        solo.clickOnText("studying",1);
+        solo.clearEditText((EditText) solo.getView(R.id.title_editText));
+        solo.enterText((EditText) solo.getView(R.id.title_editText), "study");
+        solo.clickOnCheckBox(0);
+    };
 }
+
+
+

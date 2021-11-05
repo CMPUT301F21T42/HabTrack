@@ -34,8 +34,6 @@ public class ManageFragmentTest {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         View v = solo.getView(R.id.nav_manage);
         solo.clickOnView(v, true);
-        solo.waitForActivity("Waiting", 10);
-        assertEquals(1,2);
-        //solo.assertCurrentActivity("Wrong Activity", HabitHandler.class);
+        solo.waitForFragmentById(R.id.managefragmentId);
     }
 }
