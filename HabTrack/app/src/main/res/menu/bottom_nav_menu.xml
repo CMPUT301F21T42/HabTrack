@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_myday"
+        android:icon="@drawable/ic_baseline_today_24"
+        android:title="@string/menu_myday" />
+    <item
+        android:id="@+id/nav_friends"
+        android:icon="@drawable/ic_baseline_people_alt_24"
+        android:title="@string/menu_friends" />
+    <item
+        android:id="@+id/nav_manage"
+        android:icon="@drawable/ic_baseline_playlist_add_24"
+        android:title="@string/menu_manage" />
+    <item
+        android:id="@+id/nav_events"
+        android:icon="@drawable/ic_baseline_emoji_events_24"
+        android:title="@string/menu_events" />
+
+</menu>
