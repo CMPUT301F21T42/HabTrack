@@ -105,6 +105,7 @@ public class UpdateAccountActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 progressBar.setVisibility(View.GONE);
+
                 try {
                     updateUserName.setText((String) value.getData().get("userName"));
                     updateEmail.setText((String) value.getData().get("email"));

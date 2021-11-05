@@ -4,6 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+/**
+ * This class contains functionality for events view model
+ */
+
 public class EventsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;

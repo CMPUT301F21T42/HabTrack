@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.habtrack.Habit;
 import com.example.habtrack.OnItemClickListener;
 import com.example.habtrack.databinding.FragmentMydayBinding;
+import com.example.habtrack.ui.events.AddHabitEventFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -89,6 +90,8 @@ public class MydayFragment extends Fragment {
         OnItemClickListener listener = new OnItemClickListener() {
             public void onItemClicked(int position) {
                 Habit habit = mydayAdapter.getItem(position);
+              
+                new AddHabitEventFragment(habit).show(getActivity().getSupportFragmentManager(), "AddHabitEvent");
                 Toast.makeText(getContext(), "Clicked on Checkbox: " + habit.getTitle(),
                         Toast.LENGTH_SHORT).show();
             }

@@ -115,7 +115,6 @@ public class UserProfileActivity extends AppCompatActivity {
                     } finally {
                         initializeView();
                     }
-
                 }
             });
 
