@@ -10,6 +10,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,10 +32,21 @@ public class MyDayFragmentTest {
     @Test
     public void mydaytest(){
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-        View v = solo.getView(R.id.myday_checkBox);
+        View myday = solo.getView(R.id.myday_checkBox);
         solo.clickOnCheckBox(0);
+        //EditText t1 = solo.getText(0);
         assertEquals(true,solo.isCheckBoxChecked(0));
 
+        //View nav_events = solo.getView(R.id.nav_events);
 
+        //View nav_events = solo.getView(R.id.nav_events);
+        //solo.clickOnView(nav_events);
+        //solo.waitForText(t1,1,10);
     }
+//    @After
+//    public void resetdata(){
+//        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+//        View myday = solo.getView(R.id.myday_checkBox);
+//        solo.clickOnCheckBox(0);
+//    }
 }

@@ -11,10 +11,19 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+/**These tests are written for the user having
+ * email: raunak@gmail.ca
+ * password: Qwerty12345
+ *(otherwise they will fail)
+ * This test edit an already existing
+ * habit with the name study
+ *
+ */
 public class EditFragmentTest {
     private Solo solo;
     @Rule
@@ -26,26 +35,30 @@ public class EditFragmentTest {
     }
 
     @Test
-    public void start(){
-        Activity activity = rule.getActivity();
-    }
-
-    @Test
     public void additiontest(){
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-        View v = solo.getView(R.id.nav_manage);
+        View v = solo.getView(R.id.nav_manage);// goes to manage tab
         solo.clickOnView(v, true);
-        solo.waitForActivity("Waiting", 10);
-        //solo.assertCurrentActivity("Wrong Activity", ManageFragment.class);
+        //clicking on the study habit to make changes to it
         solo.clickOnText("study",1);
         solo.clearEditText((EditText) solo.getView(R.id.title_editText));
-        solo.enterText((EditText) solo.getView(R.id.title_editText), "Studying");
-        solo.waitForText("Studying", 1, 2000);
-        View sunday_button = solo.getView(R.id.sunday_checkBox);
-        solo.clickOnView(sunday_button);
-        //solo.clickOnCheckBox(View solo.getView(R.id.monday_checkBox));
+        solo.enterText((EditText) solo.getView(R.id.title_editText), "studying");
+        solo.waitForText("studying", 1, 2000);
+
         solo.clickOnCheckBox(0);
-        assertEquals(solo.isCheckBoxChecked(0),true);
-        solo.clickOnCheckBox(4);
-        solo.clickOnText("OK",1);}
+        assertEquals(true,solo.isCheckBoxChecked(0));
+        solo.clickOnText("OK",1);
+    }
+    @After
+    public void resetmethod(){
+        //resets the data back to original configuration
+        View v = solo.getView(R.id.nav_manage);
+        solo.clickOnView(v, true);
+        solo.clickOnText("studying",1);
+        solo.clearEditText((EditText) solo.getView(R.id.title_editText));
+        solo.enterText((EditText) solo.getView(R.id.title_editText), "study");
+        solo.clickOnCheckBox(0);
+        solo.clickOnText("OK",1);
+
+    };
 }

@@ -105,9 +105,15 @@ public class UpdateAccountActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 progressBar.setVisibility(View.GONE);
-                updateUserName.setText((String) value.getData().get("userName"));
-                updateEmail.setText((String) value.getData().get("email"));
-                initializeView();
+
+                try {
+                    updateUserName.setText((String) value.getData().get("userName"));
+                    updateEmail.setText((String) value.getData().get("email"));
+                } catch (NullPointerException e) {
+                    initializeView();
+                } finally {
+                    initializeView();
+                }
             }
         });
 
@@ -242,12 +248,21 @@ public class UpdateAccountActivity extends AppCompatActivity {
                 .setNegativeButton(android.R.string.no, null)
                 .show();
     }
-
+    
+    /**
+     * This method signs out the user from current session. Used when
+     * account needs to be deleted, it is best to sign out the user
+     * first and then delete the account
+     */
     public void signOutUser() {
-        Toast.makeText(context, "USER SIGN OUT", Toast.LENGTH_LONG).show();
         FirebaseAuth.getInstance().signOut();
     }
-
+    
+    /**
+     * This methods shutdowns the app. This is needed when account
+     * is deleted, the app will need to be restarted (manually for
+     * now) to prevent further issues. 
+     */
     public void endApplication() {
         finishAffinity();
     }
