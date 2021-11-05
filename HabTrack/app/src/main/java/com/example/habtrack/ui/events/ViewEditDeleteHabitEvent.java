@@ -112,6 +112,13 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
                                 hEvent.setTitle(user_title);
                                 hEvent.setComment(user_comment);
+                                FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
+                                HabTrackDB.collection("Users")
+                                        .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                        .collection("HabitEvents")
+                                        .document(hEvent.getHabitEventID())
+                                        .set(new HabitEvents(hEvent.getTitle(), hEvent.getComment(), hEvent.getPhoto(),
+                                                hEvent.getLocation(), hEvent.getTimeStamp()));
                             }
                         }
                     }

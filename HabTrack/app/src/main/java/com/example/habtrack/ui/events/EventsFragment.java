@@ -67,6 +67,17 @@ public class EventsFragment extends Fragment {
         eventAdapter = new EventsAdapter(getContext(), dataList);
         eventList.setAdapter(eventAdapter);
 
+        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                HabitEvents currentHabit = eventAdapter.getItem(position);
+
+                new ViewEditDeleteHabitEvent(currentHabit).show(getActivity().getSupportFragmentManager(), "AddHabitEvent");
+
+            }
+        });
+
         FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
         HabTrackDB.collection("Users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
