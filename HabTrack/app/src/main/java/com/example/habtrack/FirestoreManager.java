@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -228,6 +229,27 @@ public class FirestoreManager {
     public void deleteHabit(Habit selectedHabit) {
         // First delete a ranking
         Task task = deleteRanking(selectedHabit.getId());
+
+        FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
+        HabTrackDB.collection("Users")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .collection("HabitEvents")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        for (QueryDocumentSnapshot hevent: value)  {
+                            HabitEvents hEvent = hevent.toObject(HabitEvents.class);
+                            if (hEvent.getTitle().equals(selectedHabit.getTitle())) {
+                                HabTrackDB.collection("Users")
+                                        .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                        .collection("HabitEvents")
+                                        .document(hEvent.getHabitEventID())
+                                        .delete();
+                            }
+                        }
+                    }
+                });
+
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
