@@ -30,6 +30,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+/**
+ * This class stores and displays the list of habit events
+ */
+
 public class EventsFragment extends Fragment {
 
     //    private EventsViewModel eventsViewModel;
@@ -40,6 +44,14 @@ public class EventsFragment extends Fragment {
     private ArrayAdapter<HabitEvents> eventAdapter;
 
     FirebaseFirestore db;
+
+    /**
+     * This method adds the new habit to the events list view and updates the events adapter
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return root
+     */
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

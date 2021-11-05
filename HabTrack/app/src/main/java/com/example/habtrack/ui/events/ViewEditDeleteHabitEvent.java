@@ -18,9 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {link ViewEditDeleteHabitEvent#newInstance} factory method to
- * create an instance of this fragment.
+ * This class implements the functionality for the view edit delete fragment
  */
 public class ViewEditDeleteHabitEvent extends DialogFragment {
     private EditText title;     // TODO: Need to set this to the current habit title
@@ -51,6 +49,12 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 //        }
 //    }
 
+    /**
+     * This method creates the view for the view edit delete fragment and allows the user to delete
+     * and edit the habit events
+     * @param savedInstanceState
+     * @return
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@NonNull Bundle savedInstanceState) {
@@ -105,8 +109,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
                             }
                             else{
-                                // TODO: Need to check if I need to change the data in DB
-                                // TODO: Or it will be modified
+
                                 hEvent.setTitle(user_title);
                                 hEvent.setComment(user_comment);
                             }
@@ -115,12 +118,15 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                 }).create();
     }
 
-
+    /**
+     * This method deletes the habit event from the firebase.
+     * @param selectedEvent
+     */
     public void onDeletePressed(HabitEvents selectedEvent) {
 
         FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
 
-        // TODO: Need to check if the object created locally also gets deleted
+
         HabTrackDB.collection("Users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .collection("HabitEvents")

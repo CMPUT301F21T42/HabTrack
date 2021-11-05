@@ -38,6 +38,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/**
+ * This class contains functionality for adding an event fro a completed habit
+ * It allows the user to log the event and add an optional comment with it
+ */
+
 public class AddHabitEventFragment extends DialogFragment {
     // TODO: Need to set this title to the habit title finished
     private EditText title;     // To set the title for HabitEvent
@@ -53,6 +58,13 @@ public class AddHabitEventFragment extends DialogFragment {
 //        eventAdapter.add(newHabitEvent);
     }
 
+    /**
+     * This method saves the data added by the user to the firebase
+     * @param habitEventTitle
+     * @param comment
+     * @param photo
+     * @param location
+     */
     public void onOkPressed(String habitEventTitle, String comment, Boolean photo, Boolean location){
 
 
@@ -78,7 +90,11 @@ public class AddHabitEventFragment extends DialogFragment {
         Log.d("Firestore", "new HabitEvent is added to FireStore");
     }
 
-    // TODO: Need to uncomment the Override
+    /**
+     * This method creates the dialogue for adding a habit event.
+     * It displays the habit title and stores the comment entered by the user.
+     * @param savedInstanceState: Bundle
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@NonNull Bundle savedInstanceState) {

@@ -18,13 +18,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * This class stores the all the information of a habit event
+ */
 public class HabitEvents implements Serializable {
-    // TODO: Need to modify Habit attribute if it's efficient to just store the habit title
+
 
     private String title;   // Storing the title of HabitEvent
     private String comment; // Storing the user comment on HabitEvent
 
-    // TODO: Should modify these attributes for Project part 4
+
     private Boolean Photo;
     private Boolean location;
     String timeStamp;
@@ -48,11 +51,19 @@ public class HabitEvents implements Serializable {
         this.timeStamp = timeStamp;
     }
 
-    // TODO: Need to add default values for Photo and location
+
+
+    /**
+     * This constructor is used to initialise the attributes
+     * @param habitTitle
+     * @param comment
+     * @param Photo
+     * @param location
+     */
     public HabitEvents(String habitTitle, String comment, Boolean Photo,
                        Boolean location, String timeStamp) {
 
-        // TODO: Need to type check all the attributes
+
 
         this.title = habitTitle;
         this.comment = comment;
@@ -117,12 +128,12 @@ public class HabitEvents implements Serializable {
 //import java.util.Date;
 //
 //public class HabitEvents {
-//    // TODO: Need to modify Habit attribute if it's efficient to just store the habit title
+//
 //
 //    private String title;   // Storing the title of HabitEvent
 //    private String comment; // Storing the user comment on HabitEvent
 //
-//    // TODO: Should modify these attributes for Project part 4
+
 //    private Boolean Photo;
 //    private Boolean location;
 //    String timeStamp;
@@ -148,11 +159,11 @@ public class HabitEvents implements Serializable {
 //        this.timeStamp = timeStamp;
 //    }
 //
-//    // TODO: Need to add default values for Photo and location
+//
 //    public HabitEvents(String habitTitle, String comment, Boolean Photo,
 //                       Boolean location, String timeStamp) {
 //
-//        // TODO: Need to type check all the attributes
+
 //
 //        this.title = habitTitle;
 //        this.comment = comment;

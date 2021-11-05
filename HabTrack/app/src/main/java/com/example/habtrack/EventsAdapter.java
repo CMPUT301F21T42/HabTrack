@@ -12,6 +12,9 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+/**
+ * This class defines the custom view of the Habit Events List
+ */
 public class EventsAdapter extends ArrayAdapter<HabitEvents> {
 
     private ArrayList<HabitEvents> events;
@@ -22,7 +25,13 @@ public class EventsAdapter extends ArrayAdapter<HabitEvents> {
         this.events = events;
         this.context = context;
     }
-
+    /**
+     * This method displays the event title and Date for each event on the list.
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return view
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
