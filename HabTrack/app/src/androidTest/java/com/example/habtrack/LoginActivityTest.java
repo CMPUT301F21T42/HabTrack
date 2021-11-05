@@ -1,5 +1,5 @@
 /*
- * MainActivity
+ * LoginActivityTest
  *
  * LoginActivityTest class contains Robotium Intent tests for the Login Activity.
  * Specifically it tests the Login and Signup Button.
@@ -8,7 +8,7 @@
  *
  * Version 1.0
  *
- * October 30, 2021
+ * November 4, 2021
  *
  * Copyright notice
  */
