@@ -46,6 +46,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import kotlin.internal.Exact;
+
 /**
  * UserProfileActivity centers around the user profile of the HabTrack application. This class
  * contains onClick button listening events for the "logout" and "update account" buttons. And
@@ -105,11 +107,15 @@ public class UserProfileActivity extends AppCompatActivity {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                     progressBar.setVisibility(View.GONE);
-                    if (value.getData().get("Username") != null) {
+                    try {
                         userName.setText((String) value.getData().get("userName"));
                         email.setText((String) value.getData().get("email"));
+                    } catch (NullPointerException e) {
+                        initializeView();
+                    } finally {
+                        initializeView();
                     }
-                    initializeView();
+
                 }
             });
 

@@ -71,14 +71,14 @@ public class SignUpActivityTest {
         solo.clickOnText("Sign up");
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
         solo.enterText((EditText) solo.getView(R.id.new_username), "matt");
-        solo.enterText((EditText) solo.getView(R.id.new_email), "mattheas@test.com");
+        solo.enterText((EditText) solo.getView(R.id.new_email), "mattheasg@test.com");
         solo.enterText((EditText) solo.getView(R.id.new_password), "testpassword");
         solo.enterText((EditText) solo.getView(R.id.confirm_password), "testpassword");
         solo.clickOnButton("Sign up");
 
         // Log into the app with newly created user
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.email), "mattheas@test.com");
+        solo.enterText((EditText) solo.getView(R.id.email), "mattheasg@test.com");
         solo.enterText((EditText) solo.getView(R.id.password), "testpassword");
         solo.clickOnButton("Log in");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
