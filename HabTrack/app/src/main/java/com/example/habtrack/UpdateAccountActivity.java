@@ -242,12 +242,21 @@ public class UpdateAccountActivity extends AppCompatActivity {
                 .setNegativeButton(android.R.string.no, null)
                 .show();
     }
-
+    
+    /**
+     * This method signs out the user from current session. Used when
+     * account needs to be deleted, it is best to sign out the user
+     * first and then delete the account
+     */
     public void signOutUser() {
-        Toast.makeText(context, "USER SIGN OUT", Toast.LENGTH_LONG).show();
         FirebaseAuth.getInstance().signOut();
     }
-
+    
+    /**
+     * This methods shutdowns the app. This is needed when account
+     * is deleted, the app will need to be restarted (manually for
+     * now) to prevent further issues. 
+     */
     public void endApplication() {
         finishAffinity();
     }
