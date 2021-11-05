@@ -96,18 +96,24 @@ public class UserProfileActivity extends AppCompatActivity {
         logout = findViewById(R.id.log_out);
         updateAccount = findViewById(R.id.update_account);
 
-        progressBar.setVisibility(View.VISIBLE);
-        DocumentReference userDocumentReference = UserInfo.getUserDocumentReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        userDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                progressBar.setVisibility(View.GONE);
-                userName.setText((String) value.getData().get("userName"));
-                email.setText((String) value.getData().get("email"));
-                initializeView();
-            }
-        });
+        //progressBar.setVisibility(View.VISIBLE);
+        Toast.makeText(context, FirebaseAuth.getInstance().getCurrentUser().getUid(), Toast.LENGTH_LONG).show();
 
+        // TODO: Gracefully handle situation when user does not exist
+            DocumentReference userDocumentReference = UserInfo.getUserDocumentReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            userDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    progressBar.setVisibility(View.GONE);
+                    if (value.getData().get("Username") != null) {
+                        userName.setText((String) value.getData().get("userName"));
+                        email.setText((String) value.getData().get("email"));
+                    }
+                    initializeView();
+                }
+            });
+
+        initializeView();
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +127,7 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 goToUpdateAccountActivity();
+                finish();
             }
         });
 

@@ -111,7 +111,6 @@ public class UpdateAccountActivity extends AppCompatActivity {
             }
         });
 
-
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,7 +150,6 @@ public class UpdateAccountActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     progressBar.setVisibility(View.GONE);
-                    goToUserProfileActivity();
                 } else {
                     progressBar.setVisibility(View.GONE);
                     try {
@@ -159,7 +157,7 @@ public class UpdateAccountActivity extends AppCompatActivity {
                     } catch(FirebaseAuthRecentLoginRequiredException e) {
                         Toast.makeText(context, "Re-login required", Toast.LENGTH_LONG).show();
                         // FirebaseAuth can require user to re-authenticate for security sensitive operations
-                        FirebaseAuth.getInstance().signOut();
+                        signOutUser();
                         goToLoginActivity();
                     } catch(Exception e) {
                         updateEmail.setError(e.getMessage());
@@ -188,6 +186,7 @@ public class UpdateAccountActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     progressBar.setVisibility(View.GONE);
+                    goToUserProfileActivity();
                 } else {
                     progressBar.setVisibility(View.GONE);
                     updateEmail.setError(task.getException().getMessage());
@@ -206,16 +205,16 @@ public class UpdateAccountActivity extends AppCompatActivity {
     public void deleteAccount() {
         new AlertDialog.Builder(context)
                 .setTitle("Delete Account")
-                .setMessage("Are you sure you want to delete your account?")
+                .setMessage("Are you sure you want to delete your account? App will need to be restarted")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        signOutUser();
                         progressBar.setVisibility(View.VISIBLE);
                         updateAccountHandler.deleteAccountFromFirestoreDatabase().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     progressBar.setVisibility(View.GONE);
-                                    goToLoginActivity();
                                 } else {
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -235,12 +234,22 @@ public class UpdateAccountActivity extends AppCompatActivity {
                                 }
                             }
                         });
+                        endApplication();
                     }
                 })
 
                 // A null listener allows the button to dismiss the dialog and take no further action.
                 .setNegativeButton(android.R.string.no, null)
                 .show();
+    }
+
+    public void signOutUser() {
+        Toast.makeText(context, "USER SIGN OUT", Toast.LENGTH_LONG).show();
+        FirebaseAuth.getInstance().signOut();
+    }
+
+    public void endApplication() {
+        finishAffinity();
     }
 
     /**
