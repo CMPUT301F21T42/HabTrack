@@ -33,6 +33,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
+/**
+ * This class contains onClick button listening events for the "login" and "signup" button. It also
+ * contains method calls to verify user inputs of email and password if the user attempts to login.
+ * And lastly it contains an instance of the LoginHandler in case of an attempted login with
+ * potentially valid credentials. Depending on the user inputs/ actions a UserProfileActivity or
+ * SignUpActivity activity may be started.
+ *
+ * @author Jenish
+ * @see UserProfileActivity
+ * @see LoginHandler
+ * @see SignUpActivity
+ * @see CredentialVerifier
+ * @version 1.0
+ * @since 1.0
+ */
 public class LoginActivity extends AppCompatActivity {
 
     final Context context = this;
@@ -45,6 +60,14 @@ public class LoginActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
 
+    /**
+     * onCreate() method is *generally* only called once for the lifetime off the app, i.e when
+     * the Activity is created, it finds the ID's of the different views and sets up listening
+     * events for when the user touches the screen/ button. It can be thought of in some sense
+     * as a constructor for the class.
+     *
+     * @param  savedInstanceState state of application.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
