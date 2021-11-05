@@ -122,14 +122,14 @@ public class UpdateAccountActivityTest {
         solo.clickOnText("Sign up");
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
         solo.enterText((EditText) solo.getView(R.id.new_username), "matt");
-        solo.enterText((EditText) solo.getView(R.id.new_email), "mattheasjwf@test.com");
+        solo.enterText((EditText) solo.getView(R.id.new_email), "mattheasjwfq@test.com");
         solo.enterText((EditText) solo.getView(R.id.new_password), "testpassword");
         solo.enterText((EditText) solo.getView(R.id.confirm_password), "testpassword");
         solo.clickOnButton("Sign up");
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
         // Log into the app with newly created user
-        solo.enterText((EditText) solo.getView(R.id.email), "mattheasjwf@test.com");
+        solo.enterText((EditText) solo.getView(R.id.email), "mattheasjwfq@test.com");
         solo.enterText((EditText) solo.getView(R.id.password), "testpassword");
         solo.clickOnButton("Log in");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
@@ -143,12 +143,12 @@ public class UpdateAccountActivityTest {
         solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
         solo.clickOnButton("Update Account");
         solo.clearEditText((EditText) solo.getView(R.id.update_email));
-        solo.enterText((EditText) solo.getView(R.id.update_email), "mattj@updated.com");
+        solo.enterText((EditText) solo.getView(R.id.update_email), "mattjq@updated.com");
         solo.clickOnButton("Save changes");
         solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
 
         // assert that email is updated
-        assertTrue(solo.searchText("matt@updated.com"));
+        assertTrue(solo.searchText("mattjq@updated.com"));
 
         // delete user from database
         solo.clickOnButton("Update Account");

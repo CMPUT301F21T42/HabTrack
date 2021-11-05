@@ -105,9 +105,14 @@ public class UpdateAccountActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 progressBar.setVisibility(View.GONE);
-                updateUserName.setText((String) value.getData().get("userName"));
-                updateEmail.setText((String) value.getData().get("email"));
-                initializeView();
+                try {
+                    updateUserName.setText((String) value.getData().get("userName"));
+                    updateEmail.setText((String) value.getData().get("email"));
+                } catch (NullPointerException e) {
+                    initializeView();
+                } finally {
+                    initializeView();
+                }
             }
         });
 
