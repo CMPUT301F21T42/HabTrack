@@ -15,27 +15,43 @@
 package com.example.habtrack.ui.events;
 
 import static android.content.ContentValues.TAG;
+
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.habtrack.Habit;
 import com.example.habtrack.HabitEvents;
+import com.example.habtrack.MapsActivity;
 import com.example.habtrack.R;
+import com.example.habtrack.databinding.FragmentAddHabitEventBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -44,10 +60,15 @@ import java.util.Calendar;
  */
 
 public class AddHabitEventFragment extends DialogFragment {
+    private FragmentAddHabitEventBinding binding;
+
+    private ArrayList<Double> location = new ArrayList<>();
+
     // TODO: Need to set this title to the habit title finished
     private EditText title;     // To set the title for HabitEvent
     private EditText comment;   // To get the Users comment on HabitEvent
     private Habit habit;
+    private TextView latlng;
 
     public  AddHabitEventFragment(Habit habit){
         this.habit = habit;
@@ -63,9 +84,8 @@ public class AddHabitEventFragment extends DialogFragment {
      * @param habitEventTitle
      * @param comment
      * @param photo
-     * @param location
      */
-    public void onOkPressed(String habitEventTitle, String comment, Boolean photo, Boolean location){
+    public void onOkPressed(String habitEventTitle, String comment, Boolean photo){
 
 
         FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
@@ -83,11 +103,24 @@ public class AddHabitEventFragment extends DialogFragment {
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("HabitEvents")
                 .document(HabitEventId);
 
+        HabitEvents he = new HabitEvents(habitEventTitle, comment, photo, location, timestamp);
+//        HabitEvents he = new HabitEvents(habitEventTitle, comment, photo, null, timestamp);
         HabTrackDB.collection("Users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("HabitEvents")
-                .document(HabitEventId).set(new HabitEvents(habitEventTitle, comment, photo, location, timestamp));
+                .document(HabitEventId).set(he)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "new HabitEvent is added to FireStore");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", "NOT ADDED");
+                    }
+                });
 
-        Log.d("Firestore", "new HabitEvent is added to FireStore");
     }
 
     /**
@@ -98,9 +131,39 @@ public class AddHabitEventFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@NonNull Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_habit_event, null);
-        title = view.findViewById(R.id.habit_event_title);
-        comment = view.findViewById(R.id.habit_event_comment);
+        binding = FragmentAddHabitEventBinding.inflate(LayoutInflater.from(getContext()));
+        View root = binding.getRoot();
+
+        title = binding.habitEventTitle;
+        comment = binding.habitEventComment;
+
+        latlng = binding.latlng;
+
+        ActivityResultLauncher<Intent> locationGetContent = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            location.clear();
+                            Double lat = data.getDoubleExtra("lat", 53.526681512750336);
+                            Double lng = data.getDoubleExtra("lng", -113.52975698826533);
+                            location.add(lat);
+                            location.add(lng);
+                            latlng.setText("(" + location.get(0) + ", " + location.get(1) + ")");
+                        }
+                    }
+                });
+
+        ImageButton ib = binding.imageButton;
+        ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MapsActivity.class);
+                locationGetContent.launch(intent);
+            }
+        });
 
 
         String habitTitle = "TempTitle";
@@ -114,7 +177,7 @@ public class AddHabitEventFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
-                .setView(view)
+                .setView(root)
                 .setTitle("Congratulations")
                 // Cancel button in case a user don't want to add this habit event
 
@@ -140,7 +203,7 @@ public class AddHabitEventFragment extends DialogFragment {
                             // TODO: need to store this object in customList
 
                             onOkPressed(habit.getTitle(),
-                                    user_comment, false, false);
+                                    user_comment, false);
 
                         }
 

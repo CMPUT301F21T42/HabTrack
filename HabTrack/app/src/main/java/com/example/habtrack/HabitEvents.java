@@ -13,8 +13,11 @@
  */
 package com.example.habtrack;
 
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -29,7 +32,7 @@ public class HabitEvents implements Serializable {
 
 
     private Boolean Photo;
-    private Boolean location;
+    private ArrayList<Double> location;
     String timeStamp;
     String HabitEventID;
 
@@ -61,7 +64,7 @@ public class HabitEvents implements Serializable {
      * @param location
      */
     public HabitEvents(String habitTitle, String comment, Boolean Photo,
-                       Boolean location, String timeStamp) {
+                       @Nullable ArrayList<Double> location, String timeStamp) {
 
 
 
@@ -99,11 +102,11 @@ public class HabitEvents implements Serializable {
         Photo = photo;
     }
 
-    public Boolean getLocation() {
+    public ArrayList<Double> getLocation() {
         return location;
     }
 
-    public void setLocation(Boolean location) {
+    public void setLocation(ArrayList<Double> location) {
         this.location = location;
     }
 }

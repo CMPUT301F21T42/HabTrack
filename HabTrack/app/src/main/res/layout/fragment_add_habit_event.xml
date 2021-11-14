@@ -2,9 +2,12 @@
 <LinearLayout
     xmlns:android = "http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.events.AddHabitEventFragment">
+
     <EditText
         android:id="@+id/habit_event_title"
         android:layout_width="match_parent"
@@ -36,10 +39,28 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_menu_camera" />
 
-    <TextView
-        android:id="@+id/location_picker"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Choose a location" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/location_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Choose a location" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_baseline_pin_drop_24" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/latlng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(lat, lng)" />
 
 </LinearLayout>
