@@ -88,35 +88,32 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        progressBar = findViewById(R.id.progress_bar_user_profile);
-
         imageView =findViewById(R.id.avatar);
 
-        userName = findViewById(R.id.display_user_name);
-        email = findViewById(R.id.display_email);
+//        userName = findViewById(R.id.display_user_name);
+//        email = findViewById(R.id.display_email);
 
         logout = findViewById(R.id.log_out);
         updateAccount = findViewById(R.id.update_account);
 
         //progressBar.setVisibility(View.VISIBLE);
-        Toast.makeText(context, FirebaseAuth.getInstance().getCurrentUser().getUid(), Toast.LENGTH_LONG).show();
+        // Toast.makeText(context, FirebaseAuth.getInstance().getCurrentUser().getUid(), Toast.LENGTH_LONG).show();
 
-        // TODO: Gracefully handle situation when user does not exist
-            DocumentReference userDocumentReference = UserInfo.getUserDocumentReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            userDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                    progressBar.setVisibility(View.GONE);
-                    try {
-                        userName.setText((String) value.getData().get("userName"));
-                        email.setText((String) value.getData().get("email"));
-                    } catch (NullPointerException e) {
-                        initializeView();
-                    } finally {
-                        initializeView();
-                    }
-                }
-            });
+//            DocumentReference userDocumentReference = UserInfo.getUserDocumentReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
+//            userDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//                @Override
+//                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+//                    progressBar.setVisibility(View.GONE);
+//                    try {
+//                        userName.setText((String) value.getData().get("userName"));
+//                        email.setText((String) value.getData().get("email"));
+//                    } catch (NullPointerException e) {
+//                        initializeView();
+//                    } finally {
+//                        initializeView();
+//                    }
+//                }
+//            });
 
         initializeView();
 
@@ -132,7 +129,6 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 goToUpdateAccountActivity();
-                finish();
             }
         });
 
@@ -171,8 +167,8 @@ public class UserProfileActivity extends AppCompatActivity {
      * Pressing back should result in user being taken
      * to MainActivity
      */
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(context, MainActivity.class));
-    }
+//    @Override
+//    public void onBackPressed() {
+//        startActivity(new Intent(context, MainActivity.class));
+//    }
 }
