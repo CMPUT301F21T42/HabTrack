@@ -25,5 +25,8 @@
     <string name="date_display">"Date started: %1$s</string>
     <string name="error_message">Invalid %1$s entry: please try again.</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="comment">Comment</string>
+    <string name="choose_a_location">Choose a location</string>
+    <string name="lat_lng">(lat, lng)</string>
 
 </resources>

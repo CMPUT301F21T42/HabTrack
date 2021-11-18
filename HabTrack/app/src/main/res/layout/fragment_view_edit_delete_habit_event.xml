@@ -8,30 +8,32 @@
     android:orientation="vertical"
     tools:context=".ui.events.ViewEditDeleteHabitEvent">
 
-    <EditText
+    <TextView
         android:id="@+id/habit_event_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:ems="10"
-        android:hint="HabitEventName"
-        android:text="HabitEvent"
-        android:inputType="textPersonName"
-        android:maxLength= "20"
-        />
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:padding="10dp"
+        android:textSize="22dp"
+        android:text="HabitEventName"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/habit_event_comment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:ems="10"
-        android:hint="Comment"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:ems="20"
+        android:hint="@string/comment"
         android:inputType="textPersonName"
-        android:maxLength="30"/>
+        android:maxLength="20"/>
 
     <TextView
         android:id="@+id/photo_selector_indicator"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/photo_selector"
@@ -48,7 +50,10 @@
             android:id="@+id/location_picker"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Choose a location" />
+            android:gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="5dp"
+            android:text="@string/choose_a_location" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -61,6 +66,9 @@
         android:id="@+id/latlng"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(lat, lng)" />
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/lat_lng"
+        android:visibility="gone" />
 
 </LinearLayout>

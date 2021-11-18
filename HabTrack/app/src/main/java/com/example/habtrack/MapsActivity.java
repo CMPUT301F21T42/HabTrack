@@ -1,3 +1,16 @@
+/** Copyright 2021 Wendy Zhang
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * CMPUT301F21T42 Project: HabTrack <br>
+ * To help someone who wants to track their habits.
+ * The {@code MapsActivity} class
+ * To enable the display of a map
+ */
+
 package com.example.habtrack;
 
 import androidx.annotation.NonNull;
@@ -21,6 +34,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.habtrack.ui.events.AddHabitEventFragment;
+import com.example.habtrack.ui.events.ViewEditDeleteHabitEvent;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,6 +55,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -69,6 +85,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private boolean isLocationGiven = false;
 
+    /**
+     * Sets the listener for the backButton
+     * @param item of type {@link MenuItem}
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -79,6 +100,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Creates the view containing the map
+     * @param savedInstanceState state of the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,11 +150,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /**
      * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * Triggered when the map is ready to be used.
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -143,6 +164,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Searches location based on the user input {@link String}
+     * Sets the marker location to the parsed location
+     * @param view
+     */
     public void searchLocation(View view) {
         EditText locationSearch = binding.mapText;
         String location = locationSearch.getText().toString();
@@ -165,6 +191,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Returns to the {@link AddHabitEventFragment} or the {@link ViewEditDeleteHabitEvent}
+     * @param view
+     */
     public void confirmLocation(View view) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("lat", marker.getPosition().latitude);
@@ -173,6 +203,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         finish();
     }
 
+    /**
+     * This method converts the location into an address
+     * @param location of type {@link Location}
+     * @return the parsed address of type {@link String}
+     */
     private String latLngToAddress(Location location) {
         List<Address> addresses;
         Geocoder geocoder = new Geocoder(this);
@@ -185,7 +220,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /**
-     * Gets the current location of the device, and positions the map's camera.
+     * Gets the current location of the device
      */
     @SuppressLint("MissingPermission")
     private void getDeviceLocation() {

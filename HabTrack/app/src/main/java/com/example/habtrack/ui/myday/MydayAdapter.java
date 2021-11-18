@@ -80,12 +80,13 @@ public class MydayAdapter extends ArrayAdapter<Habit> {
         check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onClickListener != null)
+                if (onClickListener != null) {
                     onClickListener.onItemClicked(position);
+                    check.setChecked(false);
+                }
             }
         });
 
         return view;
-
     }
 }

@@ -15,6 +15,8 @@ package com.example.habtrack;
 
 import androidx.annotation.Nullable;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,8 +28,7 @@ import java.util.Date;
  */
 public class HabitEvents implements Serializable {
 
-
-    private String title;   // Storing the title of HabitEvent
+    private String habitId;   // Storing the title of HabitEvent
     private String comment; // Storing the user comment on HabitEvent
 
 
@@ -35,6 +36,8 @@ public class HabitEvents implements Serializable {
     private ArrayList<Double> location;
     String timeStamp;
     String HabitEventID;
+
+    private FirestoreManager firestoreManager;
 
     public HabitEvents() {}
 
@@ -58,32 +61,31 @@ public class HabitEvents implements Serializable {
 
     /**
      * This constructor is used to initialise the attributes
-     * @param habitTitle
+     * @param habitId
      * @param comment
      * @param Photo
      * @param location
      */
-    public HabitEvents(String habitTitle, String comment, Boolean Photo,
+    public HabitEvents(String habitId, String comment, Boolean Photo,
                        @Nullable ArrayList<Double> location, String timeStamp) {
 
 
 
-        this.title = habitTitle;
+        this.habitId = habitId;
         this.comment = comment;
         this.Photo = Photo;
         this.location = location;
         this.timeStamp = timeStamp;
-        this.HabitEventID = title+timeStamp;
+        this.HabitEventID = habitId+timeStamp;
     }
 
-
+    public String getHabitId() {
+        return habitId;
+    }
 
     public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+        return FirestoreManager.getInstance(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .getHabit(getHabitId()).getTitle();
     }
 
     public String getComment() {

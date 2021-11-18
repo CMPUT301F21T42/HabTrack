@@ -11,7 +11,9 @@
  */
 package com.example.habtrack.ui.myday;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +23,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.habtrack.FirestoreManager;
 import com.example.habtrack.Habit;
 import com.example.habtrack.OnItemClickListener;
 import com.example.habtrack.databinding.FragmentMydayBinding;
@@ -40,6 +44,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,7 +66,7 @@ public class MydayFragment extends Fragment {
     private ArrayList<Habit> dataList;
     private ArrayAdapter<Habit> mydayAdapter;
 
-    FirebaseFirestore db;
+    private FirestoreManager firestoreManager;
     
     /**
      *<p>
@@ -92,35 +100,20 @@ public class MydayFragment extends Fragment {
                 Habit habit = mydayAdapter.getItem(position);
               
                 new AddHabitEventFragment(habit).show(getActivity().getSupportFragmentManager(), "AddHabitEvent");
-                Toast.makeText(getContext(), "Clicked on Checkbox: " + habit.getTitle(),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Clicked on Checkbox: " + habit.getTitle(),
+//                        Toast.LENGTH_SHORT).show();
+
             }
         };
 
         mydayAdapter = new MydayAdapter(getContext(), dataList, listener);
         mydayList.setAdapter(mydayAdapter);
 
-        db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference
-                = db.collection("Users")
-                    .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .collection("Habits");
-
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        refreshDataList();
+        firestoreManager.setOnDataChangeListener(new FirestoreManager.OnDataChangeListener() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
-                                @Nullable FirebaseFirestoreException error) {
-                dataList.clear();
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
-                {
-                    //Log.d(TAG, String.valueOf(doc.getData().get("Habit")));
-                    Calendar today = Calendar.getInstance();
-                    Habit habit = doc.toObject(Habit.class);
-                    if (!habit.getStartDate().after(today.getTime()) &&
-                            habit.getPlan().get(today.get(Calendar.DAY_OF_WEEK) - 1))
-                        dataList.add(habit); // Adding the habit from FireStore
-                }
-                mydayAdapter.notifyDataSetChanged();
+            public void onDataChange() {
+                refreshDataList();
             }
         });
 
@@ -131,6 +124,67 @@ public class MydayFragment extends Fragment {
 //        });
 
         return root;
+    }
+
+    /**
+     * Compares two date objects to determine whether they are on the same day
+     * @param date1 of type {@link Date}
+     * @param date2 of type {@link Date}
+     * @return true if they are on the same day; false otherwise
+     */
+    private boolean isSameDay(Date date1, Date date2) {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(date1);
+        cal2.setTime(date2);
+        return cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+    }
+
+    /**
+     * Updates the {@link MydayFragment#dataList} when creating the view
+     * or when the {@link MydayFragment#firestoreManager}'s data changes
+     */
+    private void refreshDataList() {
+        firestoreManager = FirestoreManager.getInstance(
+                FirebaseAuth.getInstance().getCurrentUser().getUid());
+        Date lastLogon = firestoreManager.getLastLogon();
+        Calendar today = Calendar.getInstance();
+        LocalDate end = today.getTime().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate();
+
+        dataList.clear();
+        for (Habit habit : firestoreManager.getHabits()) {
+
+            if (!habit.getStartDate().after(today.getTime())) {
+                LocalDate start = lastLogon.after(habit.getLastScheduled()) ?
+                        lastLogon.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() :
+                        habit.getLastScheduled().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                // Increment the progress denominator for days without user logon
+                for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
+                    if (habit.getPlan().get(date.get(WeekFields.SUNDAY_START.dayOfWeek()) - 1)) {
+                        habit.incrementProgressDenominator();
+                        firestoreManager.editHabit(habit);
+                    }
+                }
+                firestoreManager.setLastLogon(today.getTime());
+
+                if (habit.getPlan().get(today.get(Calendar.DAY_OF_WEEK) - 1)) {
+                    // Set the last scheduled date to today if not already set
+                    if (!isSameDay(today.getTime(), habit.getLastScheduled())) {
+                        habit.setLastScheduled(today.getTime());
+                        habit.incrementProgressDenominator();
+                        firestoreManager.editHabit(habit);
+                    }
+
+                    // Add habit to the my day list if it is not completed
+                    if (!isSameDay(today.getTime(), habit.getLastCompleted()))
+                        dataList.add(habit);
+                }
+            }
+        }
+        mydayAdapter.notifyDataSetChanged();
     }
 
     @Override
