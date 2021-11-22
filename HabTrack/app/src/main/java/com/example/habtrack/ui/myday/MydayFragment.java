@@ -162,7 +162,7 @@ public class MydayFragment extends Fragment {
                         habit.getLastScheduled().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
                 // Increment the progress denominator for days without user logon
-                for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
+                for (LocalDate date = start.plusDays(1); date.isBefore(end); date = date.plusDays(1)) {
                     if (habit.getPlan().get(date.get(WeekFields.SUNDAY_START.dayOfWeek()) - 1)) {
                         habit.incrementProgressDenominator();
                         firestoreManager.editHabit(habit);
