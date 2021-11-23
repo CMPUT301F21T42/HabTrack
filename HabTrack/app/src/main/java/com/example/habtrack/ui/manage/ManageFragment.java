@@ -1,6 +1,4 @@
-/** Copyright 2021
- * Raunak Agarwal, Revanth Atmakuri, Mattheas Jamieson,
- * Jenish Patel, Jasmine Wadhwa, Wendy Zhang
+/** Copyright 2021 Raunak Agarwal, Wendy Zhang
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -48,6 +46,8 @@ public class ManageFragment extends Fragment {
     private RecyclerView habitList;
     private ArrayList<Habit> dataList;
     private RecyclerView.Adapter<ItemViewHolder> habitAdapter;
+
+    private String userId;
 
     /**
      *

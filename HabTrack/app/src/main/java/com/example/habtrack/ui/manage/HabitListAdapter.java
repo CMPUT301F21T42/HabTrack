@@ -71,8 +71,8 @@ public class HabitListAdapter extends RecyclerView.Adapter<ItemViewHolder>
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Habit habit = habits.get(position);
         holder.title.setText(habit.getTitle());
-//        holder.progressBar.setMax(100);
-//        holder.progressBar.setProgress(habit.getProgress());
+        holder.progressBar.setMax(100);
+        holder.progressBar.setProgress(habit.getProgress());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
 
