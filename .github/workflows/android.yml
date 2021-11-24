@@ -26,5 +26,4 @@ jobs:
         chmod +x gradlew	
     - name: Build with Gradle
       run: |
-        cd HabTrack/
-        ./gradlew build
+        ./HabTrack/gradlew build
