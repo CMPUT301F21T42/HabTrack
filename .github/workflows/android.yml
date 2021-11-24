@@ -22,9 +22,9 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: |
-	cd HabTrack/
-        chmod +x gradlew
+        cd HabTrack/ 
+        chmod +x gradlew	
     - name: Build with Gradle
       run: |
-	cd HabTrack/
+        cd HabTrack/
         gradlew build
