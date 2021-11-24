@@ -27,4 +27,4 @@ jobs:
     - name: Build with Gradle
       run: |
         cd HabTrack/
-        gradlew build
+        ./gradlew build
