@@ -21,7 +21,7 @@ jobs:
         cache: gradle
 
     - name: change directory to HabTrack/
-      run: cd ./HabTrack
+      run: cd HabTrack
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
