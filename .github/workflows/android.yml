@@ -21,6 +21,10 @@ jobs:
         cache: gradle
 
     - name: Grant execute permission for gradlew
-      run: chmod +x HabTrack/gradlew	
+      run: |
+        cd HabTrack/ 
+        chmod +x gradlew
     - name: Build with Gradle
-      run: ./HabTrack/gradlew build
+      run: |
+        cd HabTrack/
+        ./gradlew build
