@@ -72,16 +72,11 @@ public class ViewProgressFragment extends DialogFragment {
     }
 
     /**
-     *  Returns a dialog object when user clicks on an object of Habit.
+     *  Returns a dialog object when user swipes right on an object of Habit,
+     *  the clicks on the "PROGRESS" button.
      *  <p>
-     *  This function opens up a fragment, extracts the information of the specific habit
-     *  of the respective user and displays it to the user for editing, deleting or just viewing
-     *  the habit and its attributes.
-     *  </p>
-     *  <p>
-     *      The user can edit the edit all the attributes of the habit on the same fragment
-     *      by clicking on the specific field to edit.
-     *  </p>
+     *  This function opens up a fragment, extracts the progress information of the specific habit
+     *  of the respective user and displays it to the user.
      *
      * @param savedInstanceState instance of the habit bundle.
      *

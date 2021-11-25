@@ -310,7 +310,7 @@ public class Habit implements Serializable, Comparable<Habit> {
      * Decrements the {@link Habit#progressDenominator} of this {@link Habit} object by one
      */
     public void decrementProgressDenominator() {
-        progressDenominator++;
+        progressDenominator--;
     }
 
     /**
