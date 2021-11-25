@@ -111,7 +111,11 @@ public class FriendProfileActivity extends AppCompatActivity {
                                     Habit habit = new Habit();
                                     habit.setTitle(String.valueOf(doc.getData().get("title")));
                                     habit.setProgress(Integer.parseInt(doc.getData().get("progress").toString()));
-                                    habitDataList.add(habit);
+
+                                    // Only public habits are visible
+                                    if (habit.getIsPublic()) {
+                                        habitDataList.add(habit);
+                                    }
                                 }
                                 habitList.setAdapter(habitAdapter);
                             }

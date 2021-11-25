@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -96,29 +97,11 @@ public class SearchUsersActivity extends AppCompatActivity {
 
         usersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
-                UserInfo user = userDataList.get(index);
-                String userID = user.getUserID();
-
-                if (userID.equals(mAuth.getCurrentUser().getUid())) {
-                    new AlertDialog.Builder(context)
-                            .setTitle("Alert")
-                            .setMessage("Cannot follow yourself ...")
-                            .setNegativeButton(android.R.string.no, null)
-                            .show();
-                } else {
-                    new AlertDialog.Builder(context)
-                            .setTitle("User")
-                            .setMessage("Do you want to follow " + user.getUserName() + " ?")
-                            .setPositiveButton("Follow", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    sendFriendRequest(userID, index);
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .show();
-                }
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                UserInfo user = userDataList.get(i);
+                Intent intent = new Intent(context, FriendProfileActivity.class);
+                intent.putExtra("userID", user.getUserID());
+                startActivity(intent);
 
             }
         });
@@ -145,7 +128,7 @@ public class SearchUsersActivity extends AppCompatActivity {
         usersList.setAdapter(usersAdapter);
     }
 
-    public void sendFriendRequest(String targetUserId, int index) {
+    public void sendFriendRequest(String targetUserId) {
         // Add sent friend request
         collectionReference
                 .document(mAuth.getCurrentUser().getUid())
@@ -154,7 +137,7 @@ public class SearchUsersActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(context, "Requested to follow " + userDataList.get(index).getUserName(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Requested to follow " + targetUserId, Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -193,7 +176,7 @@ public class SearchUsersActivity extends AppCompatActivity {
                 });
     }
 
-    public void unSendFriendRequest(String targetUserId, int index) {
+    public void unSendFriendRequest(String targetUserId) {
         // Remove friend request from outgoing friend request list
         collectionReference
                 .document(mAuth.getCurrentUser().getUid())
@@ -202,7 +185,7 @@ public class SearchUsersActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(context, "Unsend friend request " + userDataList.get(index).getUserName(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Unsend friend request " + targetUserId, Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -234,6 +217,37 @@ public class SearchUsersActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d("Sample", mAuth.getCurrentUser().getUid() + " removed from outgoing friend requests");
+                        } else {
+                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    public void unfollow(String targetUserId) {
+        collectionReference
+                .document(targetUserId)
+                .update("follower", FieldValue.arrayRemove(mAuth.getCurrentUser().getUid()))
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Sample", targetUserId + " has removed you from its follower list");
+                        } else {
+                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+        // Remove user from incoming friend request list
+        collectionReference
+                .document(mAuth.getCurrentUser().getUid())
+                .update("following", FieldValue.arrayRemove(targetUserId))
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Sample", targetUserId + " removed from incoming friend requests");
                         } else {
                             Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }

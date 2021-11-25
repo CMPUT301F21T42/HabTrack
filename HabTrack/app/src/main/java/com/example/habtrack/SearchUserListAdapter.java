@@ -63,9 +63,11 @@ public class SearchUserListAdapter extends ArrayAdapter<UserInfo> {
             @Override
             public void onClick(View view) {
                 if (request.getText() == "Follow") {
-                    context.sendFriendRequest(user.getUserID(), position);
+                    context.sendFriendRequest(user.getUserID());
                 } else if (request.getText() == "Requested") {
-                    context.unSendFriendRequest(user.getUserID(), position);
+                    context.unSendFriendRequest(user.getUserID());
+                } else if (request.getText() == "Following") {
+                    context.unfollow(user.getUserID());
                 }
             }
         });

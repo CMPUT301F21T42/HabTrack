@@ -78,31 +78,17 @@ public class NotificationActivity extends AppCompatActivity {
             }
         });
 
-//        notificationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                int userIndex = i;
-//
-//                new AlertDialog.Builder(context)
-//                        .setTitle("User")
-//                        .setMessage("Do you want to accept follow request from " + notificationsDataList.get(i).getEmail() + " ?")
-//                        .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                Log.d("Sample", "Success accept");
-//                                acceptFriendRequest(notificationsDataList.get(userIndex));
-//                            }
-//                        })
-//                        .setNegativeButton("Deny", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                Log.d("Sample", "Success deny");
-//                                denyFriendRequest(notificationsDataList.get(userIndex));
-//                            }
-//                        })
-//                        .show();
-//            }
-//        });
+
+
+        notificationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                UserInfo user = notificationsDataList.get(i);
+                Intent intent = new Intent(context, FriendProfileActivity.class);
+                intent.putExtra("userID", user.getUserID()); // getText() SHOULD NOT be static!!!
+                startActivity(intent);
+            }
+        });
 
     }
 
