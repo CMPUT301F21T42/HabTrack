@@ -26,13 +26,14 @@ import com.example.habtrack.FirestoreManager;
 import com.example.habtrack.Habit;
 import com.example.habtrack.R;
 import com.example.habtrack.ui.edithabit.EdithabitFragment;
+import com.example.habtrack.ui.edithabit.ViewProgressFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class HabitListAdapter extends RecyclerView.Adapter<ItemViewHolder>
-        implements ItemTouchHelperAdapter {
+        implements ItemTouchHelperCallback.ItemTouchHelperAdapter {
     private ArrayList<Habit> habits;
     private Context context;
     private FragmentManager fragmentManager;
@@ -78,9 +79,7 @@ public class HabitListAdapter extends RecyclerView.Adapter<ItemViewHolder>
 
             @Override
             public void onClick(View v) {
-                int pos = holder.getAdapterPosition();
-                EdithabitFragment.newInstance(habits.get(pos))
-                        .show(fragmentManager, "EDIT_HABIT");
+                EdithabitFragment.newInstance(habits.get(position)).show(fragmentManager, "EDIT_HABIT");
             }
         });
     }
@@ -93,15 +92,6 @@ public class HabitListAdapter extends RecyclerView.Adapter<ItemViewHolder>
     public int getItemCount() {
         return habits.size();
     }
-
-//    @Override
-//    public void onItemDismiss(int position) {
-//        habits.remove(position);
-//        notifyItemRemoved(position);
-//
-//        firestoreManager = FirestoreManager.getInstance(FirebaseAuth.getInstance().getCurrentUser().getUid());
-//        firestoreManager.deleteHabit(habits.get(position));
-//    }
 
     /**
      * Reorders the item that was dragged and dropped in the list and
@@ -117,4 +107,15 @@ public class HabitListAdapter extends RecyclerView.Adapter<ItemViewHolder>
         firestoreManager = FirestoreManager.getInstance(FirebaseAuth.getInstance().getCurrentUser().getUid());
         firestoreManager.swapRanking(fromPosition, toPosition);
     }
+
+    @Override
+    public void onLeftClicked(int position) {
+        ViewProgressFragment.newInstance(habits.get(position)).show(fragmentManager, "VIEW_PROGRESS");
+    };
+
+    @Override
+    public void onRightClicked(int position) {
+        firestoreManager = FirestoreManager.getInstance(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        firestoreManager.deleteHabit(habits.get(position));
+    };
 }

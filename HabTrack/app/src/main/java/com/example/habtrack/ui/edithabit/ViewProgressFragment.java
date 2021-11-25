@@ -1,0 +1,114 @@
+/** Copyright 2021 Raunak Agarwal, Wendy Zhang
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * CMPUT301F21T42 Project: HabTrack <br>
+ * To help someone who wants to track their habits.
+ * The {@code ViewProgressFragment} class
+ */
+package com.example.habtrack.ui.edithabit;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+
+import com.example.habtrack.FirestoreManager;
+import com.example.habtrack.Habit;
+import com.example.habtrack.HabitHandler;
+import com.example.habtrack.R;
+import com.example.habtrack.databinding.FragmentEdithabitBinding;
+import com.example.habtrack.databinding.FragmentViewprogressBinding;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+/**
+ * This class is used to create a fragment that will enable the user to
+ * view their habit progress
+ */
+public class ViewProgressFragment extends DialogFragment {
+    final String TAG = "Sample";
+
+//    private EdithabitViewModel edithabitViewModel;
+    private FragmentViewprogressBinding binding;
+
+    private TextView completed;
+    private TextView scheduled;
+
+    private Habit selectedHabit;
+    private FirestoreManager firestoreManager;
+
+    /**
+     * This function creates a new instance of the habit selected and displays it in the fragment.
+     * @param habit instance of the Habit class object selected by user.
+     * @return fragment with its data.
+     */
+    public static ViewProgressFragment newInstance(Habit habit) {
+        Bundle args = new Bundle();
+        args.putSerializable("habit", habit);
+
+        ViewProgressFragment fragment = new ViewProgressFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     *  Returns a dialog object when user clicks on an object of Habit.
+     *  <p>
+     *  This function opens up a fragment, extracts the information of the specific habit
+     *  of the respective user and displays it to the user for editing, deleting or just viewing
+     *  the habit and its attributes.
+     *  </p>
+     *  <p>
+     *      The user can edit the edit all the attributes of the habit on the same fragment
+     *      by clicking on the specific field to edit.
+     *  </p>
+     *
+     * @param savedInstanceState instance of the habit bundle.
+     *
+     * @return Dialog object
+     */
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+
+        binding = FragmentViewprogressBinding.inflate(LayoutInflater.from(getContext()));
+        View root = binding.getRoot();
+
+        completed = binding.completedTextView;
+        scheduled = binding.scheduledTextView;
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            selectedHabit = (Habit) bundle.getSerializable("habit");
+            completed.setText(String.valueOf(selectedHabit.getProgressNumerator()));
+            scheduled.setText(String.valueOf(selectedHabit.getProgressDenominator()));
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(getContext()).setView(root)
+                .setTitle("View Habit Progress")
+                .setPositiveButton("OK", null)
+                .create();
+
+        return dialog;
+    }
+}
