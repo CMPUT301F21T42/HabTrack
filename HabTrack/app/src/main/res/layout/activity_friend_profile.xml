@@ -9,37 +9,97 @@
     <RelativeLayout
         android:id="@+id/user_info_view"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="150dp">
 
         <ImageView
             android:id="@+id/display_pic"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginTop="30dp"
             android:layout_marginLeft="30dp"
-            android:src="@drawable/ic_outline_face_24">
-        </ImageView>
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_outline_face_24"></ImageView>
 
         <TextView
             android:id="@+id/user_name_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/display_pic"
             android:layout_alignTop="@id/display_pic"
             android:layout_marginLeft="50dp"
-            android:text="user name">
-        </TextView>
+            android:layout_toRightOf="@id/display_pic"
+            android:text="user name"></TextView>
 
         <TextView
             android:id="@+id/email_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/user_name_tag"
-            android:layout_toRightOf="@id/display_pic"
             android:layout_marginLeft="50dp"
-            android:text="email">
+            android:layout_toRightOf="@id/display_pic"
+            android:text="email"></TextView>
+
+        <TextView
+            android:id="@+id/habits_count_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/email_tag"
+            android:layout_marginTop="120dp"
+            android:text="Habits"></TextView>
+
+        <TextView
+            android:id="@+id/habits_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/habits_count_label"
+            android:layout_marginLeft="20dp"
+            android:layout_alignBottom="@id/habits_count_label"
+            android:layout_marginBottom="30dp"
+            android:text="0"
+            android:textSize="18sp">
         </TextView>
-"
+
+        <TextView
+            android:id="@+id/followers_count_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/habits_count_label"
+            android:layout_alignBottom="@id/habits_count_label"
+            android:layout_marginLeft="30dp"
+            android:text="Followers"></TextView>
+
+        <TextView
+            android:id="@+id/followers_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/followers_count_label"
+            android:layout_marginLeft="25dp"
+            android:layout_alignBottom="@id/followers_count_label"
+            android:layout_marginBottom="30dp"
+            android:text="0"
+            android:textSize="18sp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/followings_count_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/followers_count_label"
+            android:layout_alignBottom="@id/followers_count_label"
+            android:layout_marginLeft="30dp"
+            android:text="Followings"></TextView>
+
+        <TextView
+            android:id="@+id/followings_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/followings_count_label"
+            android:layout_marginLeft="25dp"
+            android:layout_alignBottom="@id/followings_count_label"
+            android:layout_marginBottom="30dp"
+            android:text="0"
+            android:textSize="18sp">
+        </TextView>
+
+        "
     </RelativeLayout>
 
     <ListView

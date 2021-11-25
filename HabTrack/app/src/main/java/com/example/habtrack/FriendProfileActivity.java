@@ -27,6 +27,13 @@ public class FriendProfileActivity extends AppCompatActivity {
     TextView friendUserName;
     TextView friendEmail;
     TextView followToViewHabits;
+    TextView habitsCount;
+    TextView followersCount;
+    TextView followingsCount;
+
+    int habitsCountData = 0;
+    int followersCountData = 0;
+    int followingsCountData = 0;
 
     ListView habitList;
 
@@ -59,7 +66,13 @@ public class FriendProfileActivity extends AppCompatActivity {
         habitDataList = new ArrayList<>();
         habitAdapter = new FriendProfileListAdapter(this, habitDataList);
 
+        habitsCount = findViewById(R.id.habits_count);
+        followersCount = findViewById(R.id.followers_count);
+        followingsCount = findViewById(R.id.followings_count);
+
         obtainHabitsFromUser();
+        getFollowersCount();
+        getFollowingsCount();
     }
 
     public void obtainFriendInfoFromUserID() {
@@ -92,6 +105,8 @@ public class FriendProfileActivity extends AppCompatActivity {
                         collectionReferenceToHabit.addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                habitsCountData = value.size();
+                                habitsCount.setText(String.valueOf(habitsCountData));
                                 for (QueryDocumentSnapshot doc : value) {
                                     Habit habit = new Habit();
                                     habit.setTitle(String.valueOf(doc.getData().get("title")));
@@ -111,6 +126,37 @@ public class FriendProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void getFollowersCount() {
+        documentReference = db.document("Users/" + userID);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                ArrayList targetUserFollowers = (ArrayList) value.getData().get("follower");
+                if (targetUserFollowers != null) {
+                    followersCountData = targetUserFollowers.size();
+                    Log.d("Sample", String.valueOf(followersCountData));
+                    followersCount.setText(String.valueOf(followersCountData));
+                }
+
+            }
+        });
+    }
+
+    public void getFollowingsCount() {
+        documentReference = db.document("Users/" + userID);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                ArrayList targetUserFollowings = (ArrayList) value.getData().get("following");
+                if (targetUserFollowings != null) {
+                    followingsCountData = targetUserFollowings.size();
+                    Log.d("Sample", String.valueOf(followingsCountData));
+                    followingsCount.setText(String.valueOf(followingsCountData));
+                }
+            }
+        });
     }
 
 }
