@@ -2,15 +2,12 @@ package com.example.habtrack;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -23,10 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.habtrack.databinding.ActivityMainBinding;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.example.habtrack.ui.edithabit.AddhabitFragment;
 
@@ -60,7 +54,7 @@ public class MainActivity extends AppCompatActivity
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_myday, R.id.nav_friends, R.id.nav_manage, R.id.nav_events,
+                R.id.nav_myday, R.id.nav_manage, R.id.nav_events,
                 R.id.nav_following, R.id.nav_follower)
                 .setOpenableLayout(drawer)
                 .build();
@@ -73,6 +67,16 @@ public class MainActivity extends AppCompatActivity
         NavigationUI.setupWithNavController(bottom_nav_view, navController);
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        bottom_nav_view.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.nav_friends) {
+                    startFriendsActivity();
+                }
+                return false;
+            }
+        });
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             public void onDestinationChanged(NavController controller, NavDestination destination, Bundle arguments) {
                 getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_person_24);
@@ -100,8 +104,21 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, UserProfileActivity.class);
             startActivity(intent);
             finish();
+        } else if (item.getItemId() == R.id.nav_follower) {
+            Intent intent = new Intent(this, NotificationActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (item.getItemId() == R.id.nav_following) {
+            Intent intent = new Intent(this, FollowingActivity.class);
+            startActivity(intent);
+            finish();
         }
         return true;
+    }
+
+    public void startFriendsActivity() {
+        Intent intent = new Intent(this, SearchUsersActivity.class);
+        startActivity(intent);
     }
 
     // TODO: Exit app (finish()) only when the MainActivity is in "My Day" fragment

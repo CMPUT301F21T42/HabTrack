@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FriendProfileActivity">
+
+    <RelativeLayout
+        android:id="@+id/user_info_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <ImageView
+            android:id="@+id/display_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/ic_outline_face_24">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/user_name_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/display_pic"
+            android:layout_alignTop="@id/display_pic"
+            android:layout_marginLeft="50dp"
+            android:text="user name">
+        </TextView>
+
+        <TextView
+            android:id="@+id/email_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_name_tag"
+            android:layout_toRightOf="@id/display_pic"
+            android:layout_marginLeft="50dp"
+            android:text="email">
+        </TextView>
+"
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/friends_habit_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/user_info_view"></ListView>
+
+    <TextView
+        android:id="@+id/follow_to_view_habits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Follow to view Habits"
+        android:visibility="invisible">
+    </TextView>
+
+</RelativeLayout>

@@ -10,6 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HabTrack">
         <activity
+            android:name=".FriendProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".FollowingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".NotificationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SearchUsersActivity"
+            android:exported="true" />
+        <activity
             android:name=".UserLoginStatusActivity"
             android:exported="true">
             <intent-filter>
@@ -24,7 +36,8 @@
         <activity
             android:name=".UserProfileActivity"
             android:exported="true"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -40,8 +53,7 @@
             android:theme="@style/Theme.HabTrack.NoActionBar" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
     </application>
 
 </manifest>
