@@ -99,8 +99,8 @@ public class FriendProfileActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 ArrayList targetUserFollowers = (ArrayList) value.getData().get("follower");
-                if (targetUserFollowers != null) {
-                    if (targetUserFollowers.contains(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                if (targetUserFollowers != null || userID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    if (targetUserFollowers.contains(FirebaseAuth.getInstance().getCurrentUser().getUid()) || userID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                         Log.d("Sample", "in");
                         collectionReferenceToHabit.addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
@@ -111,7 +111,7 @@ public class FriendProfileActivity extends AppCompatActivity {
                                     Habit habit = new Habit();
                                     habit.setTitle(String.valueOf(doc.getData().get("title")));
                                     habit.setProgress(Integer.parseInt(doc.getData().get("progress").toString()));
-
+                                    habit.setIsPublic(Boolean.parseBoolean(doc.getData().get("isPublic").toString()));
                                     // Only public habits are visible
                                     if (habit.getIsPublic()) {
                                         habitDataList.add(habit);

@@ -127,6 +127,21 @@ public class NotificationActivity extends AppCompatActivity {
                     }
                 });
 
+        // Add current user to new user's followings
+        collectionReference
+                .document(user.getUserID())
+                .update("following", FieldValue.arrayUnion(mAuth.getCurrentUser().getUid()))
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Sample", user.getUserName() + " is a friend");
+                        } else {
+                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
         // Remove user from incoming friend request list
         collectionReference
                 .document(mAuth.getCurrentUser().getUid())

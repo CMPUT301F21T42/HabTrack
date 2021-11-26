@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -43,9 +45,9 @@ public class SearchUserListAdapter extends ArrayAdapter<UserInfo> {
 
         Button request = convertView.findViewById(R.id.request_to_follow);
 
-        if (context.checkIfUserIsFollower(user)) {
-            request.setBackgroundColor(Color.GREEN);
-            request.setText("Following");
+        if (context.checkIfUserIsInFollowing(user)) {
+            request.setBackgroundColor(Color.RED);
+            request.setText("Unfollow");
             request.setTextColor(Color.WHITE);
         } else {
             if (context.checkIfUserInOutgoingFriendRequest(user)) {
@@ -59,6 +61,10 @@ public class SearchUserListAdapter extends ArrayAdapter<UserInfo> {
             }
         }
 
+//        if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(user.getUserID())) {
+//            request.setVisibility(View.INVISIBLE);
+//        }
+
         request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,7 +72,7 @@ public class SearchUserListAdapter extends ArrayAdapter<UserInfo> {
                     context.sendFriendRequest(user.getUserID());
                 } else if (request.getText() == "Requested") {
                     context.unSendFriendRequest(user.getUserID());
-                } else if (request.getText() == "Following") {
+                } else if (request.getText() == "Unfollow") {
                     context.unfollow(user.getUserID());
                 }
             }

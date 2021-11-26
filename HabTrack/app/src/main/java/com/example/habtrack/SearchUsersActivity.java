@@ -39,7 +39,7 @@ public class SearchUsersActivity extends AppCompatActivity {
     Context context = this;
 
     EditText searchUserInput;
-    Button searchFriendRequest;
+    Button searchUser;
     TextView noUsersFoundMessage;
 
     ListView usersList;
@@ -52,7 +52,7 @@ public class SearchUsersActivity extends AppCompatActivity {
 
     ArrayList<UserInfo> userDataList;
     ArrayList currentUserOutgoingFriendRequests;
-    ArrayList currentUserFollowers;
+    ArrayList currentUserFollowings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,18 +60,18 @@ public class SearchUsersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_users);
 
         searchUserInput = findViewById(R.id.searchFriendInput);
-        searchFriendRequest = findViewById(R.id.searchFriendBtn);
+        searchUser = findViewById(R.id.searchFriendBtn);
         noUsersFoundMessage = findViewById(R.id.noUsersFoundMessage);
 
         usersList = findViewById(R.id.usersListView);
         userDataList = new ArrayList<>();
         currentUserOutgoingFriendRequests = new ArrayList<>();
-        currentUserFollowers = new ArrayList();
+        currentUserFollowings = new ArrayList();
 
         usersAdapter = new SearchUserListAdapter(this, userDataList);
         usersList.setAdapter(usersAdapter);
 
-        searchFriendRequest.setOnClickListener(new View.OnClickListener() {
+        searchUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -95,6 +95,7 @@ public class SearchUsersActivity extends AppCompatActivity {
             }
         });
 
+
         usersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -115,7 +116,7 @@ public class SearchUsersActivity extends AppCompatActivity {
         } else {
             ArrayList<UserInfo> temp = new ArrayList<>(userDataList);
             for (UserInfo user : temp) {
-                if (!input.equalsIgnoreCase(user.getUserName()) || (user.getUserID().equals(mAuth.getCurrentUser().getUid()))) {
+                if (!input.equalsIgnoreCase(user.getUserName())) {
                     userDataList.remove(user);
                 }
             }
@@ -158,22 +159,6 @@ public class SearchUsersActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
-        // Add target user id to following list
-        collectionReference
-                .document(mAuth.getCurrentUser().getUid())
-                .update("following", FieldValue.arrayUnion(targetUserId))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Sample", mAuth.getCurrentUser().getUid() + " removed from outgoing friend requests");
-                        } else {
-                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
     }
 
     public void unSendFriendRequest(String targetUserId) {
@@ -203,22 +188,6 @@ public class SearchUsersActivity extends AppCompatActivity {
                             Log.d("Sample", "Removed from incoming friend request list " + mAuth.getCurrentUser().getUid());
                         } else {
                             Log.d("Sample", task.getException().getMessage());
-                        }
-                    }
-                });
-
-
-        // Remove target user id from following list
-        collectionReference
-                .document(mAuth.getCurrentUser().getUid())
-                .update("following", FieldValue.arrayRemove(targetUserId))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Sample", mAuth.getCurrentUser().getUid() + " removed from outgoing friend requests");
-                        } else {
-                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -278,17 +247,17 @@ public class SearchUsersActivity extends AppCompatActivity {
         }
     }
 
-    public boolean checkIfUserIsFollower(UserInfo user) {
+    public boolean checkIfUserIsInFollowing(UserInfo user) {
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                currentUserFollowers = (ArrayList) value.getData().get("follower");
+                currentUserFollowings = (ArrayList) value.getData().get("following");
             }
         });
 
-        if (currentUserFollowers != null) {
-            if (currentUserFollowers.size() > 0) {
-                if (currentUserFollowers.contains(user.getUserID())) {
+        if (currentUserFollowings != null) {
+            if (currentUserFollowings.size() > 0) {
+                if (currentUserFollowings.contains(user.getUserID())) {
                     return true;
                 } else {
                     return false;
