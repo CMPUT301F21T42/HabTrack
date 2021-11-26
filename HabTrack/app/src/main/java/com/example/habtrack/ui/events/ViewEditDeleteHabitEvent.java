@@ -3,6 +3,8 @@ package com.example.habtrack.ui.events;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -71,7 +73,14 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
         title.setText(HEtitle);
         comment.setText(HEcomment);
-        if (hEvent.getPhoto() != null) imageView.setImageBitmap(hEvent.getPhoto());
+
+
+        if (hEvent.getPhoto() != null) {
+            byte[] data = hEvent.getPhoto();
+
+            Bitmap bitImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+            imageView.setImageBitmap(bitImage);}
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder

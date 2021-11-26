@@ -32,7 +32,7 @@ public class HabitEvents implements Serializable {
 
 //    private Boolean Photo;
 //    private ImageData Photo;
-    private Bitmap Photo;
+    private byte[] Photo;
     private Boolean location;
     String timeStamp;
     String HabitEventID;
@@ -64,7 +64,7 @@ public class HabitEvents implements Serializable {
      * @param Photo
      * @param location
      */
-    public HabitEvents(String habitTitle, String comment, Bitmap Photo,
+    public HabitEvents(String habitTitle, String comment, byte[] Photo,
                        Boolean location, String timeStamp) {
 
 
@@ -93,11 +93,11 @@ public class HabitEvents implements Serializable {
         this.comment = comment;
     }
 
-    public Bitmap getPhoto() {
+    public byte[] getPhoto() {
         return Photo;
     }
 
-    public void setPhoto(Bitmap photo) {
+    public void setPhoto(byte[] photo) {
         this.Photo = photo;
     }
 
