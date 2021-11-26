@@ -20,6 +20,8 @@ import com.example.habtrack.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * This class implements the functionality for the view edit delete fragment
  */
@@ -76,7 +78,8 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
 
         if (hEvent.getPhoto() != null) {
-            byte[] data = hEvent.getPhoto();
+            String string_data = hEvent.getPhoto();
+            byte[] data = string_data.getBytes();
 
             Bitmap bitImage = BitmapFactory.decodeByteArray(data, 0, data.length);
 

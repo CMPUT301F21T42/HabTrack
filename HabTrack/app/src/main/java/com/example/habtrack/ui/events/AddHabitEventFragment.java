@@ -48,7 +48,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Calendar;
 
 /**
@@ -62,13 +64,13 @@ public class AddHabitEventFragment extends DialogFragment {
     private EditText comment;   // To get the Users comment on HabitEvent
     private ImageButton imageButton;
     private Habit habit;
-    private byte[] photoGraph = null;
+    private String photoGraph = null;
 
     public  AddHabitEventFragment(Habit habit){
         this.habit = habit;
     }
 
-    public void setphotoGraph(byte[] photoGraph) { this.photoGraph = photoGraph; }
+    public void setphotoGraph(String photoGraph) { this.photoGraph = photoGraph; }
 
     public void addToHabitEventClass(DataSnapshot snapshot) {
         HabitEvents newHabitEvent = (HabitEvents) snapshot.getValue();
@@ -76,7 +78,7 @@ public class AddHabitEventFragment extends DialogFragment {
     }
 
 
-    public void GotImage(byte[] photoGraph) {
+    public void GotImage(String photoGraph) {
         setphotoGraph(photoGraph);
     }
 
@@ -87,7 +89,7 @@ public class AddHabitEventFragment extends DialogFragment {
      * @param photo
      * @param location
      */
-    public void onOkPressed(String habitEventTitle, String comment, byte[] photo, Boolean location){
+    public void onOkPressed(String habitEventTitle, String comment, String photo, Boolean location){
 
 
         FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
@@ -138,7 +140,9 @@ public class AddHabitEventFragment extends DialogFragment {
                         byte[] ImageArr = stream.toByteArray();
 
 
-                        setphotoGraph(ImageArr);
+                        String ImgString = new String(ImageArr, StandardCharsets.UTF_8);
+
+                        setphotoGraph(ImgString);
                     }
                 }
         );
