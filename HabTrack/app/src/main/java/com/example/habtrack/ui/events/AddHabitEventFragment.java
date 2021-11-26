@@ -46,6 +46,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -141,7 +142,6 @@ public class AddHabitEventFragment extends DialogFragment {
             public void onClick(View view) {
                 Intent open_Camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 someActivityResultLauncher.launch(open_Camera);
-//                startActivityForResult(open_Camera, 100);
             }
         });
 
