@@ -108,22 +108,30 @@ public class ViewProgressFragment extends DialogFragment {
             habit_name.setText(String.valueOf(selectedHabit.getTitle()));
             completed.setText(String.valueOf(selectedHabit.getProgressNumerator()));
             scheduled.setText(String.valueOf(selectedHabit.getProgressDenominator()));
+            if(selectedHabit.getProgressDenominator()!=0){
+                int comp_ratio = 100*selectedHabit.getProgressNumerator()/selectedHabit.getProgressDenominator();
+                int incomp_ratio = 100 -comp_ratio;
 
-            int comp_ratio = 100*selectedHabit.getProgressNumerator()/selectedHabit.getProgressDenominator();
-            int incomp_ratio = 100 -comp_ratio;
 
+                pc.addPieSlice(
+                        new PieModel(
+                                "Completed",
+                                comp_ratio,
+                                Color.parseColor("#14DF69")));
 
-            pc.addPieSlice(
-                    new PieModel(
-                            "Completed",
-                            comp_ratio,
-                            Color.parseColor("#14DF69")));
-
-            pc.addPieSlice(
-                    new PieModel(
-                            "Incompleted",
-                            incomp_ratio,
-                            Color.parseColor("#000000")));
+                pc.addPieSlice(
+                        new PieModel(
+                                "Incompleted",
+                                incomp_ratio,
+                                Color.parseColor("#000000")));
+            }
+            else{
+                pc.addPieSlice(
+                        new PieModel(
+                                "Incompleted",
+                                100,
+                                Color.parseColor("#000000")));
+            }
 
 
         }
