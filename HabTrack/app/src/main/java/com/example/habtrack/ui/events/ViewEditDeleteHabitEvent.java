@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.habtrack.HabitEvents;
@@ -24,6 +25,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
     private EditText title;     // TODO: Need to set this to the current habit title
     private EditText comment;   // TODO:  Need to set this to the current comment
     private HabitEvents hEvent;
+    private ImageView imageView;
 //    private ViewEditDeleteHabitEvent.OnEditFragmentInteractionListener listener;
 
     public ViewEditDeleteHabitEvent() {
@@ -61,12 +63,15 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_habit_event, null);
         title = view.findViewById(R.id.habit_event_title);
         comment = view.findViewById(R.id.habit_event_comment);
+        imageView = view.findViewById(R.id.photo_selector);
+
 
         String HEtitle = hEvent.getTitle();
         String HEcomment = hEvent.getComment();
 
         title.setText(HEtitle);
         comment.setText(HEcomment);
+        if (hEvent.getPhoto() != null) imageView.setImageBitmap(hEvent.getPhoto());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -90,10 +95,6 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                         // To get the user input for Comment
                         String user_title = title.getText().toString();
                         String user_comment = comment.getText().toString();
-
-                        // TODO: Need to modify the the attributes in HabitEvent
-                        // TODO: Need to check if the user entered or modified the habitevent title, comment
-
 
                         if (user_comment.length() > 30 || user_title.length() > 20) {
                             if ( user_comment.length() > 30 && user_title.length() > 20)
