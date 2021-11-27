@@ -14,6 +14,7 @@ package com.example.habtrack.ui.edithabit;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,9 @@ import com.example.habtrack.databinding.FragmentEdithabitBinding;
 import com.example.habtrack.databinding.FragmentViewprogressBinding;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.eazegraph.lib.charts.PieChart;
+import org.eazegraph.lib.models.PieModel;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,9 +54,12 @@ public class ViewProgressFragment extends DialogFragment {
 
 //    private EdithabitViewModel edithabitViewModel;
     private FragmentViewprogressBinding binding;
+    private TextView habit_name;
 
     private TextView completed;
     private TextView scheduled;
+
+    private PieChart pc;
 
     private Habit selectedHabit;
     private FirestoreManager firestoreManager;
@@ -85,18 +92,48 @@ public class ViewProgressFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
         binding = FragmentViewprogressBinding.inflate(LayoutInflater.from(getContext()));
         View root = binding.getRoot();
 
         completed = binding.completedTextView;
         scheduled = binding.scheduledTextView;
 
+        pc = binding.piechart;
+        habit_name = binding.habitName;
+
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             selectedHabit = (Habit) bundle.getSerializable("habit");
+            habit_name.setText(String.valueOf(selectedHabit.getTitle()));
             completed.setText(String.valueOf(selectedHabit.getProgressNumerator()));
             scheduled.setText(String.valueOf(selectedHabit.getProgressDenominator()));
+            if(selectedHabit.getProgressDenominator()!=0){
+                int comp_ratio = 100*selectedHabit.getProgressNumerator()/selectedHabit.getProgressDenominator();
+                int incomp_ratio = 100 -comp_ratio;
+
+
+                pc.addPieSlice(
+                        new PieModel(
+                                "Completed",
+                                comp_ratio,
+                                Color.parseColor("#14DF69")));
+
+                pc.addPieSlice(
+                        new PieModel(
+                                "Incompleted",
+                                incomp_ratio,
+                                Color.parseColor("#000000")));
+            }
+            else{
+                pc.addPieSlice(
+                        new PieModel(
+                                "Incompleted",
+                                100,
+                                Color.parseColor("#000000")));
+            }
+
+
         }
 
         AlertDialog dialog = new AlertDialog.Builder(getContext()).setView(root)
@@ -106,4 +143,5 @@ public class ViewProgressFragment extends DialogFragment {
 
         return dialog;
     }
+
 }
