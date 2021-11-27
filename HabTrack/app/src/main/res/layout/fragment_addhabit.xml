@@ -8,16 +8,25 @@
     android:orientation="vertical"
     tools:context=".ui.edithabit.AddhabitFragment" >
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
     <EditText
         android:id="@+id/title_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:padding="10dp"
         android:ems="20"
         android:maxLength="20"
         android:hint="Habit title"
         android:inputType="textPersonName" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <EditText
         android:id="@+id/reason_editText"
@@ -25,10 +34,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:padding="10dp"
         android:ems="30"
         android:maxLength="30"
         android:hint="Reason"
         android:inputType="textPersonName" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,6 +59,7 @@
             android:id="@+id/year_editText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:maxEms="4"
             android:maxLength="4"
             android:hint="@string/year_format"
@@ -58,6 +73,7 @@
             android:id="@+id/month_editText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:ems="2"
             android:maxLength="2"
             android:hint="@string/month_format"
@@ -71,11 +87,16 @@
             android:id="@+id/day_editText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:ems="2"
             android:maxLength="2"
             android:hint="@string/day_format"
             android:inputType="number" />
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <Switch
         android:id="@+id/ispublic_switch"
@@ -83,6 +104,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="Public" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <TextView
         android:id="@+id/plan_textView"

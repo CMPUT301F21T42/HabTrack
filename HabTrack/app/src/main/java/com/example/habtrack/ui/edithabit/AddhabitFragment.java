@@ -7,7 +7,7 @@
  *
  * CMPUT301F21T42 Project: HabTrack <br>
  * To help someone who wants to track their habits.
- * The {@code EdithabitFragment} class
+ * The {@code AddhabitFragment} class
  */
 package com.example.habtrack.ui.edithabit;
 
@@ -34,12 +34,10 @@ import com.example.habtrack.HabitHandler;
 import com.example.habtrack.R;
 import com.example.habtrack.databinding.FragmentAddhabitBinding;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -67,20 +65,19 @@ public class AddhabitFragment extends DialogFragment {
      * parsing error in the date provided by the user then it returns null.
      *
      *
-     * @param date string in the form of dat
+     * @param inputDate string in the form of dat
      * @param inFormat Format to convert date from string format to date format.
      * @return inputDate the date entered by user in calender format.
      */
-    private Calendar parseDate(String date, SimpleDateFormat inFormat) {
-        Calendar inputDate = Calendar.getInstance();
+    private Date parseDate(String inputDate, SimpleDateFormat inFormat) {
+        Date date = new Date();
         inFormat.setLenient(false);
         try {
-            inputDate.setTime(inFormat.parse(date));
+            date = inFormat.parse(inputDate);
         } catch (ParseException e) {
             return null;
         }
-
-        return inputDate;
+        return date;
     }
 
     /**
@@ -132,7 +129,7 @@ public class AddhabitFragment extends DialogFragment {
         plan.add(binding.fridayCheckBox);
         plan.add(binding.saturdayCheckBox);
 
-        Date selectedDate = Calendar.getInstance().getTime();
+        Date selectedDate = new Date();
 
         year.setText(outYear.format(selectedDate.getTime()));
         month.setText(outMonth.format(selectedDate.getTime()));
@@ -171,7 +168,7 @@ public class AddhabitFragment extends DialogFragment {
                         } else if (!hh.isLegalStartDate(dateInput)) {
                             Toast.makeText(getContext(), getString((R.string.error_message), "date"), Toast.LENGTH_SHORT).show();
                         } else {
-                            Date startD = parseDate(dateInput, inFormat).getTime();
+                            Date startD = parseDate(dateInput, inFormat);
                             onOkPressed(new Habit(t, r, startD, p, priv));
 
 //                            if (selectedHabit == null) {

@@ -49,10 +49,9 @@ public class HabitHandler {
      */
     public boolean isLegalStartDate(String date) {
         SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar inputDate = Calendar.getInstance();
         inFormat.setLenient(false);
         try {
-            inputDate.setTime(inFormat.parse(date));
+            inFormat.parse(date);
         } catch (ParseException e) {
             return false;
         }
