@@ -20,8 +20,6 @@ import com.example.habtrack.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * This class implements the functionality for the view edit delete fragment
  */
@@ -64,10 +62,21 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@NonNull Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_habit_event, null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_view_edit_delete_habit_event, null);
         title = view.findViewById(R.id.habit_event_title);
         comment = view.findViewById(R.id.habit_event_comment);
-        imageView = view.findViewById(R.id.photo_selector);
+        imageView = view.findViewById(R.id.PhotoGraph);
+//                findViewById(R.id.PhotoGraph1);
+
+        if (hEvent.getPhoto() != null) {
+            String string_data = hEvent.getPhoto();
+
+            byte[] data = android.util.Base64.decode(string_data, 0);
+
+            Bitmap bitImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+            if (imageView != null) imageView.setImageBitmap(bitImage);
+        }
 
 
         String HEtitle = hEvent.getTitle();
@@ -75,15 +84,6 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
         title.setText(HEtitle);
         comment.setText(HEcomment);
-
-
-        if (hEvent.getPhoto() != null) {
-            String string_data = hEvent.getPhoto();
-            byte[] data = string_data.getBytes();
-
-            Bitmap bitImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-
-            imageView.setImageBitmap(bitImage);}
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder

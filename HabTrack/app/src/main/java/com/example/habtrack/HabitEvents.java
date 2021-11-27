@@ -12,9 +12,7 @@
  * The {@code Habit} class
  */
 package com.example.habtrack;
-
 import android.graphics.Bitmap;
-
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -25,14 +23,12 @@ import java.util.Date;
  * This class stores the all the information of a habit event
  */
 public class HabitEvents implements Serializable {
-
-
     private String title;   // Storing the title of HabitEvent
     private String comment; // Storing the user comment on HabitEvent
 
 //    private Boolean Photo;
 //    private ImageData Photo;
-    private String Photo;
+    private String Photo = "DefaultValue";
     private Boolean location;
     String timeStamp;
     String HabitEventID;
@@ -55,8 +51,6 @@ public class HabitEvents implements Serializable {
         this.timeStamp = timeStamp;
     }
 
-
-
     /**
      * This constructor is used to initialise the attributes
      * @param habitTitle
@@ -66,9 +60,6 @@ public class HabitEvents implements Serializable {
      */
     public HabitEvents(String habitTitle, String comment, String Photo,
                        Boolean location, String timeStamp) {
-
-
-
         this.title = habitTitle;
         this.comment = comment;
         this.Photo = Photo;

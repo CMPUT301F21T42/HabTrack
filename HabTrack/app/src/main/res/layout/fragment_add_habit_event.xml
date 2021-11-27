@@ -25,22 +25,11 @@
         android:inputType="textPersonName"
         android:maxLength="30"/>
 
-    <TextView
-        android:id="@+id/photo_selector_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <ImageButton
+    <ImageView
         android:id="@+id/OpenCamera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src ="@drawable/ic_menu_camera"/>
-
-<!--    <ImageView-->
-<!--        android:id="@+id/photo_selector"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:src="@drawable/ic_menu_camera" />-->
 
     <TextView
         android:id="@+id/location_picker"

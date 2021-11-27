@@ -34,7 +34,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -48,9 +47,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.Base64;
 import java.util.Calendar;
 
 /**
@@ -62,7 +59,7 @@ public class AddHabitEventFragment extends DialogFragment {
     // TODO: Need to set this title to the habit title finished
     private EditText title;     // To set the title for HabitEvent
     private EditText comment;   // To get the Users comment on HabitEvent
-    private ImageButton imageButton;
+    private ImageView imageButton;
     private Habit habit;
     private String photoGraph = null;
 
@@ -135,12 +132,14 @@ public class AddHabitEventFragment extends DialogFragment {
                         Intent data = result.getData();
 
                         Bitmap someImage = (Bitmap) data.getExtras().get("data");
+
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         someImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
                         byte[] ImageArr = stream.toByteArray();
 
 
-                        String ImgString = new String(ImageArr, StandardCharsets.UTF_8);
+                        String ImgString = android.util.Base64.encodeToString(ImageArr, 0);
+//                        String ImgString = new String(ImageArr, StandardCharsets.UTF_8);
 
                         setphotoGraph(ImgString);
                     }
