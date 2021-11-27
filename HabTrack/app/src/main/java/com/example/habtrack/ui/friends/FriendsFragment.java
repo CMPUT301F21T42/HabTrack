@@ -23,7 +23,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.habtrack.FirestoreManager;
+import com.example.habtrack.FriendsManager;
 import com.example.habtrack.Habit;
+import com.example.habtrack.UserInfo;
 import com.example.habtrack.databinding.FragmentFriendsBinding;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -39,12 +41,15 @@ public class FriendsFragment extends Fragment {
     private ArrayList<String> childList;
     private HashMap<String, ArrayList<Habit>> mobileCollection;
     private ExpandableListAdapter friendsAdapter;
+    private FriendsManager friendsManager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        friendsManager = new FriendsManager();
 
         createGroupList();
         createCollection();
@@ -72,11 +77,14 @@ public class FriendsFragment extends Fragment {
     }
 
     private void createCollection() {
-        // TODO: CHANGE TO ACTUAL FRIENDS' HABITS, NOW USING CURRENT USER
-        FirestoreManager firestoreManager = FirestoreManager.getInstance(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        mobileCollection = new HashMap<String, ArrayList<Habit>>();
-        for(String group : groupList)
-            mobileCollection.put(group, firestoreManager.getHabits());
+        ArrayList<UserInfo> followings = friendsManager.getFollowingList(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        for (UserInfo user : followings) {
+            FirestoreManager firestoreManager = FirestoreManager.getInstance(user.getUserID());
+            mobileCollection = new HashMap<String, ArrayList<Habit>>();
+            for(String group : groupList)
+                mobileCollection.put(group, firestoreManager.getHabits());
+        }
+
     }
 
     private void loadChild(String[] mobileModels) {

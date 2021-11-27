@@ -29,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
@@ -40,14 +41,12 @@ public class NotificationActivity extends AppCompatActivity {
     TextView noPendingFriendRequests;
     ArrayAdapter notificationsAdapter;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference collectionReference = db.collection("Users");
-    DocumentReference documentReference = db.document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-    ArrayList incomingFriendRequests;
-    ArrayList<UserInfo> notificationsDataList;
-
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    String currentUserID = mAuth.getCurrentUser().getUid();
+    FriendsManager friendsManager = new FriendsManager(context);
+
+    ArrayList<String> incomingFriendRequests;
+    ArrayList<UserInfo> notificationsDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,26 +58,19 @@ public class NotificationActivity extends AppCompatActivity {
         notificationsDataList = new ArrayList<>();
         notificationsAdapter = new NotificationListAdapter((NotificationActivity) context, notificationsDataList);
 
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                incomingFriendRequests = (ArrayList) value.getData().get("incomingFriendRequest");
-                if (incomingFriendRequests != null) {
-                    if (incomingFriendRequests.size() > 0) {
-                        noPendingFriendRequests.setVisibility(View.INVISIBLE);
-                        obtainFriendInfoFromUserID();
-                    } else {
-                        Log.d("Sample", "No Notifications");
-                        noPendingFriendRequests.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    Log.d("Error", "array is null");
-                }
-
+        if (incomingFriendRequests != null) {
+            if (incomingFriendRequests.size() > 0) {
+                noPendingFriendRequests.setVisibility(View.INVISIBLE);
+                notificationsDataList = friendsManager.getNotifications(currentUserID);
+            } else {
+                Log.d("Sample", "No Notifications");
+                noPendingFriendRequests.setVisibility(View.VISIBLE);
             }
-        });
+        } else {
+            Log.d("Error", "array is null");
+        }
 
-
+        notificationsList.setAdapter(notificationsAdapter);
 
         notificationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -92,117 +84,27 @@ public class NotificationActivity extends AppCompatActivity {
 
     }
 
-    public void obtainFriendInfoFromUserID() {
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                notificationsDataList.clear();
-                for (QueryDocumentSnapshot doc: value) {
-                    if (incomingFriendRequests.contains(doc.getId())) {
-                        UserInfo friend = new UserInfo();
-                        friend.setUserName(String.valueOf(doc.getData().get("userName")));
-                        friend.setEmail(String.valueOf(doc.getData().get("email")));
-                        friend.setUserID(doc.getId());
-                        notificationsDataList.add(friend);
-                    }
-                }
-                notificationsList.setAdapter(notificationsAdapter);
-            }
-        });
-    }
 
     public void acceptFriendRequest(UserInfo user) {
         // Add new user to followers
-        collectionReference
-                .document(mAuth.getCurrentUser().getUid())
-                .update("follower", FieldValue.arrayUnion(user.getUserID()))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Sample", user.getUserName() + " is a friend");
-                        } else {
-                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+        friendsManager.addFollower(user.getUserID(), currentUserID);
 
         // Add current user to new user's followings
-        collectionReference
-                .document(user.getUserID())
-                .update("following", FieldValue.arrayUnion(mAuth.getCurrentUser().getUid()))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Sample", user.getUserName() + " is a friend");
-                        } else {
-                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+        friendsManager.addFollowing(currentUserID, user.getUserID());
 
         // Remove user from incoming friend request list
-        collectionReference
-                .document(mAuth.getCurrentUser().getUid())
-                .update("incomingFriendRequest", FieldValue.arrayRemove(user.getUserID()))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Sample", user.getUserName() + " removed from incoming friend requests");
-                        } else {
-                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+        friendsManager.removeIncomingFriendRequest(user.getUserID(), currentUserID);
 
         // Remove current user id from the other user's outgoing friend request list
-        collectionReference
-                .document(user.getUserID())
-                .update("outgoingFriendRequest", FieldValue.arrayRemove(mAuth.getCurrentUser().getUid()))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Sample", mAuth.getCurrentUser().getUid() + " removed from outgoing friend requests");
-                        } else {
-                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+        friendsManager.removeOutgoingFriendRequest(currentUserID, user.getUserID());
     }
 
     public void denyFriendRequest(UserInfo user) {
         // Remove user from incoming friend request
-        collectionReference
-                .document(mAuth.getCurrentUser().getUid())
-                .update("incomingFriendRequest", FieldValue.arrayRemove(user.getUserID()))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Sample", user.getUserName() + " removed from incoming friend requests");
-                        } else {
-                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+        friendsManager.removeIncomingFriendRequest(user.getUserID(), currentUserID);
 
         // Remove current user id from the other user's outgoing friend request list
-        collectionReference
-                .document(user.getUserID())
-                .update("outgoingFriendRequest", FieldValue.arrayRemove(mAuth.getCurrentUser().getUid()))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Sample", mAuth.getCurrentUser().getUid() + " removed from outgoing friend requests");
-                        } else {
-                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+        friendsManager.removeOutgoingFriendRequest(currentUserID, user.getUserID());
     }
 
 

@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
@@ -31,11 +32,10 @@ public class FollowingActivity extends AppCompatActivity {
     ListView followingList;
     TextView noFollowing;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference collectionReference = db.collection("Users");
-    DocumentReference documentReference = db.document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FriendsManager friendsManager = new FriendsManager(context);
+    String currentUserID = mAuth.getCurrentUser().getUid();
 
-    ArrayList followingUserIDList;
     ArrayList<UserInfo> followingDataList;
     FollowingListAdapter followingAdapter;
 
@@ -50,24 +50,19 @@ public class FollowingActivity extends AppCompatActivity {
         followingDataList = new ArrayList<>();
         followingAdapter = new FollowingListAdapter((FollowingActivity) this, followingDataList);
 
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                followingUserIDList = (ArrayList) value.getData().get("following");
-                if (followingUserIDList != null) {
-                    if (followingUserIDList.size() > 0) {
-                        noFollowing.setVisibility(View.INVISIBLE);
-                        obtainFriendInfoFromUserID();
-                    } else {
-                        Log.d("Sample", "No Notifications");
-                        noFollowing.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    Log.d("Error", "array is null");
-                }
-
+        followingDataList = friendsManager.getFollowingList(currentUserID);
+        if (followingDataList != null) {
+            if (followingDataList.size() > 0) {
+                noFollowing.setVisibility(View.INVISIBLE);
+            } else {
+                Log.d("Sample", "No Followings");
+                noFollowing.setVisibility(View.VISIBLE);
             }
-        });
+        } else {
+            Log.d("Error", "array is null");
+        }
+
+        followingList.setAdapter(followingAdapter);
 
         followingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -76,25 +71,6 @@ public class FollowingActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, FriendProfileActivity.class);
                 intent.putExtra("userID", user.getUserID()); // getText() SHOULD NOT be static!!!
                 startActivity(intent);
-            }
-        });
-    }
-
-    public void obtainFriendInfoFromUserID() {
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                followingDataList.clear();
-                for (QueryDocumentSnapshot doc: value) {
-                    if (followingUserIDList.contains(doc.getId())) {
-                        UserInfo friend = new UserInfo();
-                        friend.setUserName(String.valueOf(doc.getData().get("userName")));
-                        friend.setEmail(String.valueOf(doc.getData().get("email")));
-                        friend.setUserID(doc.getId());
-                        followingDataList.add(friend);
-                    }
-                }
-                followingList.setAdapter(followingAdapter);
             }
         });
     }

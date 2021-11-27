@@ -61,9 +61,6 @@
             android:theme="@style/Theme.HabTrack.NoActionBar" />
         <activity
             android:name=".LoginActivity"
-<<<<<<< HEAD
-            android:exported="true" />
-=======
             android:exported="true">
         </activity>
 
@@ -72,7 +69,6 @@
             android:exported="true" >
         </activity>
 
->>>>>>> a749ee4a6d1bd2749e1d7d6f730ff2bfedef645d
     </application>
 
 </manifest>

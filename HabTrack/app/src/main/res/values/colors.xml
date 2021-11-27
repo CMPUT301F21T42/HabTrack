@@ -7,15 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-<<<<<<< HEAD
-    <color name="blue">#0000FF</color>
-=======
-
     <color name="ocean_dark">#34666F</color>
     <color name="ocean">#64A2AD</color>
     <color name="ocean_light">#93BDBF</color>
     <color name="taupe">#BFCFC7</color>
     <color name="beige">#F1D6BC</color>
     <color name="beige_light">#FBE8D9</color>
->>>>>>> a749ee4a6d1bd2749e1d7d6f730ff2bfedef645d
 </resources>

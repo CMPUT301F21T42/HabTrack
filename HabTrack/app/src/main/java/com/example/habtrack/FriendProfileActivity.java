@@ -3,6 +3,7 @@ package com.example.habtrack;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 
 public class FriendProfileActivity extends AppCompatActivity {
 
+    Context context = this;
+
     TextView friendUserName;
     TextView friendEmail;
     TextView followToViewHabits;
@@ -40,14 +43,9 @@ public class FriendProfileActivity extends AppCompatActivity {
     ArrayList<Habit> habitDataList;
     ArrayAdapter habitAdapter;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference collectionReferenceToUser = db.collection("Users");
+    FriendsManager friendsManager = new FriendsManager(context);
 
     private String userID;
-    private UserInfo friend;
-
-    CollectionReference collectionReferenceToHabit;
-    DocumentReference documentReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +53,7 @@ public class FriendProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friend_profile);
 
         userID = getIntent().getExtras().getString("userID");
-        obtainFriendInfoFromUserID();
-        collectionReferenceToHabit = db.collection("Users").document(userID).collection("Habits");
+        UserInfo user = friendsManager.getUserInfoObjectFromUserID(userID);
 
         friendUserName = findViewById(R.id.user_name_tag);
         friendEmail = findViewById(R.id.email_tag);
@@ -70,97 +67,26 @@ public class FriendProfileActivity extends AppCompatActivity {
         followersCount = findViewById(R.id.followers_count);
         followingsCount = findViewById(R.id.followings_count);
 
-        obtainHabitsFromUser();
-        getFollowersCount();
-        getFollowingsCount();
+        habitDataList = friendsManager.getUserHabits(userID);
+        habitList.setAdapter(habitAdapter);
+        if (habitDataList.isEmpty());
+        followToViewHabits.setVisibility(View.VISIBLE);
+
+        habitsCount.setText(getHabitsCount());
+        followersCount.setText(getFollowersCount());
+        followingsCount.setText(getFollowingsCount());
     }
 
-    public void obtainFriendInfoFromUserID() {
-        collectionReferenceToUser.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                for (QueryDocumentSnapshot doc: value) {
-                    if (userID.equals(doc.getId())) {
-                        friend = new UserInfo();
-                        friend.setUserName(String.valueOf(doc.getData().get("userName")));
-                        friend.setEmail(String.valueOf(doc.getData().get("email")));
-                        friend.setUserID(doc.getId());
-                    }
-                }
-                friendUserName.setText(friend.getUserName());
-                friendEmail.setText(friend.getEmail());
-            }
-        });
+    public String getFollowersCount() {
+        return String.valueOf(friendsManager.getFollowerCount(userID));
     }
 
-    public void obtainHabitsFromUser() {
-        documentReference = db.document("Users/" + userID);
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                ArrayList targetUserFollowers = (ArrayList) value.getData().get("follower");
-                if (targetUserFollowers != null || userID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                    if (targetUserFollowers.contains(FirebaseAuth.getInstance().getCurrentUser().getUid()) || userID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                        Log.d("Sample", "in");
-                        collectionReferenceToHabit.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                            @Override
-                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                habitsCountData = value.size();
-                                habitsCount.setText(String.valueOf(habitsCountData));
-                                for (QueryDocumentSnapshot doc : value) {
-                                    Habit habit = new Habit();
-                                    habit.setTitle(String.valueOf(doc.getData().get("title")));
-                                    habit.setProgress(Integer.parseInt(doc.getData().get("progress").toString()));
-                                    habit.setIsPublic(Boolean.parseBoolean(doc.getData().get("isPublic").toString()));
-                                    // Only public habits are visible
-                                    if (habit.getIsPublic()) {
-                                        habitDataList.add(habit);
-                                    }
-                                }
-                                habitList.setAdapter(habitAdapter);
-                            }
-                        });
-                    } else {
-                        followToViewHabits.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    followToViewHabits.setVisibility(View.VISIBLE);
-                }
-
-            }
-        });
-
+    public String getFollowingsCount() {
+        return String.valueOf(friendsManager.getFollowingCount(userID));
     }
 
-    public void getFollowersCount() {
-        documentReference = db.document("Users/" + userID);
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                ArrayList targetUserFollowers = (ArrayList) value.getData().get("follower");
-                if (targetUserFollowers != null) {
-                    followersCountData = targetUserFollowers.size();
-                    Log.d("Sample", String.valueOf(followersCountData));
-                    followersCount.setText(String.valueOf(followersCountData));
-                }
-
-            }
-        });
-    }
-
-    public void getFollowingsCount() {
-        documentReference = db.document("Users/" + userID);
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                ArrayList targetUserFollowings = (ArrayList) value.getData().get("following");
-                if (targetUserFollowings != null) {
-                    followingsCountData = targetUserFollowings.size();
-                    Log.d("Sample", String.valueOf(followingsCountData));
-                    followingsCount.setText(String.valueOf(followingsCountData));
-                }
-            }
-        });
+    public String getHabitsCount() {
+        return String.valueOf(friendsManager.getHabitCount(userID));
     }
 
 }
