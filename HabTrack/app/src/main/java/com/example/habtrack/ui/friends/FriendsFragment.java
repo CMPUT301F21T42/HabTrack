@@ -103,14 +103,20 @@ public class FriendsFragment extends Fragment {
                 followings = (ArrayList) value.getData().get("following");
                 if (followings != null && followings.size() > 0) {
                     for (String userID : followings) {
-                        UserInfo friend = new UserInfo();
-                        friend.setUserName(String.valueOf(value.getData().get("userName")));
-                        friend.setEmail(String.valueOf(value.getData().get("email")));
-                        friend.setUserID(value.getId());
-                        groupList.add(friend.getUserName());
-                        FirestoreManager firestoreManager = FirestoreManager.getInstance(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        mobileCollection.put(friend.getUserName(), firestoreManager.getHabits());
-                        ((BaseExpandableListAdapter) friendsAdapter).notifyDataSetChanged();
+                        DocumentReference userDocument = FirebaseFirestore.getInstance().collection("Users").document(userID);
+                        userDocument.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                UserInfo friend = new UserInfo();
+                                friend.setUserName(String.valueOf(value.getData().get("userName")));
+                                friend.setEmail(String.valueOf(value.getData().get("email")));
+                                friend.setUserID(value.getId());
+                                groupList.add(friend.getUserName());
+                                FirestoreManager firestoreManager = FirestoreManager.getInstance(userID);
+                                mobileCollection.put(friend.getUserName(), firestoreManager.getHabits());
+                                ((BaseExpandableListAdapter) friendsAdapter).notifyDataSetChanged();
+                            }
+                        });
                     }
                 } else {
                     Log.d("Sample", "No Followings");
