@@ -3,12 +3,21 @@ package com.example.habtrack.ui.events;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +28,8 @@ import com.example.habtrack.HabitEvents;
 import com.example.habtrack.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * This class implements the functionality for the view edit delete fragment
@@ -77,6 +88,44 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
             if (imageView != null) imageView.setImageBitmap(bitImage);
         }
+
+        ActivityResultLauncher<Intent> newActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        Intent data = result.getData();
+
+                        Bitmap newImage = (Bitmap) data.getExtras().get("data");
+
+                        ByteArrayOutputStream newstream = new ByteArrayOutputStream();
+                        newImage.compress(Bitmap.CompressFormat.PNG, 100, newstream);
+
+                        byte[] Imagearr = newstream.toByteArray();
+
+                        String Imgstring = android.util.Base64.encodeToString(Imagearr, 0);
+
+                        setNewImagetoDB(Imgstring, hEvent);
+                    }
+                }
+        );
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (hEvent.getPhoto() == null) {
+                    Log.d("Access Camera", "To retake a picture");
+                    Intent open_Camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    newActivityResultLauncher.launch(open_Camera);
+                }
+                else {
+                    new EditPhotographFragment(hEvent).show(getActivity().getSupportFragmentManager(), "EditPhotograph");
+                    Log.d("Edit-PhotoGraph Fragment", "Edit PhotoGraph Fragment pops up");
+                }
+                Log.d("editimage", "On image click Working");
+            }
+        });
+
 
 
         String HEtitle = hEvent.getTitle();
@@ -153,6 +202,17 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                 .document(selectedEvent.getHabitEventID())
                 .delete();
 //        eventAdapter.remove(selectedEvent);
+    }
+
+    private void setNewImagetoDB(String newImage, HabitEvents selectedEvent) {
+        FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
+
+        // TODO: Test this
+        HabTrackDB.collection("Users")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .collection("HabitEvents")
+                .document(selectedEvent.getHabitEventID())
+                .update("photo", newImage);
     }
 
 
