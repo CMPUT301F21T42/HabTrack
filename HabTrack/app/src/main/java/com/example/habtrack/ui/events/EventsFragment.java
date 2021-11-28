@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -75,6 +77,13 @@ public class EventsFragment extends Fragment {
 
                 new ViewEditDeleteHabitEvent(currentHabit).show(getActivity().getSupportFragmentManager(), "AddHabitEvent");
 
+            }
+        });
+
+        final Button searchButton = binding.buttonSearch;
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                binding.fieldSearchEntry.setVisibility(View.VISIBLE);
             }
         });
 

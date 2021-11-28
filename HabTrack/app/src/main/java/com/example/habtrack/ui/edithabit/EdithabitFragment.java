@@ -126,7 +126,7 @@ public class EdithabitFragment extends DialogFragment {
             selectedDate = selectedHabit.getStartDate();
             title.setText(selectedHabit.getTitle());
             reason.setText(selectedHabit.getReason());
-            if (selectedHabit.getIsPublic())
+            if (selectedHabit.isPublic())
                 privacy.setChecked(true);
             for (int i = 0; i < plan.size(); i++) {
                 if (selectedHabit.getPlan(i))
@@ -157,12 +157,11 @@ public class EdithabitFragment extends DialogFragment {
                 })
                 .setPositiveButton("OK", null).create();
 
-        Date finalSelectedDate = selectedDate;
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
 
-                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -181,7 +180,11 @@ public class EdithabitFragment extends DialogFragment {
                         } else if (!hh.isLegalReason(r)) {
                             Toast.makeText(getContext(), getString((R.string.error_message), "reason"), Toast.LENGTH_SHORT).show();
                         } else {
-                            onOkPressed(new Habit(t, r, finalSelectedDate, p, priv));
+                            selectedHabit.setTitle(t);
+                            selectedHabit.setReason(r);
+                            selectedHabit.setPublic(priv);
+                            selectedHabit.setPlan(p);
+                            onOkPressed(selectedHabit);
 
 //                            if (selectedHabit == null) {
 //                                listener.onOkPressed(new Habit(t, r, startD));
@@ -211,7 +214,7 @@ public class EdithabitFragment extends DialogFragment {
         firestoreManager = FirestoreManager.getInstance(
                 FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        firestoreManager.editHabit(selectedHabit, updatedHabit);
+        firestoreManager.editHabit(updatedHabit);
     }
 
     /**

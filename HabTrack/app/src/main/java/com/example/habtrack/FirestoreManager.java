@@ -22,21 +22,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 
 public class FirestoreManager {
@@ -47,7 +45,7 @@ public class FirestoreManager {
      * This variable contains a unique identifier for the user.
      * This variable is of type {@link String}.
      */
-    private String userId;
+    private static String userId;
 
     /**
      * This variable contains a {@link HashMap} of habitId : Habit.
@@ -72,9 +70,29 @@ public class FirestoreManager {
     private static FirestoreManager instance;
 
     /**
-     * This variable contains a {@link UserPreference}
+     * This variable contains a {@link UserPreference}.
      */
     private UserPreference preference = new UserPreference();
+
+    /**
+     * This variable contains the user's last app logon of type {@link Date}.
+     */
+    private Date lastLogon;
+
+    /**
+     * This variable contains a reference to the user firestore {@link DocumentReference}
+     */
+    private final DocumentReference userDocument;
+
+    /**
+     * This variable contains a reference to the habit firestore {@link CollectionReference}
+     */
+    private final CollectionReference habitCollection;
+
+    /**
+     * This variable contains a reference to the event firestore {@link CollectionReference}
+     */
+    private final CollectionReference eventCollection;
 
     /**
      * The {@link OnDataChangeListener} interface
@@ -88,19 +106,23 @@ public class FirestoreManager {
      * @param userId the unique identifier of the user
      */
     private FirestoreManager(String userId) {
-        this.userId = userId;
+        FirestoreManager.userId = userId;
         this.db = FirebaseFirestore.getInstance();
+        this.userDocument = db.collection("Users").document(userId);
+        this.habitCollection = userDocument.collection("Habits");
+        this.eventCollection = userDocument.collection("HabitEvents");
         initRanking();
     }
 
     /**
      * Gets the current instance of {@link FirestoreManager}
      * Creates a new one if the current instance is not initialized
+     * or if the userId is updated with a new login
      * @param userId the unique identifier of the user
      * @return a {@link FirestoreManager} object
      */
     public static FirestoreManager getInstance(String userId) {
-        if (FirestoreManager.instance == null)
+        if (FirestoreManager.instance == null || !FirestoreManager.userId.equals(userId))
             FirestoreManager.instance = new FirestoreManager(userId);
 
         return FirestoreManager.instance;
@@ -120,12 +142,7 @@ public class FirestoreManager {
      * and {@link FirestoreManager#habitCacheList}
      */
     private void initListener(){
-        final CollectionReference collectionReference
-                = db.collection("Users")
-                    .document(userId)
-                    .collection("Habits");
-
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        habitCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
                                 @Nullable FirebaseFirestoreException error) {
@@ -136,24 +153,20 @@ public class FirestoreManager {
                 }
 
                 if (preference.getHabitRanking().size() < habitCacheMap.size()) {
-                    // If we have a habit that for whatever reason does not have a ranking
-                    // Give it a default ranking
                     for (Habit habit : habitCacheMap.values()) {
-                        if (!preference.getHabitRanking().contains(habit.getId())) {
-                            addRanking(habit.getId());
-                        }
+                        if (!preference.getHabitRanking().contains(habit.getId()))
+                            addRanking(habit.getId()); // if a habit has no ranking, add default ranking
                     }
                 }
 
                 habitCacheList.clear();
                 for (String id : preference.getHabitRanking())
                     if(!habitCacheMap.containsKey(id)){
-                        // If instead we have a ranking that does not correspond to any habit
-                        // Simply remove it
-                        deleteRanking(id);
-                    }else {
+                        deleteRanking(id); // if a ranking doesn't correspond to any habit - remove it
+                    } else {
                         habitCacheList.add(habitCacheMap.get(id));
                     }
+
                 if (listener != null)
                     listener.onDataChange();
             }
@@ -182,18 +195,12 @@ public class FirestoreManager {
      * @param newHabit of type {@link Habit}
      */
     public void addHabit(Habit newHabit) {
-        // First add a ranking
-        Task task = addRanking(newHabit.getId());
+        Task task = addRanking(newHabit.getId()); // first add a ranking
 
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                final CollectionReference collectionReference
-                        = db.collection("Users")
-                            .document(userId)
-                            .collection("Habits");
-
-                collectionReference
+                habitCollection
                         .document(newHabit.getId())
                         .set(newHabit)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -227,25 +234,16 @@ public class FirestoreManager {
      * @param selectedHabit of type {@link Habit}
      */
     public void deleteHabit(Habit selectedHabit) {
-        // First delete a ranking
-        Task task = deleteRanking(selectedHabit.getId());
+        Task task = deleteRanking(selectedHabit.getId()); // first delete a ranking
 
-        FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
-        HabTrackDB.collection("Users")
-                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .collection("HabitEvents")
+        eventCollection
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         for (QueryDocumentSnapshot hevent: value)  {
                             HabitEvents hEvent = hevent.toObject(HabitEvents.class);
-                            if (hEvent.getTitle().equals(selectedHabit.getTitle())) {
-                                HabTrackDB.collection("Users")
-                                        .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                        .collection("HabitEvents")
-                                        .document(hEvent.getHabitEventID())
-                                        .delete();
-                            }
+                            if (hEvent.getHabitId().equals(selectedHabit.getId()))
+                                eventCollection.document(hEvent.getHabitEventID()).delete();
                         }
                     }
                 });
@@ -253,12 +251,7 @@ public class FirestoreManager {
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                final CollectionReference collectionReference
-                        = db.collection("Users")
-                            .document(userId)
-                            .collection("Habits");
-
-                collectionReference
+                habitCollection
                         .document(selectedHabit.getId())
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -289,19 +282,10 @@ public class FirestoreManager {
 
     /**
      * Edits an existing {@link Habit} from firestore
-     * @param selectedHabit of type {@link Habit}
      * @param updatedHabit of type {@link Habit}
      */
-    public void editHabit(Habit selectedHabit, Habit updatedHabit) {
-        selectedHabit.setTitle(updatedHabit.getTitle());
-        selectedHabit.setReason(updatedHabit.getReason());
-        selectedHabit.setPlan(updatedHabit.getPlan());
-
-        db.collection("Users")
-                .document(userId)
-                .collection("Habits")
-                .document(selectedHabit.getId())
-                .set(selectedHabit);
+    public void editHabit(Habit updatedHabit) {
+        habitCollection.document(updatedHabit.getId()).set(updatedHabit);
     }
 
     /**
@@ -309,11 +293,7 @@ public class FirestoreManager {
      * Pull data from firestore to fill {@link FirestoreManager#preference}
      */
     private void initRanking() {
-        final CollectionReference collectionReference
-                = db.collection("Users");
-
-        collectionReference
-                .document(userId)
+        userDocument
                 .get()
                 .addOnCompleteListener(new OnCompleteListener() {
                     @Override
@@ -327,7 +307,8 @@ public class FirestoreManager {
                             UserPreference p = snapshot.get("preference", UserPreference.class);
                             if (p != null)
                                 preference.setHabitRanking(p.getHabitRanking());
-
+                            Date ll = snapshot.get("lastLogon", Date.class);
+                            setLastLogon(ll == null ? new Date() : ll);
                             initListener();
                         }
                     }
@@ -341,9 +322,7 @@ public class FirestoreManager {
      */
     private Task<Void> addRanking(String habitId) {
         preference.addRanking(habitId);
-        return db.collection("Users")
-                 .document(userId)
-                 .update("preference", preference);
+        return userDocument.update("preference", preference);
     }
 
     /**
@@ -353,9 +332,7 @@ public class FirestoreManager {
      */
     private Task<Void> deleteRanking(String habitId) {
         preference.deleteRanking(habitId);
-        return db.collection("Users")
-                 .document(userId)
-                 .update("preference", preference);
+        return userDocument.update("preference", preference);
     }
 
     /**
@@ -375,9 +352,7 @@ public class FirestoreManager {
      */
     public Task<Void> swapRanking(int fromPosition, int toPosition) {
         preference.swapRanking(fromPosition, toPosition);
-        return db.collection("Users")
-                 .document(userId)
-                 .update("preference", preference);
+        return userDocument.update("preference", preference);
     }
 
     /**
@@ -387,5 +362,22 @@ public class FirestoreManager {
      */
     public Habit getHabit(String habitId) {
         return habitCacheMap.get(habitId);
+    }
+
+    /**
+     * Returns the {@link FirestoreManager#lastLogon} of this {@link FirestoreManager} object
+     * @return the user's last app logon of type {@link Date}
+     */
+    public Date getLastLogon() {
+        return lastLogon;
+    }
+
+    /**
+     * Sets the {@link FirestoreManager#lastLogon} of this {@link FirestoreManager} object
+     * @param lastLogon of type {@link Date}
+     */
+    public void setLastLogon(Date lastLogon) {
+        this.lastLogon = lastLogon;
+        userDocument.update("lastLogon", lastLogon);
     }
 }

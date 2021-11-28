@@ -21,7 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class FollowingActivity extends AppCompatActivity {
@@ -31,13 +33,16 @@ public class FollowingActivity extends AppCompatActivity {
     ListView followingList;
     TextView noFollowing;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference collectionReference = db.collection("Users");
-    DocumentReference documentReference = db.document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    String currentUserID = mAuth.getCurrentUser().getUid();
+    FriendsManager friendsManager = FriendsManager.getInstance(currentUserID);
 
-    ArrayList followingUserIDList;
     ArrayList<UserInfo> followingDataList;
+    ArrayList followingUserIDList;
     FollowingListAdapter followingAdapter;
+
+    CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Users");
+    DocumentReference documentReference = FirebaseFirestore.getInstance().document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,6 @@ public class FollowingActivity extends AppCompatActivity {
         followingList = findViewById(R.id.following_list_view);
 
         followingDataList = new ArrayList<>();
-        followingAdapter = new FollowingListAdapter((FollowingActivity) this, followingDataList);
 
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -68,6 +72,9 @@ public class FollowingActivity extends AppCompatActivity {
 
             }
         });
+
+        followingAdapter = new FollowingListAdapter((FollowingActivity) this, followingDataList);
+        followingList.setAdapter(followingAdapter);
 
         followingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -97,11 +104,5 @@ public class FollowingActivity extends AppCompatActivity {
                 followingList.setAdapter(followingAdapter);
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        startActivity(new Intent(this, MainActivity.class));
     }
 }

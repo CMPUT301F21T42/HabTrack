@@ -1,16 +1,16 @@
-package com.example.habtrack.ui.follower;
+package com.example.habtrack.ui.friends;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class FollowerViewModel extends ViewModel {
+public class FriendsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public FollowerViewModel() {
+    public FriendsViewModel() {
         mText = new MutableLiveData<>();
-//        mText.setValue("This is follower fragment");
+//        mText.setValue("This is following fragment");
     }
 
     public LiveData<String> getText() {

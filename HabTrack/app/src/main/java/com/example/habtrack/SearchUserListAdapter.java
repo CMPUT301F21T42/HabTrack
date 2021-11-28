@@ -15,6 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,41 +48,6 @@ public class SearchUserListAdapter extends ArrayAdapter<UserInfo> {
         TextView userNameText = convertView.findViewById(R.id.user_name_text);
         userNameText.setText(user.getUserName());
         userNameText.setTextSize(20);
-
-        Button request = convertView.findViewById(R.id.request_to_follow);
-
-        if (context.checkIfUserIsInFollowing(user)) {
-            request.setBackgroundColor(Color.RED);
-            request.setText("Unfollow");
-            request.setTextColor(Color.WHITE);
-        } else {
-            if (context.checkIfUserInOutgoingFriendRequest(user)) {
-                request.setBackgroundColor(Color.WHITE);
-                request.setText("Requested");
-                request.setTextColor(Color.BLACK);
-            } else {
-                request.setBackgroundColor(Color.BLUE);
-                request.setText("Follow");
-                request.setTextColor(Color.WHITE);
-            }
-        }
-
-//        if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(user.getUserID())) {
-//            request.setVisibility(View.INVISIBLE);
-//        }
-
-        request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (request.getText() == "Follow") {
-                    context.sendFriendRequest(user.getUserID());
-                } else if (request.getText() == "Requested") {
-                    context.unSendFriendRequest(user.getUserID());
-                } else if (request.getText() == "Unfollow") {
-                    context.unfollow(user.getUserID());
-                }
-            }
-        });
 
         return convertView;
     }

@@ -11,6 +11,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Contains unit tests for {@link Habit} methods
+ * @author Wendy Zhang
+ */
 public class HabitTest {
 
     private Habit mockHabit() {
@@ -66,16 +70,12 @@ public class HabitTest {
 
     @Test
     void getTitleTest() {
-        ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
-        Collections.fill(plan, true);
         Habit habit = mockHabit();
         assertEquals("Title", habit.getTitle());
     }
 
     @Test
     void setTitleTest() {
-        ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
-        Collections.fill(plan, true);
         Habit habit = mockHabit();
         assertEquals("Title", habit.getTitle());
 
@@ -85,11 +85,9 @@ public class HabitTest {
 
     @Test
     void setTitleExceptionTest() {
-        ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
-        Collections.fill(plan, true);
         Habit habit = mockHabit();
         assertThrows(IllegalArgumentException.class,
-                () -> {habit.setTitle("abcdefghi jklmnopqr s");});
+                () -> {habit.setTitle("This is a long habit title");});
     }
 
     @Test
@@ -113,11 +111,9 @@ public class HabitTest {
 
     @Test
     void setReasonExceptionTest() {
-        ArrayList<Boolean> plan = new ArrayList<>(Arrays.asList(new Boolean[7]));
-        Collections.fill(plan, true);
         Habit habit = mockHabit();
         assertThrows(IllegalArgumentException.class,
-                () -> {habit.setReason("abcdefghi jklmnopqr stuvwxyz ABC");});
+                () -> {habit.setReason("This is a really super long habit reason");});
     }
 
     @Test
@@ -141,5 +137,51 @@ public class HabitTest {
         habit.setStartDate(updateDate);
         assertNotEquals(startDate, habit.getStartDate());
         assertEquals(updateDate, habit.getStartDate());
+    }
+
+    @Test
+    void isPublicTest() {
+        Habit habit = mockHabit();
+        assertTrue(habit.isPublic());
+    }
+
+    @Test
+    void setPublicTest() {
+        Habit habit = mockHabit();
+        assertTrue(habit.isPublic());
+
+        habit.setPublic(false);
+        assertFalse(habit.isPublic());
+    }
+
+    @Test
+    void progressTest() {
+        Habit habit = mockHabit();
+
+        // getProgressTest
+        assertEquals(0, habit.getProgress());
+        assertEquals(0, habit.getProgressNumerator());
+        assertEquals(0, habit.getProgressDenominator());
+
+        habit.setProgressNumerator(2);
+        habit.setProgressDenominator(3);
+        assertEquals(66, habit.getProgress());
+
+        // Numerator = 3, Denominator = 3
+        habit.incrementProgressNumerator();
+        assertEquals(100, habit.getProgress());
+
+        // Numerator = 1, Denominator = 3
+        habit.decrementProgressNumerator();
+        habit.decrementProgressNumerator();
+        assertEquals(33, habit.getProgress());
+
+        // Numerator = 1, Denominator = 4
+        habit.incrementProgressDenominator();
+        assertEquals(25, habit.getProgress());
+
+        // Numerator = 1, Denominator = 3
+        habit.decrementProgressDenominator();
+        assertEquals(33, habit.getProgress());
     }
 }

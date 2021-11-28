@@ -8,16 +8,25 @@
     android:orientation="vertical"
     tools:context=".ui.edithabit.EdithabitFragment" >
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
     <EditText
         android:id="@+id/title_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:padding="10dp"
         android:ems="20"
         android:maxLength="20"
         android:hint="Habit title"
         android:inputType="textPersonName" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <EditText
         android:id="@+id/reason_editText"
@@ -25,10 +34,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:padding="10dp"
         android:ems="30"
         android:maxLength="30"
         android:hint="Reason"
         android:inputType="textPersonName" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <TextView
         android:id="@+id/date_textView"
@@ -37,12 +51,20 @@
         android:layout_marginStart="20dp"
         android:text="date" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
     <Switch
         android:id="@+id/ispublic_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="Public" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <TextView
         android:id="@+id/plan_textView"
