@@ -8,6 +8,9 @@
  * CMPUT301F21T42 Project: HabTrack <br>
  * To help someone who wants to track their habits.
  * The {@code ItemTouchHelperCallback} class
+ *
+ * Referenced to Artur Grzybowski on https://github.com/FanFataL/swipe-controller-demo
+ * Accessed on November 25, 2021
  */
 
 package com.example.habtrack.ui.manage;
@@ -105,13 +108,18 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     /**
-     * Does something...
      * @param holder the {@link RecyclerView.ViewHolder}
      * @param direction of the swiping action
      */
     @Override
     public void onSwiped(RecyclerView.ViewHolder holder, int direction) {}
 
+    /**
+     * Helper to return the swiped item to original position
+     * @param flags of type int
+     * @param layoutDirection of type int
+     * @return
+     */
     @Override
     public int convertToAbsoluteDirection(int flags, int layoutDirection) {
         if (swipeBack) {
@@ -138,6 +146,16 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         currentItemViewHolder = viewHolder;
     }
 
+    /**
+     * Sets the touch listener for the recycler list
+     * @param c the {@link Canvas}
+     * @param recyclerView of type {@link RecyclerView}
+     * @param viewHolder of type {@link RecyclerView.ViewHolder}
+     * @param dX of type float
+     * @param dY of type float
+     * @param actionState of type int
+     * @param isCurrentlyActive of type boolean
+     */
     private void setTouchListener(final Canvas c, final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder, final float dX, final float dY, final int actionState, final boolean isCurrentlyActive) {
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -198,11 +216,21 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         });
     }
 
+    /**
+     * Sets the list items to be clickable
+     * @param recyclerView of type {@link RecyclerView}
+     * @param isClickable of type boolean
+     */
     private void setItemsClickable(RecyclerView recyclerView, boolean isClickable) {
         for (int i = 0; i < recyclerView.getChildCount(); ++i)
             recyclerView.getChildAt(i).setClickable(isClickable);
     }
 
+    /**
+     * Draws the "PROGRESS" and "DELETE" buttons on the background
+     * @param c the {@link Canvas}
+     * @param viewHolder of type {@link RecyclerView.ViewHolder}
+     */
     private void drawButtons(Canvas c, RecyclerView.ViewHolder viewHolder) {
         float buttonWidthWithoutPadding = BUTTON_WIDTH - 20;
         float corners = 16;
@@ -228,6 +256,13 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         }
     }
 
+    /**
+     * Draws text in the buttons
+     * @param text the {@link String} to be drawn
+     * @param c the {@link Canvas}
+     * @param button the {@link RectF} the text resides in
+     * @param p of type {@link Paint}
+     */
     private void drawText(String text, Canvas c, RectF button, Paint p) {
         float textSize = 60;
         p.setColor(Color.WHITE);
@@ -238,6 +273,10 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         c.drawText(text, button.centerX()-(textWidth/2), button.centerY()+(textSize/2), p);
     }
 
+    /**
+     * Draw on the canvas
+     * @param c the {@link Canvas}
+     */
     public void onDraw(Canvas c) {
         if (currentItemViewHolder != null)
             drawButtons(c, currentItemViewHolder);
