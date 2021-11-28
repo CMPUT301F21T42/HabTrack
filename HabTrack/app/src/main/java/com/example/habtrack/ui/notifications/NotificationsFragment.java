@@ -1,4 +1,4 @@
-package com.example.habtrack.ui.follower;
+package com.example.habtrack.ui.notifications;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,23 +12,23 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.habtrack.databinding.FragmentFollowerBinding;
+import com.example.habtrack.databinding.FragmentNotificationsBinding;
 
-public class FollowerFragment extends Fragment {
+public class NotificationsFragment extends Fragment {
 
-    private FollowerViewModel followerViewModel;
-    private FragmentFollowerBinding binding;
+    private NotificationsViewModel notificationsViewModel;
+    private FragmentNotificationsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        followerViewModel =
-                new ViewModelProvider(this).get(FollowerViewModel.class);
+        notificationsViewModel =
+                new ViewModelProvider(this).get(NotificationsViewModel.class);
 
-        binding = FragmentFollowerBinding.inflate(inflater, container, false);
+        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textFollower;
-        followerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

@@ -43,10 +43,12 @@ public class NotificationActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     String currentUserID = mAuth.getCurrentUser().getUid();
-    FriendsManager friendsManager = new FriendsManager(context);
+    FriendsManager friendsManager = FriendsManager.getInstance(currentUserID);
 
-    ArrayList<String> incomingFriendRequests;
+    ArrayList<String> incomingFriendRequests = new ArrayList<>();
     ArrayList<UserInfo> notificationsDataList;
+
+    CollectionReference userCollection = FirebaseFirestore.getInstance().collection("Users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,21 +58,9 @@ public class NotificationActivity extends AppCompatActivity {
         noPendingFriendRequests = findViewById(R.id.no_pending_requests);
         notificationsList = findViewById(R.id.notifications_list_view);
         notificationsDataList = new ArrayList<>();
+
         notificationsAdapter = new NotificationListAdapter((NotificationActivity) context, notificationsDataList);
-
-        if (incomingFriendRequests != null) {
-            if (incomingFriendRequests.size() > 0) {
-                noPendingFriendRequests.setVisibility(View.INVISIBLE);
-                notificationsDataList = friendsManager.getNotifications(currentUserID);
-            } else {
-                Log.d("Sample", "No Notifications");
-                noPendingFriendRequests.setVisibility(View.VISIBLE);
-            }
-        } else {
-            Log.d("Error", "array is null");
-        }
-
-        notificationsList.setAdapter(notificationsAdapter);
+        getNotifications();
 
         notificationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -105,6 +95,41 @@ public class NotificationActivity extends AppCompatActivity {
 
         // Remove current user id from the other user's outgoing friend request list
         friendsManager.removeOutgoingFriendRequest(currentUserID, user.getUserID());
+    }
+
+    public void getNotifications() {
+        DocumentReference userDocument = userCollection.document(currentUserID);
+        userDocument.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                incomingFriendRequests.clear();
+                incomingFriendRequests = (ArrayList) value.getData().get("incomingFriendRequest");
+            }
+        });
+        userCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                notificationsDataList.clear();
+                for (QueryDocumentSnapshot doc: value) {
+                    if (incomingFriendRequests.size() > 0) {
+                        noPendingFriendRequests.setVisibility(View.INVISIBLE);
+                        if (incomingFriendRequests.contains(doc.getId())) {
+                            UserInfo user = new UserInfo();
+                            user.setUserName(String.valueOf(doc.getData().get("userName")));
+                            user.setEmail(String.valueOf(doc.getData().get("email")));
+                            user.setUserID(doc.getId());
+                            notificationsDataList.add(user);
+                        }
+                        notificationsList.setAdapter(notificationsAdapter);
+                    } else {
+                        Log.d("Sample", "No Notifications");
+                        noPendingFriendRequests.setVisibility(View.VISIBLE);
+                    }
+
+                }
+            }
+        });
+
     }
 
 

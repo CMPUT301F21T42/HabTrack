@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/user_info_view"
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="200dp">
 
         <ImageView
             android:id="@+id/display_pic"
@@ -99,14 +99,25 @@
             android:textSize="18sp">
         </TextView>
 
-        "
+        <Button
+            android:id="@+id/follow_button"
+            android:layout_width="230dp"
+            android:layout_height="35dp"
+            android:layout_below="@id/habits_count_label"
+            android:layout_alignLeft="@id/habits_count_label"
+            android:layout_marginTop="10dp"
+            android:text="Follow"
+            android:textSize="10sp"
+            android:textAlignment="center">
+        </Button>
     </RelativeLayout>
 
     <ListView
         android:id="@+id/friends_habit_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/user_info_view"></ListView>
+        android:layout_below="@id/user_info_view"
+        android:layout_marginTop="20dp"></ListView>
 
     <TextView
         android:id="@+id/follow_to_view_habits"

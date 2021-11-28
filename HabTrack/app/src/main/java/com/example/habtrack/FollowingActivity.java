@@ -23,6 +23,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class FollowingActivity extends AppCompatActivity {
@@ -33,11 +34,15 @@ public class FollowingActivity extends AppCompatActivity {
     TextView noFollowing;
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FriendsManager friendsManager = new FriendsManager(context);
     String currentUserID = mAuth.getCurrentUser().getUid();
+    FriendsManager friendsManager = FriendsManager.getInstance(currentUserID);
 
     ArrayList<UserInfo> followingDataList;
+    ArrayList followingUserIDList;
     FollowingListAdapter followingAdapter;
+
+    CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Users");
+    DocumentReference documentReference = FirebaseFirestore.getInstance().document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +53,27 @@ public class FollowingActivity extends AppCompatActivity {
         followingList = findViewById(R.id.following_list_view);
 
         followingDataList = new ArrayList<>();
-        followingAdapter = new FollowingListAdapter((FollowingActivity) this, followingDataList);
 
-        followingDataList = friendsManager.getFollowingList(currentUserID);
-        if (followingDataList != null) {
-            if (followingDataList.size() > 0) {
-                noFollowing.setVisibility(View.INVISIBLE);
-            } else {
-                Log.d("Sample", "No Followings");
-                noFollowing.setVisibility(View.VISIBLE);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                followingUserIDList = (ArrayList) value.getData().get("following");
+                if (followingUserIDList != null) {
+                    if (followingUserIDList.size() > 0) {
+                        noFollowing.setVisibility(View.INVISIBLE);
+                        obtainFriendInfoFromUserID();
+                    } else {
+                        Log.d("Sample", "No Notifications");
+                        noFollowing.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    Log.d("Error", "array is null");
+                }
+
             }
-        } else {
-            Log.d("Error", "array is null");
-        }
+        });
 
+        followingAdapter = new FollowingListAdapter((FollowingActivity) this, followingDataList);
         followingList.setAdapter(followingAdapter);
 
         followingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -71,6 +83,25 @@ public class FollowingActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, FriendProfileActivity.class);
                 intent.putExtra("userID", user.getUserID()); // getText() SHOULD NOT be static!!!
                 startActivity(intent);
+            }
+        });
+    }
+
+    public void obtainFriendInfoFromUserID() {
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                followingDataList.clear();
+                for (QueryDocumentSnapshot doc: value) {
+                    if (followingUserIDList.contains(doc.getId())) {
+                        UserInfo friend = new UserInfo();
+                        friend.setUserName(String.valueOf(doc.getData().get("userName")));
+                        friend.setEmail(String.valueOf(doc.getData().get("email")));
+                        friend.setUserID(doc.getId());
+                        followingDataList.add(friend);
+                    }
+                }
+                followingList.setAdapter(followingAdapter);
             }
         });
     }

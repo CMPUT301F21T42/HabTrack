@@ -7,14 +7,18 @@
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_outline_person_24"
-            android:title="@string/menu_profile" />
+            android:title="@string/menu_account" />
         <item
             android:id="@+id/nav_following"
             android:icon="@drawable/ic_outline_face_24"
             android:title="@string/menu_following" />
         <item
-            android:id="@+id/nav_follower"
-            android:icon="@drawable/ic_outline_face_24"
-            android:title="@string/menu_follower" />
+            android:id="@+id/nav_notifications"
+            android:icon="@drawable/ic_baseline_notifications_24"
+            android:title="@string/menu_notifications" />
+        <item
+            android:id="@+id/nav_explore"
+            android:icon="@drawable/ic_baseline_explore_24"
+            android:title="@string/menu_explore"/>
     </group>
 </menu>

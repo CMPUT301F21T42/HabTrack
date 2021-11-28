@@ -10,11 +10,11 @@
         android:id="@+id/searchFriendInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         android:ems="12"
-        android:inputType="textPersonName"
         android:hint="Search friends"
+        android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,14 +25,15 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:text="Search"
-        android:layout_toRightOf="@id/searchFriendInput"/>
+        android:layout_toRightOf="@id/searchFriendInput"
+        android:layout_alignBaseline="@id/searchFriendInput"/>
 
     <ListView
         android:id="@+id/usersListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/searchFriendInput"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="15dp"/>
 
     <TextView
         android:id="@+id/noUsersFoundMessage"

@@ -1,5 +1,6 @@
 package com.example.habtrack;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -15,6 +16,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 
@@ -31,9 +42,13 @@ public class SearchUsersActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     String currentUserID = mAuth.getCurrentUser().getUid();
-    FriendsManager friendsManager = new FriendsManager(context);
+    FriendsManager friendsManager = FriendsManager.getInstance(currentUserID);
+
+    CollectionReference userCollection = FirebaseFirestore.getInstance().collection("Users");
 
     ArrayList<UserInfo> userDataList;
+    ArrayList currentUserFollowings;
+    ArrayList currentUserOutgoingFriendRequests;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +62,23 @@ public class SearchUsersActivity extends AppCompatActivity {
         usersList = findViewById(R.id.usersListView);
         userDataList = new ArrayList<>();
 
+        userCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                userDataList.clear();
+                for (QueryDocumentSnapshot doc: value) {
+                    UserInfo user = new UserInfo();
+                    user.setEmail(String.valueOf(doc.getData().get("email")));
+                    user.setUserName(String.valueOf(doc.getData().get("userName")));
+                    user.setUserID(doc.getId());
+                    userDataList.add(user);
+                }
+
+                Log.d("friendsManager", String.valueOf(userDataList.size()));
+            }
+        });
+
         usersAdapter = new SearchUserListAdapter(this, userDataList);
-
-        friendsManager.getAllUsersInDB();
-
-        for (UserInfo user : userDataList) {
-            Log.d("Sample", user.getUserName());
-        }
         usersList.setAdapter(usersAdapter);
 
         searchUser.setOnClickListener(new View.OnClickListener() {
@@ -74,10 +99,13 @@ public class SearchUsersActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, FriendProfileActivity.class);
                 intent.putExtra("userID", user.getUserID());
                 startActivity(intent);
-
             }
         });
 
+    }
+
+    private void refreshUserList() {
+        usersList.setAdapter(usersAdapter);
     }
 
     private void searchUserFromInput() {
@@ -98,67 +126,6 @@ public class SearchUsersActivity extends AppCompatActivity {
         // If search input is given then narrow down userNameDataList
         searchUserFromInput();
         usersList.setAdapter(usersAdapter);
-    }
-
-    public void sendFriendRequest(String targetUserId) {
-        // Add sent friend request
-        friendsManager.addOutgoingFriendRequest(targetUserId, currentUserID);
-
-        // Load friend request to target user id
-        friendsManager.addIncomingFriendRequest(currentUserID, targetUserId);
-    }
-
-    public void unSendFriendRequest(String targetUserId) {
-        // Remove friend request from current user's outgoing friend request list
-        friendsManager.removeOutgoingFriendRequest(targetUserId, currentUserID);
-
-        // Remove incoming friend request from target user id
-        friendsManager.removeIncomingFriendRequest(currentUserID, targetUserId);
-    }
-
-    public void unfollow(String targetUserId) {
-        // Remove current user ID from target user's follower list
-        friendsManager.removeFollower(currentUserID, targetUserId);
-
-        // Remove target user from current user's following list
-        friendsManager.removeFollower(targetUserId, currentUserID);
-    }
-
-    public boolean checkIfUserInOutgoingFriendRequest(UserInfo user) {
-        ArrayList currentUserOutgoingFriendRequests = friendsManager.getOutgoingFriendRequestList(user.getUserID());
-
-        if (currentUserOutgoingFriendRequests != null) {
-            if (currentUserOutgoingFriendRequests.size() > 0) {
-                if (currentUserOutgoingFriendRequests.contains(user.getUserID())) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public boolean checkIfUserIsInFollowing(UserInfo user) {
-        ArrayList currentUserFollowings = friendsManager.getFollowingList(user.getUserID());
-
-        if (currentUserFollowings != null) {
-            if (currentUserFollowings.size() > 0) {
-                if (currentUserFollowings.contains(user.getUserID())) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-
     }
 
 }
