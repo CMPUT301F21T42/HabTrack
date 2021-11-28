@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -98,6 +99,8 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
                         Bitmap newImage = (Bitmap) data.getExtras().get("data");
 
+                        imageView.setImageBitmap(newImage);
+
                         ByteArrayOutputStream newstream = new ByteArrayOutputStream();
                         newImage.compress(Bitmap.CompressFormat.PNG, 100, newstream);
 
@@ -106,7 +109,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                         String Imgstring = android.util.Base64.encodeToString(Imagearr, 0);
 
 //                        setNewImagetoDB(Imgstring, hEvent);
-                        hEvent.setPhoto(Imgstring);
+//                        hEvent.setPhoto(Imgstring);
                     }
                 }
         );
@@ -131,6 +134,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
         String HEtitle = hEvent.getTitle();
         String HEcomment = hEvent.getComment();
+        String HEphoto = hEvent.getPhoto();
 
         title.setText(HEtitle);
         comment.setText(HEcomment);
@@ -158,6 +162,14 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                         String user_title = title.getText().toString();
                         String user_comment = comment.getText().toString();
 
+                        Bitmap bitImg= ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                        ByteArrayOutputStream newstream = new ByteArrayOutputStream();
+                        bitImg.compress(Bitmap.CompressFormat.PNG, 100, newstream);
+                        byte[] Imagearr = newstream.toByteArray();
+
+                        String user_photo = android.util.Base64.encodeToString(Imagearr, 0);
+
+
                         if (user_comment.length() > 30 || user_title.length() > 20) {
                             if ( user_comment.length() > 30 && user_title.length() > 20)
                                 Toast.makeText(getContext(), "Title should be less than 20 characters and Comment should be less than 30 characters", Toast.LENGTH_SHORT).show();
@@ -168,13 +180,14 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                                 Toast.makeText(getContext(), "Title should be less than 20 characters", Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            if (user_title.equals(HEtitle) && user_comment.equals(HEcomment)){
+                            if (user_title.equals(HEtitle) && user_comment.equals(HEcomment) && user_photo.equals(HEphoto)){
 
                             }
                             else{
 
                                 hEvent.setTitle(user_title);
                                 hEvent.setComment(user_comment);
+                                hEvent.setPhoto(user_photo);
                                 modifyHabitEventDB();
 
 //                                FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
