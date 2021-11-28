@@ -14,6 +14,9 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -38,6 +41,8 @@ public class EditPhotographFragment extends DialogFragment {
     private HabitEvents hEvent;
     private ImageView imageView;
     private ActivityResultLauncher<Intent> newActivityResultLauncher;
+//    private String DeleteFlag = null;
+    private ViewEditDeleteHabitEvent obj;
 
     public EditPhotographFragment() { }
 
@@ -48,59 +53,67 @@ public class EditPhotographFragment extends DialogFragment {
         this.imageView = imageView;
     }
 
-    EditPhotographFragment(HabitEvents hEvent, ImageView imageView, ActivityResultLauncher<Intent> ARL) {
+    public EditPhotographFragment(HabitEvents hEvent, ImageView imageView, ActivityResultLauncher<Intent> ARL) {
         this.hEvent = hEvent;
         this.imageView = imageView;
         this.newActivityResultLauncher = ARL;
     }
 
-    private void setNewImage(String newImage, HabitEvents selectedEvent){
-
-        if (selectedEvent.getPhoto() != null) {
-
-            String string_data = selectedEvent.getPhoto();
-
-            byte[] data = android.util.Base64.decode(string_data, 0);
-
-            Bitmap bitImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-
-            if (imageView != null) imageView.setImageBitmap(bitImage);
-        }
-        else {
-            imageView.setImageResource(R.drawable.ic_menu_camera);
-            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-            imageView.setImageBitmap(bitmap);
-
-            Log.d("Testing for null", "NULL");
-        }
+    public EditPhotographFragment(HabitEvents hEvent, ImageView imageView, ActivityResultLauncher<Intent> ARL, ViewEditDeleteHabitEvent obj) {
+        this.hEvent = hEvent;
+        this.imageView = imageView;
+        this.newActivityResultLauncher = ARL;
+        this.obj = obj;
     }
+
+    //
+//    private void setNewImage(String newImage, HabitEvents selectedEvent){
+//
+//        if (selectedEvent.getPhoto() != null) {
+//
+//            String string_data = selectedEvent.getPhoto();
+//
+//            byte[] data = android.util.Base64.decode(string_data, 0);
+//
+//            Bitmap bitImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+//
+//            if (imageView != null) imageView.setImageBitmap(bitImage);
+//        }
+//        else {
+//            imageView.setImageResource(R.drawable.ic_menu_camera);
+//            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+//            imageView.setImageBitmap(bitmap);
+//
+//            Log.d("Testing for null", "NULL");
+//        }
+//    }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@NonNull Bundle savedInstanceData){
         //TODO: check later
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_edit_photograph, null);
-
-        ActivityResultLauncher<Intent> reTakeActivityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        Intent data = result.getData();
-
-                        Bitmap newImage = (Bitmap) data.getExtras().get("data");
-
-                        imageView.setImageBitmap(newImage);
-
-                        ByteArrayOutputStream newstream = new ByteArrayOutputStream();
-                        newImage.compress(Bitmap.CompressFormat.PNG, 100, newstream);
-
-                        byte[] Imagearr = newstream.toByteArray();
-
-                        String ImgString = android.util.Base64.encodeToString(Imagearr, 0);
-                    }
-                }
-        );
+//
+//        ActivityResultLauncher<Intent> reTakeActivityResultLauncher = registerForActivityResult(
+//                new ActivityResultContracts.StartActivityForResult(),
+//                new ActivityResultCallback<ActivityResult>() {
+//                    @Override
+//                    public void onActivityResult(ActivityResult result) {
+//                        Intent data = result.getData();
+//
+//                        Bitmap newImage = (Bitmap) data.getExtras().get("data");
+//
+//                        imageView.setImageBitmap(newImage);
+//
+//                        ByteArrayOutputStream newstream = new ByteArrayOutputStream();
+//                        newImage.compress(Bitmap.CompressFormat.PNG, 100, newstream);
+//
+//                        byte[] Imagearr = newstream.toByteArray();
+//
+//                        String ImgString = android.util.Base64.encodeToString(Imagearr, 0);
+//                    }
+//                }
+//        );
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -109,7 +122,19 @@ public class EditPhotographFragment extends DialogFragment {
                 .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        setNewImage(null, hEvent);
+//                        setNewImage(null, hEvent);
+
+//                        int id = getResources().getIdentifier("res/drawable/ic_menu_camera.xml", null, null);
+//                        imageView.setImageResource(id);
+                        Drawable myicon = getResources().getDrawable(R.drawable.ic_menu_camera, getContext().getTheme());
+
+//                        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_menu_camera);
+//                        imageView.setImageResource(R.drawable.ic_menu_camera);
+                        imageView.setImageDrawable(myicon);
+//                        if (bitmap != null) imageView.setImageBitmap(bitmap);
+                        obj.setDeleteFlag(true);
+
+                        Log.d("Testing for null", "NULL");
                     }
                 })
                 .setNeutralButton("Cancel", null)

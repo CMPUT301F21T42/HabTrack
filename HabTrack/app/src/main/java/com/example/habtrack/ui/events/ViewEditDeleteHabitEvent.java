@@ -38,6 +38,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
     private EditText comment;   // TODO:  Need to set this to the current comment
     private HabitEvents hEvent;
     private ImageView imageView;
+    private Boolean DeleteFlag = false;
 
     public ViewEditDeleteHabitEvent() {
 
@@ -45,6 +46,14 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
     public ViewEditDeleteHabitEvent(HabitEvents hEvent) {
         this.hEvent = hEvent;
+    }
+
+    public Boolean getDeleteFlag() {
+        return DeleteFlag;
+    }
+
+    public void setDeleteFlag(Boolean deleteFlag) {
+        DeleteFlag = deleteFlag;
     }
 
     /**
@@ -86,6 +95,8 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                 }
         );
 
+        ViewEditDeleteHabitEvent obj1 = this;
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,7 +106,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                     newActivityResultLauncher.launch(open_Camera);
                 }
                 else {
-                    new EditPhotographFragment(hEvent, imageView, newActivityResultLauncher).show(getActivity().getSupportFragmentManager(), "EditPhotograph");
+                    new EditPhotographFragment(hEvent, imageView, newActivityResultLauncher, obj1).show(getActivity().getSupportFragmentManager(), "EditPhotograph");
                     Log.d("Edit-PhotoGraph Fragment", "Edit PhotoGraph Fragment pops up");
                 }
                 Log.d("editimage", "On image click Working");
@@ -132,12 +143,17 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                         String user_title = title.getText().toString();
                         String user_comment = comment.getText().toString();
 
-                        Bitmap bitImg = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                        ByteArrayOutputStream newstream = new ByteArrayOutputStream();
-                        bitImg.compress(Bitmap.CompressFormat.PNG, 100, newstream);
-                        byte[] Imagearr = newstream.toByteArray();
-                        String user_photo = android.util.Base64.encodeToString(Imagearr, 0);
-
+                        String user_photo;
+                        if (!getDeleteFlag()) {
+                            Bitmap bitImg = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                            ByteArrayOutputStream newstream = new ByteArrayOutputStream();
+                            bitImg.compress(Bitmap.CompressFormat.PNG, 100, newstream);
+                            byte[] Imagearr = newstream.toByteArray();
+                            user_photo = android.util.Base64.encodeToString(Imagearr, 0);
+                        }
+                        else {
+                            user_photo = "Default Value";
+                        }
                         if (user_comment.length() > 30 || user_title.length() > 20) {
                             if ( user_comment.length() > 30 && user_title.length() > 20)
                                 Toast.makeText(getContext(), "Title should be less than 20 characters and Comment should be less than 30 characters", Toast.LENGTH_SHORT).show();
@@ -155,8 +171,14 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
                                 hEvent.setTitle(user_title);
                                 hEvent.setComment(user_comment);
-                                if ((int) imageView.getId() == R.drawable.ic_menu_camera) hEvent.setPhoto(null);
-                                else hEvent.setPhoto(user_photo);
+//                                hEvent.setPhoto(null);
+                                if (getDeleteFlag()) {
+                                    hEvent.setPhoto(null);
+                                    setDeleteFlag(false);
+                                }
+                                else {
+                                    hEvent.setPhoto(user_photo);
+                                }
 
                                 modifyHabitEventDB();
 
