@@ -169,12 +169,13 @@ public class FriendProfileActivity extends AppCompatActivity {
                                     Log.d("Sample", doc.getId());
                                     Habit habit = new Habit();
                                     habit.setTitle(String.valueOf(doc.getData().get("title")));
-//                                    habit.setProgress(Integer.parseInt(doc.getData().get("progress").toString()));
-//                                    habit.setIsPublic(Boolean.parseBoolean(doc.getData().get("isPublic").toString()));
-//                                    // Only public habits are visible
-//                                    if (habit.getIsPublic()) {
-//                                        habitDataList.add(habit);
-//                                    }
+                                    habit.setProgressNumerator(Integer.parseInt(doc.getData().get("progressNumerator").toString()));
+                                    habit.setProgressDenominator(Integer.parseInt(doc.getData().get("progressDenominator").toString()));
+                                    // habit.setPublic((boolean) doc.getData().get("public"));
+                                    // Only public habits are visible
+                                    if (habit.isPublic()) {
+                                        habitDataList.add(habit);
+                                    }
                                     habitDataList.add(habit);
                                 }
                                 if (habitDataList.isEmpty()) {

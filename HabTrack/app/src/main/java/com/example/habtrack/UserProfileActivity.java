@@ -46,8 +46,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import kotlin.internal.Exact;
-
 /**
  * UserProfileActivity centers around the user profile of the HabTrack application. This class
  * contains onClick button listening events for the "logout" and "update account" buttons. And
@@ -90,10 +88,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         imageView =findViewById(R.id.avatar);
 
-
         logout = findViewById(R.id.log_out);
         updateAccount = findViewById(R.id.update_account);
-
 
         initializeView();
 
@@ -141,14 +137,5 @@ public class UserProfileActivity extends AppCompatActivity {
         // Once signed out, and in sign in activity, then on back press
         // user should not be able to go back
         finish();
-    }
-
-    /**
-     * Pressing back should result in user being taken
-     * to MainActivity
-     */
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(context, MainActivity.class));
     }
 }

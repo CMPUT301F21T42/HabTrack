@@ -124,15 +124,12 @@ public class MainActivity extends AppCompatActivity
         if (item.getItemId() == R.id.nav_profile) {
             Intent intent = new Intent(this, UserProfileActivity.class);
             startActivity(intent);
-            finish();
         } else if (item.getItemId() == R.id.nav_notifications) {
             Intent intent = new Intent(this, NotificationActivity.class);
             startActivity(intent);
-            finish();
         } else if (item.getItemId() == R.id.nav_following) {
             Intent intent = new Intent(this, FollowingActivity.class);
             startActivity(intent);
-            finish();
         } else if (item.getItemId() == R.id.nav_explore) {
             Intent intent = new Intent(this, SearchUsersActivity.class);
             startActivity(intent);
