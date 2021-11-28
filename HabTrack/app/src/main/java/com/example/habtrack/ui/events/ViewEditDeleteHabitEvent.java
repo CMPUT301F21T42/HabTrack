@@ -105,7 +105,8 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
                         String Imgstring = android.util.Base64.encodeToString(Imagearr, 0);
 
-                        setNewImagetoDB(Imgstring, hEvent);
+//                        setNewImagetoDB(Imgstring, hEvent);
+                        hEvent.setPhoto(Imgstring);
                     }
                 }
         );
@@ -174,13 +175,15 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
                                 hEvent.setTitle(user_title);
                                 hEvent.setComment(user_comment);
-                                FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
-                                HabTrackDB.collection("Users")
-                                        .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                        .collection("HabitEvents")
-                                        .document(hEvent.getHabitEventID())
-                                        .set(new HabitEvents(hEvent.getTitle(), hEvent.getComment(), hEvent.getPhoto(),
-                                                hEvent.getLocation(), hEvent.getTimeStamp()));
+                                modifyHabitEventDB();
+
+//                                FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
+//                                HabTrackDB.collection("Users")
+//                                        .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                                        .collection("HabitEvents")
+//                                        .document(hEvent.getHabitEventID())
+//                                        .set(new HabitEvents(hEvent.getTitle(), hEvent.getComment(), hEvent.getPhoto(),
+//                                                hEvent.getLocation(), hEvent.getTimeStamp()));
                             }
                         }
                     }
@@ -204,15 +207,16 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 //        eventAdapter.remove(selectedEvent);
     }
 
-    private void setNewImagetoDB(String newImage, HabitEvents selectedEvent) {
-        FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
+    private void modifyHabitEventDB() {
 
-        // TODO: Test this
+        FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
         HabTrackDB.collection("Users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .collection("HabitEvents")
-                .document(selectedEvent.getHabitEventID())
-                .update("photo", newImage);
+                .document(hEvent.getHabitEventID())
+                .set(new HabitEvents(hEvent.getTitle(), hEvent.getComment(), hEvent.getPhoto(),
+                        hEvent.getLocation(), hEvent.getTimeStamp()));
+
     }
 
 
