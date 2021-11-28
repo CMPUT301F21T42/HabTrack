@@ -1,3 +1,17 @@
+/** Copyright 2021
+ * Raunak Agarwal, Revanth Atmakuri, Mattheas Jamieson,
+ * Jenish Patel, Jasmine Wadhwa, Wendy Zhang
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * CMPUT301F21T42 Project: HabTrack <br>
+ * To help someone who wants to track their habits.
+ * The {@code Habit} class
+ */
+
 package com.example.habtrack;
 
 import android.content.Intent;
@@ -6,6 +20,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,6 +45,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.example.habtrack.ui.edithabit.AddhabitFragment;
 
+/**
+ * MainActivity holds the navigation for the drawer element,
+ * the {@link com.example.habtrack.ui.myday.MydayFragment},
+ * the {@link com.example.habtrack.ui.friends.FriendsFragment},
+ * the {@link com.example.habtrack.ui.manage.ManageFragment}, and
+ * the {@link com.example.habtrack.ui.events.EventsFragment}.
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -72,6 +94,11 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationView bottom_nav_view = findViewById(R.id.bottom_nav_view);
         NavigationUI.setupWithNavController(bottom_nav_view, navController);
 
+        TextView user_name = findViewById(R.id.user_name);
+        TextView user_email = findViewById(R.id.user_email);
+//        user_name.setText();
+//        user_email.setText();
+
         navigationView.setNavigationItemSelectedListener(this);
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             public void onDestinationChanged(NavController controller, NavDestination destination, Bundle arguments) {
@@ -87,6 +114,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -94,6 +122,12 @@ public class MainActivity extends AppCompatActivity
                 || super.onSupportNavigateUp();
     }
 
+    /**
+     * This method starts the {@link UserProfileActivity}
+     * when the "profile" option is selected from the navigation drawer
+     * @param item
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_profile) {

@@ -47,7 +47,7 @@ public class HabitHandler {
      * @param date the date {@link String}
      * @return true if the {@link String} argument can be parsed; false otherwise
      */
-    public boolean isLegalStartDate(String date) {
+    public boolean isLegalDate(String date) {
         SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
         inFormat.setLenient(false);
         try {

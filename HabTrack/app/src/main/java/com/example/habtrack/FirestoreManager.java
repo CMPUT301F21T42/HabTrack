@@ -190,6 +190,17 @@ public class FirestoreManager {
     }
 
     /**
+     * Checks whether there is a {@link Habit} with a given title
+     * @param habitTitle title of type {@link String}
+     * @return true if the {@link Habit} exists, false otherwise
+     */
+    public boolean hasHabit(String habitTitle) {
+        for (Habit habit : habitCacheList)
+            if (habit.getTitle() == habitTitle) return true;
+        return false;
+    }
+
+    /**
      * Adds a new {@link Habit} to firestore
      * @param newHabit of type {@link Habit}
      */
