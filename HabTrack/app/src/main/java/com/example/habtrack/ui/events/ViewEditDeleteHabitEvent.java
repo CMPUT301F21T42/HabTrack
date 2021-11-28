@@ -15,8 +15,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,7 +38,6 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
     private EditText comment;   // TODO:  Need to set this to the current comment
     private HabitEvents hEvent;
     private ImageView imageView;
-//    private ViewEditDeleteHabitEvent.OnEditFragmentInteractionListener listener;
 
     public ViewEditDeleteHabitEvent() {
 
@@ -49,21 +46,6 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
     public ViewEditDeleteHabitEvent(HabitEvents hEvent) {
         this.hEvent = hEvent;
     }
-
-//    public interface OnEditFragmentInteractionListener {
-//        void onDeletePressed(HabitEvents selectedEvent);
-//    }
-
-//    @Override
-//    public void onAttach(Context context){
-//        super.onAttach(context);
-//        if(context instanceof ViewEditDeleteHabitEvent.OnEditFragmentInteractionListener){
-//            listener = (ViewEditDeleteHabitEvent.OnEditFragmentInteractionListener) context;
-//        }
-//        else{
-//            throw new RuntimeException(context.toString()+ "must implement OnEditFragmentInteractionListener");
-//        }
-//    }
 
     /**
      * This method creates the view for the view edit delete fragment and allows the user to delete
@@ -78,7 +60,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
         title = view.findViewById(R.id.habit_event_title);
         comment = view.findViewById(R.id.habit_event_comment);
         imageView = view.findViewById(R.id.PhotoGraph);
-//                findViewById(R.id.PhotoGraph1);
+        String HEphoto = hEvent.getPhoto();
 
         if (hEvent.getPhoto() != null) {
             String string_data = hEvent.getPhoto();
@@ -100,16 +82,6 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                         Bitmap newImage = (Bitmap) data.getExtras().get("data");
 
                         imageView.setImageBitmap(newImage);
-
-                        ByteArrayOutputStream newstream = new ByteArrayOutputStream();
-                        newImage.compress(Bitmap.CompressFormat.PNG, 100, newstream);
-
-                        byte[] Imagearr = newstream.toByteArray();
-
-                        String Imgstring = android.util.Base64.encodeToString(Imagearr, 0);
-
-//                        setNewImagetoDB(Imgstring, hEvent);
-//                        hEvent.setPhoto(Imgstring);
                     }
                 }
         );
@@ -123,7 +95,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                     newActivityResultLauncher.launch(open_Camera);
                 }
                 else {
-                    new EditPhotographFragment(hEvent).show(getActivity().getSupportFragmentManager(), "EditPhotograph");
+                    new EditPhotographFragment(hEvent, imageView, newActivityResultLauncher).show(getActivity().getSupportFragmentManager(), "EditPhotograph");
                     Log.d("Edit-PhotoGraph Fragment", "Edit PhotoGraph Fragment pops up");
                 }
                 Log.d("editimage", "On image click Working");
@@ -131,10 +103,8 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
         });
 
 
-
         String HEtitle = hEvent.getTitle();
         String HEcomment = hEvent.getComment();
-        String HEphoto = hEvent.getPhoto();
 
         title.setText(HEtitle);
         comment.setText(HEcomment);
@@ -162,13 +132,11 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                         String user_title = title.getText().toString();
                         String user_comment = comment.getText().toString();
 
-                        Bitmap bitImg= ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                        Bitmap bitImg = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
                         ByteArrayOutputStream newstream = new ByteArrayOutputStream();
                         bitImg.compress(Bitmap.CompressFormat.PNG, 100, newstream);
                         byte[] Imagearr = newstream.toByteArray();
-
                         String user_photo = android.util.Base64.encodeToString(Imagearr, 0);
-
 
                         if (user_comment.length() > 30 || user_title.length() > 20) {
                             if ( user_comment.length() > 30 && user_title.length() > 20)
@@ -187,7 +155,9 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
                                 hEvent.setTitle(user_title);
                                 hEvent.setComment(user_comment);
-                                hEvent.setPhoto(user_photo);
+                                if ((int) imageView.getId() == R.drawable.ic_menu_camera) hEvent.setPhoto(null);
+                                else hEvent.setPhoto(user_photo);
+
                                 modifyHabitEventDB();
 
 //                                FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
@@ -210,14 +180,11 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
     public void onDeletePressed(HabitEvents selectedEvent) {
 
         FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
-
-
         HabTrackDB.collection("Users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .collection("HabitEvents")
                 .document(selectedEvent.getHabitEventID())
                 .delete();
-//        eventAdapter.remove(selectedEvent);
     }
 
     private void modifyHabitEventDB() {
