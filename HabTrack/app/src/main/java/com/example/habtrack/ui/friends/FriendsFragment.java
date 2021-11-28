@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -55,9 +57,11 @@ public class FriendsFragment extends Fragment {
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        groupList = new ArrayList<>();
+        mobileCollection = new HashMap<>();
         friendsAdapter = new FriendsListAdapter(getContext(), groupList, mobileCollection);
         expandableListView = binding.friendsList;
-//        expandableListView.setAdapter(friendsAdapter);
+        expandableListView.setAdapter(friendsAdapter);
 
         createGroupList();
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
@@ -92,14 +96,12 @@ public class FriendsFragment extends Fragment {
     }
 
     private void createGroupList() {
-        groupList = new ArrayList<>();
-        mobileCollection = new HashMap<String, ArrayList<Habit>>();
         DocumentReference documentReference = FirebaseFirestore.getInstance().collection("Users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 followings = (ArrayList) value.getData().get("following");
-                if (followings.size() > 0) {
+                if (followings != null && followings.size() > 0) {
                     for (String userID : followings) {
                         UserInfo friend = new UserInfo();
                         friend.setUserName(String.valueOf(value.getData().get("userName")));
@@ -108,6 +110,7 @@ public class FriendsFragment extends Fragment {
                         groupList.add(friend.getUserName());
                         FirestoreManager firestoreManager = FirestoreManager.getInstance(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         mobileCollection.put(friend.getUserName(), firestoreManager.getHabits());
+                        ((BaseExpandableListAdapter) friendsAdapter).notifyDataSetChanged();
                     }
                 } else {
                     Log.d("Sample", "No Followings");
