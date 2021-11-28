@@ -32,8 +32,8 @@ public class HabitHandlerTest {
     @Test
     void isLegalStartDateTest() {
         HabitHandler habitHandler = mockHabitHandler();
-        assertTrue(habitHandler.isLegalStartDate("2021-11-01"));
-        assertFalse(habitHandler.isLegalStartDate("20111101"));
-        assertFalse(habitHandler.isLegalStartDate("2021-02-30"));
+        assertTrue(habitHandler.isLegalDate("2021-11-01"));
+        assertFalse(habitHandler.isLegalDate("20111101"));
+        assertFalse(habitHandler.isLegalDate("2021-02-30"));
     }
 }
