@@ -31,7 +31,7 @@ public class AddHabitEventTest {
     }
 
     @Test
-    public void addfragTest() {
+    public void AddHabitEventTest() {
         //solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
         View v = solo.getView(R.id.fab);
@@ -88,9 +88,9 @@ public class AddHabitEventTest {
         solo.clearEditText((EditText) solo.getView(R.id.habit_event_comment));
         solo.enterText((EditText) solo.getView(R.id.habit_event_comment), "Done for today");
 
-        View cameraIcon = solo.getView(R.id.OpenCamera);
-        solo.clickOnView(cameraIcon);
-        
+//        View cameraIcon = solo.getView(R.id.OpenCamera);
+//        solo.clickOnView(cameraIcon);
+
         solo.waitForText("Done", 1, 1000);
         solo.clickOnText("Add");
 
