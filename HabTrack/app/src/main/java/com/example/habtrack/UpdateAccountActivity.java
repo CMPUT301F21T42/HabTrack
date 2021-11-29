@@ -167,7 +167,6 @@ public class UpdateAccountActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     progressBar.setVisibility(View.GONE);
-
                     progressBar.setVisibility(View.VISIBLE);
                     updateAccountHandler.updateEmailInFirestoreDatabase(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -197,6 +196,20 @@ public class UpdateAccountActivity extends AppCompatActivity {
                         updateEmail.setError(e.getMessage());
                         updateEmail.requestFocus();
                     }
+                    return;
+                }
+            }
+        });
+        updateAccountHandler.updateUserNameInFirestoreDatabase(userName).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    updateUserName.setError(task.getException().getMessage());
+                    updateUserName.requestFocus();
                     return;
                 }
             }

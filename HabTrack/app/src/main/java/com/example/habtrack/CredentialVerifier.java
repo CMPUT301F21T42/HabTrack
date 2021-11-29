@@ -76,8 +76,8 @@ public class CredentialVerifier {
         if (userName.isEmpty()) {
             userNameVerifyFailureMessage = "Please enter your name";
             return false;
-        } else if (userName.matches(".*\\d.*")) {
-            userNameVerifyFailureMessage = "User name cannot contain numbers";
+        } else if (!userName.matches("^[a-zA-Z0-9 ]*$")) {
+            userNameVerifyFailureMessage = "User name can only contain alphanumeric characters";
             return false;
         } else {
             return true;

@@ -156,4 +156,10 @@ public class AccountActivity extends AppCompatActivity {
         // user should not be able to go back
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(context, MainActivity.class));
+    }
 }
