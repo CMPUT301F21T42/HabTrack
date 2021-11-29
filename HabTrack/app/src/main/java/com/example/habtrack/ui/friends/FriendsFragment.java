@@ -24,11 +24,16 @@ import com.example.habtrack.Habit;
 import com.example.habtrack.UserInfo;
 import com.example.habtrack.databinding.FragmentFriendsBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,9 +109,28 @@ public class FriendsFragment extends Fragment {
                                 friend.setEmail(String.valueOf(value.getData().get("email")));
                                 friend.setUserID(value.getId());
                                 groupList.add(friend.getUserName());
-                                FirestoreManager firestoreManager = FirestoreManager.getInstance(userID);
-                                groupCollection.put(friend.getUserName(), firestoreManager.getHabits());
-                                ((BaseExpandableListAdapter) friendsAdapter).notifyDataSetChanged();
+
+                                DocumentReference uDoc = FirebaseFirestore.getInstance().collection("Users").document(friend.getUserID());
+                                CollectionReference uHabit = uDoc.collection("Habits");
+                                uHabit.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        ArrayList<Habit> publicHabits = new ArrayList<>();
+                                        for (QueryDocumentSnapshot doc : value) {
+                                            Habit habit = new Habit();
+                                            habit.setTitle(String.valueOf(doc.getData().get("title")));
+                                            habit.setProgressNumerator(Integer.parseInt(doc.getData().get("progressNumerator").toString()));
+                                            habit.setProgressDenominator(Integer.parseInt(doc.getData().get("progressDenominator").toString()));
+                                            habit.setPublic((boolean) doc.getData().get("public"));
+                                            // Only public habits are visible
+                                            if (habit.isPublic()) {
+                                                publicHabits.add(habit);
+                                            }
+                                        }
+                                        groupCollection.put(friend.getUserName(), publicHabits);
+                                        ((BaseExpandableListAdapter) friendsAdapter).notifyDataSetChanged();
+                                    }
+                                });
                             }
                         });
                     }
