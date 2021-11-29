@@ -1,73 +1,54 @@
 package com.example.habtrack;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
 import android.app.Activity;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
 
 import com.robotium.solo.Solo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * These tests create a new habit called "Dance",
  * adds a reason to do it, adds start date and the
  * days to do it.
  */
+@LargeTest
+@RunWith(AndroidJUnit4.class)
 public class addHabitFragmentTest {
-    private Solo solo;
+
     @Rule
-    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
+    public ActivityTestRule<UserLoginStatusActivity> mActivityTestRule = new ActivityTestRule<>(UserLoginStatusActivity.class);
 
-    @Before
-    public void setup(){
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
-    }
 
     @Test
-    public void start(){
-        Activity activity = rule.getActivity();
-    }
+    public void addHabit1Test() {
+        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.title_editText)).perform(typeText("Dance"));
+        onView(withId(R.id.reason_editText)).perform(typeText("Fun"), closeSoftKeyboard());
+        onView(withId(R.id.monday_checkBox)).perform(click());
+        onView(withId(R.id.wednesday_checkBox)).perform(click());
+        onView(withText("OK")).perform(click());
+        }
 
-    @Test
-    public void addhabitfrag() {
-        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-        View v = solo.getView(R.id.fab);
-        solo.clickOnView(v);// clicking on the plus button to add a new habit.
 
-        //adds all the data for the habit
-        solo.enterText((EditText) solo.getView(R.id.title_editText), "Dance");
-        solo.waitForText("Dance", 1, 1000);
 
-        solo.enterText((EditText) solo.getView(R.id.reason_editText), "Like doing it");
-        solo.waitForText("Like doing it", 1, 1000);
-
-        solo.clearEditText((EditText) solo.getView(R.id.year_editText));
-        solo.enterText((EditText) solo.getView(R.id.year_editText), "2021");
-        solo.waitForText("2021", 1, 1000);
-
-        solo.clearEditText((EditText) solo.getView(R.id.month_editText));
-        solo.enterText((EditText) solo.getView(R.id.month_editText), "12");
-        solo.waitForText("12", 1, 1000);
-
-        solo.clearEditText((EditText) solo.getView(R.id.day_editText));
-        solo.enterText((EditText) solo.getView(R.id.day_editText), "10");
-        solo.waitForText("10", 1, 1000);
-
-        View monday_button = solo.getView(R.id.monday_checkBox);
-        solo.clickOnView(monday_button);
-        //checks if the monday button is checked off
-        assertEquals(true,solo.isCheckBoxChecked(1));
-        // This will not function properly because robotium and firebase give
-        //error as it cannot save the data. And the purpose of "Ok" is to save it to
-        // the database/
-        //solo.clickOnText("Ok");
 
     }
-}

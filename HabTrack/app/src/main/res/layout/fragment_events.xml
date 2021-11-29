@@ -12,12 +12,24 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button_search"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Search For Event" />
+            android:layout_gravity="center">
+            <Button
+                android:id="@+id/button_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search For Event" />
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/button_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset" />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/eventList"
@@ -37,12 +49,17 @@
                 android:id="@+id/habit_editText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:padding="10dp"
                 android:ems="20"
                 android:maxLength="20"
                 android:hint="Habit title"
                 android:inputType="textPersonName" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -52,7 +69,8 @@
                     android:id="@+id/year_editText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="10dp"
+                    android:padding="10dp"
                     android:maxEms="4"
                     android:maxLength="4"
                     android:hint="@string/year_format"
@@ -66,6 +84,7 @@
                     android:id="@+id/month_editText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="10dp"
                     android:ems="2"
                     android:maxLength="2"
                     android:hint="@string/month_format"
@@ -79,6 +98,7 @@
                     android:id="@+id/day_editText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="10dp"
                     android:ems="2"
                     android:maxLength="2"
                     android:hint="@string/day_format"
