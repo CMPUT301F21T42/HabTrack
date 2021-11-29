@@ -1,5 +1,23 @@
-package com.example.habtrack;
+/*
+ * FriendsManager
+ *
+ * FriendsManager class handles friend requests and followers between two users. It has an
+ * aggregation relationship where the FriendProfileActivity, where FriendProfileActivity will create
+ * an instance of a FriendsManager class if one does not exist, else it uses the created instance. This class has methods that
+ * can add/ remove outgoing follow requests, grants/ denys incoming follow requests, also removes/
+ * adds followers and remove/adds followings. All these methods take two userID's as parameters to
+ * reflect that all the methods have a current userID and targer userID.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * November 28, 2021
+ *
+ * Copyright notice
+ */
 
+package com.example.habtrack;
 
 import android.util.Log;
 
@@ -11,6 +29,16 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * This class uses the singleton design pattern, meaning at most only one instance of the class
+ * will exist. This class is created by the FriendsProfileAcitivity and handles all the interactions
+ * between two users pertaining to following/ follwers.
+ *
+ * @author Jenish
+ * @see FriendProfileActivity
+ * @version 1.0
+ * @since 1.0
+ */
 public class FriendsManager {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
