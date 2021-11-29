@@ -3,12 +3,20 @@ package com.example.habtrack.ui.events;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -20,6 +28,8 @@ import com.example.habtrack.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * This class implements the functionality for the view edit delete fragment
  */
@@ -28,7 +38,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
     private EditText comment;   // TODO:  Need to set this to the current comment
     private HabitEvents hEvent;
     private ImageView imageView;
-//    private ViewEditDeleteHabitEvent.OnEditFragmentInteractionListener listener;
+    private Boolean DeleteFlag = false;
 
     public ViewEditDeleteHabitEvent() {
 
@@ -38,20 +48,21 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
         this.hEvent = hEvent;
     }
 
-//    public interface OnEditFragmentInteractionListener {
-//        void onDeletePressed(HabitEvents selectedEvent);
-//    }
+    public Boolean getDeleteFlag() {
+        return DeleteFlag;
+    }
 
-//    @Override
-//    public void onAttach(Context context){
-//        super.onAttach(context);
-//        if(context instanceof ViewEditDeleteHabitEvent.OnEditFragmentInteractionListener){
-//            listener = (ViewEditDeleteHabitEvent.OnEditFragmentInteractionListener) context;
-//        }
-//        else{
-//            throw new RuntimeException(context.toString()+ "must implement OnEditFragmentInteractionListener");
-//        }
-//    }
+    public void setDeleteFlag(Boolean deleteFlag) {
+        DeleteFlag = deleteFlag;
+    }
+
+    public ImageView getImageView() {
+        return this.imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
 
     /**
      * This method creates the view for the view edit delete fragment and allows the user to delete
@@ -66,7 +77,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
         title = view.findViewById(R.id.habit_event_title);
         comment = view.findViewById(R.id.habit_event_comment);
         imageView = view.findViewById(R.id.PhotoGraph);
-//                findViewById(R.id.PhotoGraph1);
+        String HEphoto = hEvent.getPhoto();
 
         if (hEvent.getPhoto() != null) {
             String string_data = hEvent.getPhoto();
@@ -77,6 +88,38 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
             if (imageView != null) imageView.setImageBitmap(bitImage);
         }
+
+        ActivityResultLauncher<Intent> newActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        Intent data = result.getData();
+
+                        Bitmap newImage = (Bitmap) data.getExtras().get("data");
+
+                        imageView.setImageBitmap(newImage);
+                    }
+                }
+        );
+
+        ViewEditDeleteHabitEvent obj1 = this;
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (hEvent.getPhoto() == null) {
+                    Log.d("Access Camera", "To retake a picture");
+                    Intent open_Camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    newActivityResultLauncher.launch(open_Camera);
+                }
+                else {
+                    new EditPhotographFragment(newActivityResultLauncher, obj1).show(getActivity().getSupportFragmentManager(), "EditPhotograph");
+                    Log.d("Edit-PhotoGraph Fragment", "Edit PhotoGraph Fragment pops up");
+                }
+                Log.d("editimage", "On image click Working");
+            }
+        });
 
 
         String HEtitle = hEvent.getTitle();
@@ -108,6 +151,17 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                         String user_title = title.getText().toString();
                         String user_comment = comment.getText().toString();
 
+                        String user_photo;
+                        if (!getDeleteFlag()) {
+                            Bitmap bitImg = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                            ByteArrayOutputStream newstream = new ByteArrayOutputStream();
+                            bitImg.compress(Bitmap.CompressFormat.PNG, 100, newstream);
+                            byte[] Imagearr = newstream.toByteArray();
+                            user_photo = android.util.Base64.encodeToString(Imagearr, 0);
+                        }
+                        else {
+                            user_photo = "Default Value";
+                        }
                         if (user_comment.length() > 30 || user_title.length() > 20) {
                             if ( user_comment.length() > 30 && user_title.length() > 20)
                                 Toast.makeText(getContext(), "Title should be less than 20 characters and Comment should be less than 30 characters", Toast.LENGTH_SHORT).show();
@@ -118,20 +172,23 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                                 Toast.makeText(getContext(), "Title should be less than 20 characters", Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            if (user_title.equals(HEtitle) && user_comment.equals(HEcomment)){
+                            if (user_title.equals(HEtitle) && user_comment.equals(HEcomment) && user_photo.equals(HEphoto)){
 
                             }
                             else{
 
                                 hEvent.setTitle(user_title);
                                 hEvent.setComment(user_comment);
-                                FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
-                                HabTrackDB.collection("Users")
-                                        .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                        .collection("HabitEvents")
-                                        .document(hEvent.getHabitEventID())
-                                        .set(new HabitEvents(hEvent.getTitle(), hEvent.getComment(), hEvent.getPhoto(),
-                                                hEvent.getLocation(), hEvent.getTimeStamp()));
+//                                hEvent.setPhoto(null);
+                                if (getDeleteFlag()) {
+                                    hEvent.setPhoto(null);
+                                    setDeleteFlag(false);
+                                }
+                                else {
+                                    hEvent.setPhoto(user_photo);
+                                }
+
+                                modifyHabitEventDB();
                             }
                         }
                     }
@@ -145,15 +202,22 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
     public void onDeletePressed(HabitEvents selectedEvent) {
 
         FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
-
-
         HabTrackDB.collection("Users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .collection("HabitEvents")
                 .document(selectedEvent.getHabitEventID())
                 .delete();
-//        eventAdapter.remove(selectedEvent);
     }
 
+    private void modifyHabitEventDB() {
 
+        FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
+        HabTrackDB.collection("Users")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .collection("HabitEvents")
+                .document(hEvent.getHabitEventID())
+                .set(new HabitEvents(hEvent.getTitle(), hEvent.getComment(), hEvent.getPhoto(),
+                        hEvent.getLocation(), hEvent.getTimeStamp()));
+
+    }
 }
