@@ -171,6 +171,7 @@ public class AddHabitEventFragment extends DialogFragment {
         title = view.findViewById(R.id.habit_event_title);
         comment = view.findViewById(R.id.habit_event_comment);
         imageButton = view.findViewById(R.id.OpenCamera);
+        latlng = view.findViewById(R.id.latlng);
       
       
 //         binding = FragmentAddHabitEventBinding.inflate(LayoutInflater.from(getContext()));
