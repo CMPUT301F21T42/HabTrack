@@ -8,6 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * Contains unit tests for {@link HabitEvents} methods
+ * @authors Revanth Atmakuri, Jasmine Kaur Wadhwa
+ */
+
 public class HabitEventsTest {
 
     @Test
