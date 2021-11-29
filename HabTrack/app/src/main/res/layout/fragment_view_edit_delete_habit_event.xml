@@ -30,16 +30,12 @@
         android:inputType="textPersonName"
         android:maxLength="20"/>
 
-    <TextView
-        android:id="@+id/photo_selector_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <ImageView
-        android:id="@+id/photo_selector"
+  <ImageView
+        android:id="@+id/PhotoGraph"
+        android:src="@drawable/ic_menu_camera"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_menu_camera" />
+        android:layout_height="match_parent"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

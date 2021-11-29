@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -33,10 +34,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,7 +58,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,18 +79,26 @@ public class AddHabitEventFragment extends DialogFragment {
     // TODO: Need to set this title to the habit title finished
     private TextView title;     // To set the title for HabitEvent
     private EditText comment;   // To get the Users comment on HabitEvent
+    private ImageView imageButton;
     private Habit habit;
+    private String photoGraph = null;
     private TextView latlng;
-
     private FirestoreManager firestoreManager;
 
     public  AddHabitEventFragment(Habit habit){
         this.habit = habit;
     }
 
+    public void setphotoGraph(String photoGraph) { this.photoGraph = photoGraph; }
+
     public void addToHabitEventClass(DataSnapshot snapshot) {
         HabitEvents newHabitEvent = (HabitEvents) snapshot.getValue();
 //        eventAdapter.add(newHabitEvent);
+    }
+
+
+    public void GotImage(String photoGraph) {
+        setphotoGraph(photoGraph);
     }
 
     /**
@@ -95,7 +107,7 @@ public class AddHabitEventFragment extends DialogFragment {
      * @param comment
      * @param photo
      */
-    public void onOkPressed(Habit habit, String comment, Boolean photo){
+    public void onOkPressed(Habit habit, String comment, String photo){
 
         FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
         firestoreManager = FirestoreManager.getInstance(
@@ -105,12 +117,10 @@ public class AddHabitEventFragment extends DialogFragment {
         CollectionReference HabitEvents = HabTrackDB.collection("Users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("HabitEvents");
 
-        // TODO: update this comment
         // The Id for this new HabitEvent would be "Workout2021-09-29" if title for habit is "Workout"
         // and if the date user finished this habit is 2021/09/29
         String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         HabitEvents he = new HabitEvents(habit.getId(), comment, photo, location, timestamp);
-//        HabitEvents he = new HabitEvents(habitEventTitle, comment, photo, null, timestamp);
 
         HabTrackDB.collection("Users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("HabitEvents")
@@ -156,14 +166,46 @@ public class AddHabitEventFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@NonNull Bundle savedInstanceState) {
-        binding = FragmentAddHabitEventBinding.inflate(LayoutInflater.from(getContext()));
-        View root = binding.getRoot();
 
-        title = binding.habitEventTitle;
-        comment = binding.habitEventComment;
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_habit_event, null);
+        title = view.findViewById(R.id.habit_event_title);
+        comment = view.findViewById(R.id.habit_event_comment);
+        imageButton = view.findViewById(R.id.OpenCamera);
+      
+      
+//         binding = FragmentAddHabitEventBinding.inflate(LayoutInflater.from(getContext()));
+//         View root = binding.getRoot();
 
-        latlng = binding.latlng;
+//         title = binding.habitEventTitle;
+//         comment = binding.habitEventComment;
+//         imageButton = binding.OpenCamera;
 
+//         latlng = binding.latlng;
+
+
+        ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                      Intent data = result.getData();
+
+                      Bitmap someImage = (Bitmap) data.getExtras().get("data");
+                      imageButton.setImageBitmap(someImage);
+                      
+                      ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        someImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] ImageArr = stream.toByteArray();
+
+
+                        String ImgString = android.util.Base64.encodeToString(ImageArr, 0);
+//                        String ImgString = new String(ImageArr, StandardCharsets.UTF_8);
+
+                        setphotoGraph(ImgString);
+                    }
+                }
+        );                      
+                      
         ActivityResultLauncher<Intent> locationGetContent = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -189,7 +231,14 @@ public class AddHabitEventFragment extends DialogFragment {
                 locationGetContent.launch(intent);
             }
         });
-
+  
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent open_Camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                someActivityResultLauncher.launch(open_Camera);
+            }
+        });
 
         String habitTitle = "TempTitle";
 
@@ -216,8 +265,6 @@ public class AddHabitEventFragment extends DialogFragment {
                         // To get the user input for Comment
                         String user_comment = comment.getText().toString();
 
-                        // TODO: Need to store all the habitevent information in an habitevent object
-
                         if (user_comment.length() > 30) {
                             Toast.makeText(getContext(),
                                     "Comment should be less than 30 characters", Toast.LENGTH_SHORT).show();
@@ -225,14 +272,21 @@ public class AddHabitEventFragment extends DialogFragment {
                         else {
 //                            HabitEvents newHabitEvent = new HabitEvents(bundle.getParcelable("HabitDone"),
 //                                    user_comment, false, false);
-                            // TODO: need to store this object in customList
 
-                            onOkPressed(habit, user_comment, false);
-
+//                             onOkPressed(habit.getTitle(),
+//                                     user_comment, photoGraph, false);
+                            onOkPressed(habit, user_comment, photoGraph);
                         }
 
                     }
                 }).create();
     }
+
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        this.photoGraph = (Bitmap) data.getExtras().get("data");
+//    }
 
 }

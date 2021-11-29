@@ -58,4 +58,8 @@
 
     </application>
 
+    <uses-feature android:name="android.hardware.camera"
+                    android:required="false">
+    </uses-feature>
+
 </manifest>
