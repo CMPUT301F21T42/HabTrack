@@ -53,20 +53,20 @@ import java.util.ArrayList;
  */
 public class FollowingActivity extends AppCompatActivity {
 
-    Context context = this;
+    private Context context = this;
 
     ListView followingList;
     TextView noFollowing;
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    String currentUserID = mAuth.getCurrentUser().getUid();
+    private String currentUserID = mAuth.getCurrentUser().getUid();
 
-    ArrayList<UserInfo> followingDataList;
-    ArrayList followingUserIDList;
-    FollowingListAdapter followingAdapter;
+    private ArrayList<UserInfo> followingDataList;
+    private ArrayList followingUserIDList;
+    private FollowingListAdapter followingAdapter;
 
-    CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Users");
-    DocumentReference documentReference = FirebaseFirestore.getInstance().document("Users/" + currentUserID);
+    private CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Users");
+    private DocumentReference documentReference = FirebaseFirestore.getInstance().document("Users/" + currentUserID);
 
     /**
      * Sets the listener for the backButton
@@ -129,7 +129,7 @@ public class FollowingActivity extends AppCompatActivity {
         });
     }
 
-    public void obtainFriendInfoFromUserID() {
+    private void obtainFriendInfoFromUserID() {
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {

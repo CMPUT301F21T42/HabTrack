@@ -54,18 +54,18 @@ import java.util.ArrayList;
  */
 public class NotificationActivity extends AppCompatActivity {
 
-    Context context = this;
+    private Context context = this;
 
     ListView notificationsList;
     TextView noPendingFriendRequests;
     ArrayAdapter notificationsAdapter;
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    String currentUserID = mAuth.getCurrentUser().getUid();
+    private String currentUserID = mAuth.getCurrentUser().getUid();
     FriendsManager friendsManager = FriendsManager.getInstance(currentUserID);
 
-    ArrayList<String> incomingFriendRequests = new ArrayList<>();
-    ArrayList<UserInfo> notificationsDataList;
+    private ArrayList<String> incomingFriendRequests = new ArrayList<>();
+    private ArrayList<UserInfo> notificationsDataList;
 
     CollectionReference userCollection = FirebaseFirestore.getInstance().collection("Users");
 
@@ -110,7 +110,6 @@ public class NotificationActivity extends AppCompatActivity {
 
     }
 
-
     public void acceptFriendRequest(UserInfo user) {
         // Add new user to followers
         friendsManager.addFollower(user.getUserID(), currentUserID);
@@ -133,7 +132,7 @@ public class NotificationActivity extends AppCompatActivity {
         friendsManager.removeOutgoingFriendRequest(currentUserID, user.getUserID());
     }
 
-    public void getNotifications() {
+    private void getNotifications() {
         DocumentReference userDocument = userCollection.document(currentUserID);
         userDocument.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override

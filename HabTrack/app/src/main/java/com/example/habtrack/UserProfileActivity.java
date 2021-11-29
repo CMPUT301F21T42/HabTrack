@@ -60,7 +60,7 @@ import java.util.ArrayList;
  */
 public class UserProfileActivity extends AppCompatActivity {
 
-    Context context = this;
+    private Context context = this;
 
     TextView friendUserName;
     TextView friendEmail;
@@ -70,23 +70,23 @@ public class UserProfileActivity extends AppCompatActivity {
     TextView followingsCount;
     Button follow;
 
-    int habitsCountData = 0;
-    int followersCountData = 0;
-    int followingsCountData = 0;
+    private int habitsCountData = 0;
+    private int followersCountData = 0;
+    private int followingsCountData = 0;
 
     ListView habitList;
 
-    ArrayList<Habit> habitDataList;
-    ArrayAdapter habitAdapter;
+    private ArrayList<Habit> habitDataList;
+    private ArrayAdapter habitAdapter;
 
-    FriendsManager friendsManager;
+    private FriendsManager friendsManager;
 
     private String userID;
     private String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-    UserInfo user;
-    ArrayList currentUserFollowings;
+    private UserInfo user;
+    private ArrayList currentUserFollowings;
 
-    CollectionReference userCollection = FirebaseFirestore.getInstance().collection("Users");
+    private CollectionReference userCollection = FirebaseFirestore.getInstance().collection("Users");
 
     /**
      * Sets the listener for the backButton
@@ -150,7 +150,7 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    public void getFollowersFollowingsCount(String userID) {
+    private void getFollowersFollowingsCount(String userID) {
         DocumentReference userDocument = userCollection.document(userID);
         userDocument.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -171,7 +171,7 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    public void getUserInfoObjectFromUserID(String userID) {
+    private void getUserInfoObjectFromUserID(String userID) {
         CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Users");
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -200,7 +200,7 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    public void getHabits(String userID) {
+    private void getHabits(String userID) {
         getFollowingsList();
         DocumentReference userDocument = userCollection.document(userID);
         CollectionReference habitsCollection = userDocument.collection("Habits");
@@ -243,7 +243,7 @@ public class UserProfileActivity extends AppCompatActivity {
         habitList.setAdapter(habitAdapter);
     }
 
-    public void sendFriendRequest(String targetUserId) {
+    private void sendFriendRequest(String targetUserId) {
         // Add sent friend request
         friendsManager.addOutgoingFriendRequest(targetUserId, currentUserID);
 
@@ -251,7 +251,7 @@ public class UserProfileActivity extends AppCompatActivity {
         friendsManager.addIncomingFriendRequest(currentUserID, targetUserId);
     }
 
-    public void unSendFriendRequest(String targetUserId) {
+    private void unSendFriendRequest(String targetUserId) {
         // Remove friend request from current user's outgoing friend request list
         friendsManager.removeOutgoingFriendRequest(targetUserId, currentUserID);
 
@@ -259,7 +259,7 @@ public class UserProfileActivity extends AppCompatActivity {
         friendsManager.removeIncomingFriendRequest(currentUserID, targetUserId);
     }
 
-    public void unfollow(String targetUserId) {
+    private void unfollow(String targetUserId) {
         // Remove current user ID from target user's follower list
         friendsManager.removeFollower(currentUserID, targetUserId);
 
@@ -267,7 +267,7 @@ public class UserProfileActivity extends AppCompatActivity {
         friendsManager.removeFollowing(targetUserId, currentUserID);
     }
 
-    public void setFollowButton(String userID) {
+    private void setFollowButton(String userID) {
         follow.setBackgroundColor(context.getResources().getColor(R.color.ocean_dark));
         follow.setText("Follow");
         follow.setTextColor(Color.WHITE);

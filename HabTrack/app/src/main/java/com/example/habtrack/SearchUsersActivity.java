@@ -61,11 +61,11 @@ public class SearchUsersActivity extends AppCompatActivity {
     TextView noUsersFoundMessage;
 
     ListView usersList;
-    ArrayAdapter usersAdapter;
+    private ArrayAdapter usersAdapter;
 
-    CollectionReference userCollection = FirebaseFirestore.getInstance().collection("Users");
+    private CollectionReference userCollection = FirebaseFirestore.getInstance().collection("Users");
 
-    ArrayList<UserInfo> userDataList;
+    private ArrayList<UserInfo> userDataList;
 
     /**
      * Sets the listener for the backButton
