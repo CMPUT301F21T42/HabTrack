@@ -100,7 +100,7 @@ public class ViewEditDeleteHabitEventTest {
         solo.enterText((EditText) solo.getView(R.id.habit_event_comment), "Testing in progress");
         solo.waitForText("Testing in progress", 1, 100);
 
-        solo.clickOnText("SAVE");
+        solo.clickOnText("DELETE");
 
     }
 
