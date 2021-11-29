@@ -25,6 +25,8 @@ import com.robotium.solo.Solo;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
+import org.junit.FixMethodOrder;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -35,7 +37,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 import androidx.test.filters.LargeTest;
 
 /**
@@ -49,13 +50,14 @@ import androidx.test.filters.LargeTest;
  * @version 1.0
  * @since 1.0
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @LargeTest
 public class FollowerTest {
     private Solo solo;
-    private final String testUserOneUserName = "robotestuserone";
-    private final String testUserTwoUserName = "robotestusertwo";
-    private final String testUserOneEmail = "robotestuserone@email.com";
-    private final String testUserTwoEmail = "robotestusertwo@email.com";
+    private final String testUserOneUserName = "robotestuseroneeee";
+    private final String testUserTwoUserName = "robotestusertwoooo";
+    private final String testUserOneEmail = "robotestuseroneeee@email.com";
+    private final String testUserTwoEmail = "robotestusertwoooo@email.com";
     private final String testUserPassword = "password";
 
     @Rule
@@ -83,7 +85,7 @@ public class FollowerTest {
      * follow requests and viewing the public habits of the other user.
      */
     @Test
-    public void checkCreateTestUsers() {
+    public void A_checkCreateTestUsers() {
         // create two test users
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.clickOnText("Sign up");
@@ -131,7 +133,7 @@ public class FollowerTest {
      * Signs into second user, search up first user and send a follow request using robotium.
      */
     @Test
-    public void checkSendFollowRequest() {
+    public void B_checkSendFollowRequest() {
         // sign in with second test user
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.email), testUserTwoEmail);
@@ -164,7 +166,7 @@ public class FollowerTest {
      * that it has in fact no user followers.
      */
     @Test
-    public void checkDenyFollowRequest() {
+    public void C_checkDenyFollowRequest() {
         // sign in with first test user
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.email), testUserOneEmail);
@@ -191,9 +193,9 @@ public class FollowerTest {
      * that it has in fact no user followers. Then switch accounts and ensure public habit is visible.
      */
     @Test
-    public void checkGrantFollowRequest() {
+    public void D_checkGrantFollowRequest() {
         // resend follow request from user two to user one
-        checkSendFollowRequest();
+        B_checkSendFollowRequest();
 
         // sign in with first test user
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
