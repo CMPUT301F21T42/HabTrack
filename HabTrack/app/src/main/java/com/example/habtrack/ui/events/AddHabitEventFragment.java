@@ -251,7 +251,7 @@ public class AddHabitEventFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
-                .setView(root)
+                .setView(view)
                 .setTitle("Congratulations")
                 // Cancel button in case a user don't want to add this habit event
 

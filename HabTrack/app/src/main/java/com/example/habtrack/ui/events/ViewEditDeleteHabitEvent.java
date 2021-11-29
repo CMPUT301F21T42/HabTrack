@@ -209,7 +209,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
-                .setView(root)
+                .setView(view)
                 .setTitle("View/Edit/Delete")
                 // Delete button in case a user want to delete a habit event
                 // TODO: Need to add the implementation for Delete
@@ -237,48 +237,43 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                             bitImg.compress(Bitmap.CompressFormat.PNG, 100, newstream);
                             byte[] Imagearr = newstream.toByteArray();
                             user_photo = android.util.Base64.encodeToString(Imagearr, 0);
-                        }
-                        else {
+                        } else {
                             user_photo = "Default Value";
                         }
                         if (user_comment.length() > 30 || user_title.length() > 20) {
-                            if ( user_comment.length() > 30 && user_title.length() > 20)
+                            if (user_comment.length() > 30 && user_title.length() > 20)
                                 Toast.makeText(getContext(), "Title should be less than 20 characters and Comment should be less than 30 characters", Toast.LENGTH_SHORT).show();
-                            else
-                            if (user_comment.length() > 30)
+                            else if (user_comment.length() > 30)
                                 Toast.makeText(getContext(), "Comment should be less than 30 characters", Toast.LENGTH_SHORT).show();
                             else
                                 Toast.makeText(getContext(), "Title should be less than 20 characters", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            if (user_title.equals(HEtitle) && user_comment.equals(HEcomment) && user_photo.equals(HEphoto)){
+                        } else {
+                            if (user_title.equals(HEtitle) && user_comment.equals(HEcomment) && user_photo.equals(HEphoto)) {
 
-                            }
-                            else{
+                            } else {
 
-                                hEvent.setTitle(user_title);
+//                                hEvent.setTitle(user_title);
                                 hEvent.setComment(user_comment);
 //                                hEvent.setPhoto(null);
                                 if (getDeleteFlag()) {
                                     hEvent.setPhoto(null);
                                     setDeleteFlag(false);
-                                }
-                                else {
+                                } else {
                                     hEvent.setPhoto(user_photo);
                                 }
 
+                                // To check
+                                hEvent.setComment(user_comment);
+                                hEvent.setLocation(location);
                                 modifyHabitEventDB();
                             }
-                          // To check
-                            hEvent.setComment(user_comment);
-                            hEvent.setLocation(location);
-                            modifyHabitEventsDB();
 //                             FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
 //                             HabTrackDB.collection("Users")
 //                                     .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
 //                                     .collection("HabitEvents")
 //                                     .document(hEvent.getHabitEventID())
 //                                     .set(hEvent);                        }
+                        }
                     }
                 }).create();
     }
@@ -309,7 +304,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                 });
     }
 
-    private void modifyHabitEventDB() {
+    private void modifyHabitEventDB(){
 
         FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
         HabTrackDB.collection("Users")

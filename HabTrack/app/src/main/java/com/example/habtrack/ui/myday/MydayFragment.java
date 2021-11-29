@@ -45,6 +45,7 @@ import java.time.ZoneId;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * This class enables the user to view their habits for the day
