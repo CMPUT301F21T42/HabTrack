@@ -19,6 +19,8 @@ package com.example.habtrack;
 import android.app.Activity;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import com.robotium.solo.Solo;
@@ -74,6 +76,11 @@ import org.junit.runner.RunWith;
 @LargeTest
 public class FollowerTest {
     private Solo solo;
+    private final String testUserOneUserName = "robotestuserone";
+    private final String testUserTwoUserName = "robotestusertwo";
+    private final String testUserOneEmail = "robotestuserone@email.com";
+    private final String testUserTwoEmail = "robotestusertwo@email.com";
+    private final String testUserPassword = "password";
 
     @Rule
     public ActivityTestRule<LoginActivity> rule =
@@ -105,29 +112,29 @@ public class FollowerTest {
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.clickOnText("Sign up");
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.new_username), "testfriend");
-        solo.enterText((EditText) solo.getView(R.id.new_email), "testfriend1@test.com");
-        solo.enterText((EditText) solo.getView(R.id.new_password), "testpassword");
-        solo.enterText((EditText) solo.getView(R.id.confirm_password), "testpassword");
+        solo.enterText((EditText) solo.getView(R.id.new_username), testUserOneUserName);
+        solo.enterText((EditText) solo.getView(R.id.new_email), testUserOneEmail);
+        solo.enterText((EditText) solo.getView(R.id.new_password), testUserPassword);
+        solo.enterText((EditText) solo.getView(R.id.confirm_password), testUserPassword);
         solo.clickOnButton("Sign up");
 
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.clickOnText("Sign up");
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.new_username), "testfriendtwo");
-        solo.enterText((EditText) solo.getView(R.id.new_email), "testfriend2@test.com");
-        solo.enterText((EditText) solo.getView(R.id.new_password), "testpassword");
-        solo.enterText((EditText) solo.getView(R.id.confirm_password), "testpassword");
+        solo.enterText((EditText) solo.getView(R.id.new_username), testUserTwoUserName);
+        solo.enterText((EditText) solo.getView(R.id.new_email), testUserTwoEmail);
+        solo.enterText((EditText) solo.getView(R.id.new_password), testUserPassword);
+        solo.enterText((EditText) solo.getView(R.id.confirm_password), testUserPassword);
         solo.clickOnButton("Sign up");
 
-        // sign in with first test user using robotium
+        // sign in with first test user 
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.email), "testfriend1@test.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testpassword");
+        solo.enterText((EditText) solo.getView(R.id.email), testUserOneEmail);
+        solo.enterText((EditText) solo.getView(R.id.password), testUserPassword);
         solo.clickOnButton("Log in");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
-        // using espresso add habit to signed in user
+        // using espresso add habit to first test user
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.title_editText)).perform(typeText("Study"));
         onView(withId(R.id.reason_editText)).perform(typeText("earn money"), closeSoftKeyboard());
@@ -149,10 +156,10 @@ public class FollowerTest {
      */
     @Test
     public void checkSendFollowRequest() {
-        // sign in with second test user using robotium
+        // sign in with second test user
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.email), "testfriend2@test.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testpassword");
+        solo.enterText((EditText) solo.getView(R.id.email), testUserTwoEmail);
+        solo.enterText((EditText) solo.getView(R.id.password), testUserPassword);
         solo.clickOnButton("Log in");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
@@ -160,12 +167,10 @@ public class FollowerTest {
         solo.clickOnImageButton(0);
         solo.clickOnText("Explore");
         solo.assertCurrentActivity("Wrong Activity", SearchUsersActivity.class);
-        //onView(withId(R.id.nav_friends)).perform(click());
-        solo.enterText( , "testuserfriend");
+        solo.enterText((EditText) solo.getView(R.id.searchFriendInput), testUserOneUserName);
         solo.clickOnButton("Search");
-        solo.clearEditText(myEditText);
-        solo.clickOnText("testuserfriend");
-        solo.sleep(500);
+        solo.clearEditText((EditText) solo.getView(R.id.searchFriendInput));
+        solo.clickOnText(testUserOneUserName);
         solo.assertCurrentActivity("Wrong Activity", FriendProfileActivity.class);
         solo.clickOnButton("Follow");
 
@@ -179,55 +184,75 @@ public class FollowerTest {
     }
 
     /**
-     * Signs into first user, grant user two's follow request. Then search users own profile and ensure
-     * that it has in fact no user followers. Then switch accounts and ensure public habit is visible.
-     */
-    @Test
-    public void checkGrantFollowRequest() {
-        // ASSUMPTION THAT OTHER USERS HABIT IS PUBLIC?????
-
-        // sign in with first test user using robotium
-        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.email), "friend@test.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testpassword");
-        solo.clickOnButton("Log in");
-        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-
-        // check for follow request and accept it
-        solo.clickOnImageButton(0);
-        solo.clickOnText("Follower");
-        assertTrue(solo.searchText("testuserfriendtwo"));
-
-        // check your follower number is one
-
-        // switch account and check that public habit is visible
-
-    }
-
-    /**
      * Signs into first user, deny user two's follow request. Then search users own profile and ensure
      * that it has in fact no user followers.
      */
     @Test
     public void checkDenyFollowRequest() {
-        // sign in with first test user using robotium
+        // sign in with first test user
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.email), "friend@test.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testpassword");
+        solo.enterText((EditText) solo.getView(R.id.password), testUserPassword);
         solo.clickOnButton("Log in");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
         // check for follow request and deny
+        // does not work clicking image button twice
         solo.clickOnImageButton(0);
-        solo.clickOnText("Follower");
-        assertTrue(solo.searchText("testuserfriendtwo"));
+        solo.clickOnImageButton(0);
+        //solo.clickOnText("Follower");
+        //assertTrue(solo.searchText("testuserfriendtwo"));
 
         // deny follow request
 
         // check your follower number is zero
-
-
     }
 
+    /**
+     * Signs into first user, grant user two's follow request. Then search users own profile and ensure
+     * that it has in fact no user followers. Then switch accounts and ensure public habit is visible.
+     */
+    @Test
+    public void checkGrantFollowRequest() {
+        // resend follow request
+        checkSendFollowRequest();
 
+        // sign in with first test user
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.email), testUserOneEmail);
+        solo.enterText((EditText) solo.getView(R.id.password), testUserPassword);
+        solo.clickOnButton("Log in");
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+
+        // check for follow request and accept it
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Notifications");
+        assertTrue(solo.searchText(testUserTwoUserName));
+        solo.clickOnText("Accept");
+        solo.goBack();
+
+        // close navigation drawers and open friend list to assert new follower
+        DrawerLayout mDrawerLayout = (DrawerLayout) solo.getView(R.id.drawer_layout);
+        mDrawerLayout.closeDrawers();
+        onView(withId(R.id.nav_friends)).perform(click());
+        assertTrue(solo.searchText(testUserTwoUserName));
+
+        // sign out of first user
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Account");
+        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.clickOnButton("Log out");
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+
+        // sign in to second user and check first users public habit is visible
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.email), testUserTwoEmail);
+        solo.enterText((EditText) solo.getView(R.id.password), testUserPassword);
+        solo.clickOnButton("Log in");
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+
+        // CHECK FOR PUBLIC HSBIT
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Following");
+    }
 }
