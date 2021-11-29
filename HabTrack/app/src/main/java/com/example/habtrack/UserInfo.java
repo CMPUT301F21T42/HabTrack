@@ -22,6 +22,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
+/**
+ * UserInfo is a class that represents a user and it encaspulates all of a users info such
+ * as username, email, password, userID, etc. It also contains all necessary getters and setters to
+ * manipulate this data.
+ *
+ * @author Jenish
+ * @version 1.0
+ * @since 1.0
+ */
 public class UserInfo {
 
     public final String userNameKey = "userName";
