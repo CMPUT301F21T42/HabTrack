@@ -14,8 +14,13 @@
 package com.example.habtrack;
 import android.graphics.Bitmap;
 
+import androidx.annotation.Nullable;
+
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -23,15 +28,14 @@ import java.util.Date;
  * This class stores the all the information of a habit event
  */
 public class HabitEvents implements Serializable {
-    private String title;   // Storing the title of HabitEvent
-    private String comment; // Storing the user comment on HabitEvent
 
-//    private Boolean Photo;
-//    private ImageData Photo;
+    private String habitId;   // Storing the title of HabitEvent
+    private String comment; // Storing the user comment on HabitEvent
     private String Photo = "DefaultValue";
-    private Boolean location;
-    String timeStamp;
-    String HabitEventID;
+    private ArrayList<Double> location;
+    private String timeStamp;
+    private String HabitEventID;
+    private FirestoreManager firestoreManager;
 
     public HabitEvents() {}
 
@@ -53,27 +57,29 @@ public class HabitEvents implements Serializable {
 
     /**
      * This constructor is used to initialise the attributes
-     * @param habitTitle
+     * @param habitId
      * @param comment
      * @param Photo
      * @param location
      */
-    public HabitEvents(String habitTitle, String comment, String Photo,
-                       Boolean location, String timeStamp) {
-        this.title = habitTitle;
+    public HabitEvents(String habitId, String comment, String Photo,
+                       @Nullable ArrayList<Double> location, String timeStamp) {
+
+        this.habitId = habitId;
         this.comment = comment;
         this.Photo = Photo;
         this.location = location;
         this.timeStamp = timeStamp;
-        this.HabitEventID = title+timeStamp;
+        this.HabitEventID = habitId+timeStamp;
+    }
+
+    public String getHabitId() {
+        return habitId;
     }
 
     public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+        return FirestoreManager.getInstance(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .getHabit(getHabitId()).getTitle();
     }
 
     public String getComment() {
@@ -92,11 +98,11 @@ public class HabitEvents implements Serializable {
         this.Photo = photo;
     }
 
-    public Boolean getLocation() {
+    public ArrayList<Double> getLocation() {
         return location;
     }
 
-    public void setLocation(Boolean location) {
+    public void setLocation(ArrayList<Double> location) {
         this.location = location;
     }
 }

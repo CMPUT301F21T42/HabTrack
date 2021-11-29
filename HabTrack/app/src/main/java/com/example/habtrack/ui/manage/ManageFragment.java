@@ -1,6 +1,4 @@
-/** Copyright 2021
- * Raunak Agarwal, Revanth Atmakuri, Mattheas Jamieson,
- * Jenish Patel, Jasmine Wadhwa, Wendy Zhang
+/** Copyright 2021 Raunak Agarwal, Wendy Zhang
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,6 +11,7 @@
  */
 package com.example.habtrack.ui.manage;
 
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,7 +27,6 @@ import com.example.habtrack.FirestoreManager;
 import com.example.habtrack.Habit;
 import com.example.habtrack.databinding.FragmentManageBinding;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -48,6 +45,9 @@ public class ManageFragment extends Fragment {
     private RecyclerView habitList;
     private ArrayList<Habit> dataList;
     private RecyclerView.Adapter<ItemViewHolder> habitAdapter;
+    private ItemTouchHelperCallback callback;
+
+    private String userId;
 
     /**
      *
@@ -84,9 +84,16 @@ public class ManageFragment extends Fragment {
         habitAdapter = new HabitListAdapter(getContext(), dataList, getParentFragmentManager());
         habitList.setAdapter(habitAdapter);
 
-        ItemTouchHelper.Callback callback = new ItemTouchHelperCallback((ItemTouchHelperAdapter) habitAdapter);
+        callback = new ItemTouchHelperCallback((ItemTouchHelperCallback.ItemTouchHelperAdapter) habitAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(habitList);
+
+        habitList.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                callback.onDraw(c);
+            }
+        });
 
         firestoreManager.setOnDataChangeListener(new FirestoreManager.OnDataChangeListener() {
             @Override
@@ -94,14 +101,6 @@ public class ManageFragment extends Fragment {
                 habitAdapter.notifyDataSetChanged();
             }
         });
-
-//        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                EdithabitFragment.newInstance(dataList.get(position))
-//                        .show(getParentFragmentManager(), "EDIT_HABIT");
-//            }
-//        });
 
         return root;
     }
@@ -111,5 +110,4 @@ public class ManageFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }

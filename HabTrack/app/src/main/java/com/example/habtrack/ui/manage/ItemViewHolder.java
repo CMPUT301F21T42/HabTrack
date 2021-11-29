@@ -31,7 +31,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder{
      * This variable contains the ui {@link TextView} that displays a {@link Habit} title
      */
     public TextView title;
-//    public ProgressBar progressBar;
+    public ProgressBar progressBar;
 
     /**
      * Constructs a {@link ItemViewHolder} object
@@ -40,6 +40,6 @@ public class ItemViewHolder extends RecyclerView.ViewHolder{
     public ItemViewHolder(View itemView) {
         super(itemView);
         title = itemView.findViewById(R.id.title_text);
-//        progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
+        progressBar = itemView.findViewById(R.id.progressBar);
     }
 }

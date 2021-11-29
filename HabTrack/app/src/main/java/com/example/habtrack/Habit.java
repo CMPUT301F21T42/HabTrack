@@ -12,8 +12,8 @@
 package com.example.habtrack;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -71,7 +71,7 @@ public class Habit implements Serializable, Comparable<Habit> {
      * to show how closely the user is following its plan over time.
      * This variable is of type int.
      */
-    private int progress;
+//    private int progress;
 
     /**
      * This variable contains the count of events completed.
@@ -84,6 +84,18 @@ public class Habit implements Serializable, Comparable<Habit> {
      * This variable is of type int.
      */
     private int progressDenominator;
+
+    /**
+     * This variable contains the last completed date for this {@link Habit} object.
+     * This variable is of type {@link Date}.
+     */
+    private Date lastCompleted = new Date(0);
+
+    /**
+     * This variable contains the last scheduled date for this {@link Habit} object.
+     * This variable is of type {@link Date}.
+     */
+    private Date lastScheduled = new Date(0);
 
     public Habit() {}
 
@@ -109,10 +121,9 @@ public class Habit implements Serializable, Comparable<Habit> {
         this.startDate = startDate;
         this.plan = plan;
         this.isPublic = isPublic;
-        this.progress = 0;
         this.progressNumerator = 0;
         this.progressDenominator = 0;
-        this.id = Calendar.getInstance().getTime().toString();
+        this.id = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
     }
 
     /**
@@ -185,16 +196,16 @@ public class Habit implements Serializable, Comparable<Habit> {
      * Returns the {@link Habit#isPublic} of this {@link Habit} object
      * @return true if public, false otherwise
      */
-    public boolean getIsPublic() {
+    public boolean isPublic() {
         return isPublic;
     }
 
     /**
      * Sets the {@link Habit#isPublic} of this {@link Habit} object
-     * @param isPublic true if public, false otherwise
+     * @param aPublic true if public, false otherwise
      */
-    public void setIsPublic(boolean isPublic) {
-        this.isPublic = isPublic;
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
     }
 
     /**
@@ -238,19 +249,11 @@ public class Habit implements Serializable, Comparable<Habit> {
     }
 
     /**
-     * Returns the {@link Habit#progress} of this {@link Habit} object
+     * Returns the progress of this {@link Habit} object
      * @return progress of type int
      */
     public int getProgress() {
-        return progress;
-    }
-
-    /**
-     * Sets the {@link Habit#progress} of this {@link Habit} object
-     * @param progress of type int
-     */
-    public void setProgress(int progress) {
-        this.progress = progress;
+        return progressDenominator == 0 ? 0 : 100 * progressNumerator / progressDenominator;
     }
 
     /**
@@ -270,6 +273,17 @@ public class Habit implements Serializable, Comparable<Habit> {
     }
 
     /**
+     * Increments the {@link Habit#progressNumerator} of this {@link Habit} object by one
+     */
+    public void incrementProgressNumerator() {
+        progressNumerator++;
+    }
+
+    public void decrementProgressNumerator() {
+        progressNumerator--;
+    }
+
+    /**
      * Returns the {@link Habit#progressDenominator} of this {@link Habit} object
      * @return progressDenominator of type int
      */
@@ -283,6 +297,71 @@ public class Habit implements Serializable, Comparable<Habit> {
      */
     public void setProgressDenominator(int progressDenominator) {
         this.progressDenominator = progressDenominator;
+    }
+
+    /**
+     * Increments the {@link Habit#progressDenominator} of this {@link Habit} object by one
+     */
+    public void incrementProgressDenominator() {
+        progressDenominator++;
+    }
+
+    /**
+     * Decrements the {@link Habit#progressDenominator} of this {@link Habit} object by one
+     */
+    public void decrementProgressDenominator() {
+        progressDenominator--;
+    }
+
+    /**
+     * Returns the {@link Habit#lastScheduled} of this {@link Habit} object
+     * @return last scheduled date of type {@link Date}
+     */
+    public Date getLastScheduled() {
+        return lastScheduled;
+    }
+
+    /**
+     * Sets the {@link Habit#lastScheduled} of this {@link Habit} object
+     * @param lastScheduled of type {@link Date}
+     */
+    public void setLastScheduled(Date lastScheduled) {
+        this.lastScheduled = lastScheduled;
+    }
+
+    /**
+     * Resets the {@link Habit#lastScheduled} of this {@link Habit} object to start of Epoch
+     * then decrement {link Habit#progressDenomincator}
+     */
+    public void resetLastScheduled() {
+        lastScheduled = new Date(0);
+        decrementProgressDenominator();
+    }
+
+    /**
+     * Returns the {@link Habit#lastCompleted} of this {@link Habit} object
+     * @return last completed date of type {@link Date}
+     */
+    public Date getLastCompleted() {
+        return lastCompleted;
+    }
+
+    /**
+     * Sets the {@link Habit#lastCompleted} of this {@link Habit} object
+     * @param lastCompleted of type {@link Date}
+     */
+    public void setLastCompleted(Date lastCompleted) {
+        this.lastCompleted = lastCompleted;
+    }
+
+    /**
+     * Called when a habit event is deleted
+     * Resets the {@link Habit#lastCompleted} of this {@link Habit} object to start of Epoch
+     * then decrement {link Habit#progressNumerator}
+     */
+    public void resetLastCompleted() {
+        lastCompleted = new Date(0);
+        decrementProgressNumerator();
     }
 
     /**

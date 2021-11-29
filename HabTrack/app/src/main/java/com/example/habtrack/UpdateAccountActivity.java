@@ -156,6 +156,23 @@ public class UpdateAccountActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     progressBar.setVisibility(View.GONE);
+
+                    progressBar.setVisibility(View.VISIBLE);
+                    updateAccountHandler.updateEmailInFirestoreDatabase(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                progressBar.setVisibility(View.GONE);
+                                goToUserProfileActivity();
+                            } else {
+                                progressBar.setVisibility(View.GONE);
+                                updateEmail.setError(task.getException().getMessage());
+                                updateEmail.requestFocus();
+                                return;
+                            }
+                        }
+                    });
+
                 } else {
                     progressBar.setVisibility(View.GONE);
                     try {
@@ -169,34 +186,6 @@ public class UpdateAccountActivity extends AppCompatActivity {
                         updateEmail.setError(e.getMessage());
                         updateEmail.requestFocus();
                     }
-                    return;
-                }
-            }
-        });
-
-        progressBar.setVisibility(View.VISIBLE);
-        updateAccountHandler.updateUserNameInFirestoreDatabase(userName).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    progressBar.setVisibility(View.GONE);
-                } else {
-                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        progressBar.setVisibility(View.VISIBLE);
-        updateAccountHandler.updateEmailInFirestoreDatabase(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    progressBar.setVisibility(View.GONE);
-                    goToUserProfileActivity();
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    updateEmail.setError(task.getException().getMessage());
-                    updateEmail.requestFocus();
                     return;
                 }
             }
@@ -221,26 +210,27 @@ public class UpdateAccountActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     progressBar.setVisibility(View.GONE);
+
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    updateAccountHandler.deleteAccountFromAuthentication().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                progressBar.setVisibility(View.GONE);
+                                                goToLoginActivity();
+                                            } else {
+                                                progressBar.setVisibility(View.GONE);
+                                                Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+
                                 } else {
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
-                        progressBar.setVisibility(View.VISIBLE);
-                        updateAccountHandler.deleteAccountFromAuthentication().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    progressBar.setVisibility(View.GONE);
-                                    goToLoginActivity();
-                                } else {
-                                    progressBar.setVisibility(View.GONE);
-                                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
-                        endApplication();
                     }
                 })
 
@@ -257,11 +247,11 @@ public class UpdateAccountActivity extends AppCompatActivity {
     public void signOutUser() {
         FirebaseAuth.getInstance().signOut();
     }
-    
+
     /**
      * This methods shutdowns the app. This is needed when account
      * is deleted, the app will need to be restarted (manually for
-     * now) to prevent further issues. 
+     * now) to prevent further issues.
      */
     public void endApplication() {
         finishAffinity();
@@ -292,6 +282,5 @@ public class UpdateAccountActivity extends AppCompatActivity {
      */
     public void goToUserProfileActivity() {
         startActivity(new Intent(context, UserProfileActivity.class));
-        finish();
     }
 }
