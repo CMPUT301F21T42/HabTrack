@@ -199,6 +199,7 @@ public class FriendProfileActivity extends AppCompatActivity {
                                 if (habitDataList.isEmpty()) {
                                     followToViewHabits.setVisibility(View.VISIBLE);
                                 }
+                                habitAdapter.notifyDataSetChanged();
                             }
                         });
                     } else {

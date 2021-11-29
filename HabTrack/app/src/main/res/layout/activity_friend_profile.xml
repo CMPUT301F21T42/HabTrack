@@ -1,131 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FriendProfileActivity">
+    tools:context=".FriendProfileActivity"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/user_info_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
 
         <ImageView
             android:id="@+id/display_pic"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/ic_outline_face_24"></ImageView>
+            android:layout_margin="20dp"
+            android:src="@drawable/ic_outline_face_24" />
 
-        <TextView
-            android:id="@+id/user_name_tag"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/display_pic"
-            android:layout_marginLeft="50dp"
-            android:layout_toRightOf="@id/display_pic"
-            android:text="user name"></TextView>
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/email_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/user_name_tag"
-            android:layout_marginLeft="50dp"
-            android:layout_toRightOf="@id/display_pic"
-            android:text="email"></TextView>
+            <TextView
+                android:id="@+id/user_name_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="user name" />
 
-        <TextView
-            android:id="@+id/habits_count_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/email_tag"
-            android:layout_marginTop="120dp"
-            android:text="Habits"></TextView>
+            <TextView
+                android:id="@+id/email_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="email" />
 
-        <TextView
-            android:id="@+id/habits_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/habits_count_label"
-            android:layout_marginLeft="20dp"
-            android:layout_alignBottom="@id/habits_count_label"
-            android:layout_marginBottom="30dp"
-            android:text="0"
-            android:textSize="18sp">
-        </TextView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
 
-        <TextView
-            android:id="@+id/followers_count_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/habits_count_label"
-            android:layout_alignBottom="@id/habits_count_label"
-            android:layout_marginLeft="30dp"
-            android:text="Followers"></TextView>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/followers_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/followers_count_label"
-            android:layout_marginLeft="25dp"
-            android:layout_alignBottom="@id/followers_count_label"
-            android:layout_marginBottom="30dp"
-            android:text="0"
-            android:textSize="18sp">
-        </TextView>
+                    <TextView
+                        android:id="@+id/habits_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/followings_count_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/followers_count_label"
-            android:layout_alignBottom="@id/followers_count_label"
-            android:layout_marginLeft="30dp"
-            android:text="Followings"></TextView>
+                    <TextView
+                        android:id="@+id/habits_count_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Habits" />
+                </LinearLayout>
 
-        <TextView
-            android:id="@+id/followings_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/followings_count_label"
-            android:layout_marginLeft="25dp"
-            android:layout_alignBottom="@id/followings_count_label"
-            android:layout_marginBottom="30dp"
-            android:text="0"
-            android:textSize="18sp">
-        </TextView>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/follow_button"
-            android:layout_width="230dp"
-            android:layout_height="35dp"
-            android:layout_below="@id/habits_count_label"
-            android:layout_alignLeft="@id/habits_count_label"
-            android:layout_marginTop="10dp"
-            android:text="Follow"
-            android:textSize="10sp"
-            android:textAlignment="center">
-        </Button>
-    </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/followers_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/followers_count_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Followers" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/followings_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/followings_count_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Followings" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/follow_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Follow"
+                android:textSize="10sp"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/friends_habit_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/user_info_view"
-        android:layout_marginTop="20dp"></ListView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp" />
 
     <TextView
         android:id="@+id/follow_to_view_habits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
         android:text="Follow to view Habits"
-        android:visibility="invisible">
-    </TextView>
+        android:visibility="invisible" />
 
-</RelativeLayout>
+</LinearLayout>

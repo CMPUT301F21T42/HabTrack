@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -80,6 +81,21 @@ public class UpdateAccountActivity extends AppCompatActivity {
     UpdateAccountHandler updateAccountHandler = new UpdateAccountHandler();
 
     /**
+     * Sets the listener for the backButton
+     * @param item of type {@link MenuItem}
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
      * onCreate() is called when Activity is created (similar to a constructor) and it finds
      * the ID's of different views and sets up listening events for the user to touch the
      * screen/ buttons.
@@ -90,6 +106,8 @@ public class UpdateAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_account);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         updateUserName = findViewById(R.id.update_user_name);
         updateEmail = findViewById(R.id.update_email);

@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -42,12 +43,11 @@ public class ManageFragment extends Fragment {
     private FragmentManageBinding binding;
     private FirestoreManager firestoreManager;
 
+    private TextView noHabits;
     private RecyclerView habitList;
     private ArrayList<Habit> dataList;
     private RecyclerView.Adapter<ItemViewHolder> habitAdapter;
     private ItemTouchHelperCallback callback;
-
-    private String userId;
 
     /**
      *
@@ -71,11 +71,11 @@ public class ManageFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-//        manageViewModel =
-//                new ViewModelProvider(this).get(ManageViewModel.class);
 
         binding = FragmentManageBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        noHabits = binding.noHabits;
 
         habitList = binding.habitList;
         habitList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -85,9 +85,9 @@ public class ManageFragment extends Fragment {
         habitList.setAdapter(habitAdapter);
 
         if (dataList != null && dataList.size() == 0) {
-            binding.noHabits.setVisibility(View.VISIBLE);
+            noHabits.setVisibility(View.VISIBLE);
         } else {
-            binding.noHabits.setVisibility(View.INVISIBLE);
+            noHabits.setVisibility(View.INVISIBLE);
         }
 
         callback = new ItemTouchHelperCallback((ItemTouchHelperCallback.ItemTouchHelperAdapter) habitAdapter);
@@ -107,9 +107,9 @@ public class ManageFragment extends Fragment {
                 habitAdapter.notifyDataSetChanged();
 
                 if (dataList != null && dataList.size() == 0) {
-                    binding.noHabits.setVisibility(View.VISIBLE);
+                    noHabits.setVisibility(View.VISIBLE);
                 } else {
-                    binding.noHabits.setVisibility(View.INVISIBLE);
+                    noHabits.setVisibility(View.INVISIBLE);
                 }
             }
         });

@@ -12,11 +12,11 @@
         <entry key="app/src/main/res/drawable/custom_input.xml" value="0.3104166666666667" />
         <entry key="app/src/main/res/drawable/ic_outline_notifications_24.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_following.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_friend_profile.xml" value="0.17108167770419427" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.24270833333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_search_users.xml" value="0.1640625" />
-        <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.24270833333333333" />
+        <entry key="app/src/main/res/layout/activity_search_users.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_update_account.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_user_login_status.xml" value="0.22708333333333333" />
