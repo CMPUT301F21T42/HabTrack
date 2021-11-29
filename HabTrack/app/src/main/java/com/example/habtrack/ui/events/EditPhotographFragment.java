@@ -15,6 +15,10 @@ import android.view.View;
 import com.example.habtrack.R;
 import io.reactivex.annotations.NonNull;
 
+/**
+ * This class implements the functionality of the fragment that allows managing photograph.
+ * It provides the option to Re-take or Delete the existing image.
+ */
 public class EditPhotographFragment extends DialogFragment {
     private ActivityResultLauncher<Intent> newActivityResultLauncher;
     private ViewEditDeleteHabitEvent VEDHabitEvent;
@@ -27,6 +31,12 @@ public class EditPhotographFragment extends DialogFragment {
         this.VEDHabitEvent = VEDHabitEvent;
     }
 
+    /**
+     * This method creates the view for the edit photograph fragment and allows the user to retake or
+     * delete the photograph
+     * @param savedInstanceData
+     * @return
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@NonNull Bundle savedInstanceData){
