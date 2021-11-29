@@ -14,7 +14,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-/**
+/**These tests are written for the following user being logged in:
+ * email: qwerty@gmail.ca
+ * password: zxcvbnm12
+ *(otherwise they will fail)
  * This test navigates to the manage tab.
  */
 public class ManageFragmentTest {

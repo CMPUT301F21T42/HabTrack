@@ -113,12 +113,20 @@ public class ViewProgressFragment extends DialogFragment {
                 int incomp_ratio = 100 -comp_ratio;
 
 
-                pc.addPieSlice(
-                        new PieModel(
-                                "Completed",
-                                comp_ratio,
-                                Color.parseColor("#14DF69")));
-
+                if(comp_ratio >= 50 ) {
+                    pc.addPieSlice(
+                            new PieModel(
+                                    "Completed",
+                                    comp_ratio,
+                                    Color.parseColor("#14DF69")));
+                }
+                else{
+                    pc.addPieSlice(
+                            new PieModel(
+                                    "Completed",
+                                    comp_ratio,
+                                    Color.parseColor("#F23C13")));
+                }
                 pc.addPieSlice(
                         new PieModel(
                                 "Incompleted",

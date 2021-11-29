@@ -31,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -187,6 +188,17 @@ public class FirestoreManager {
      */
     public boolean hasHabit(Habit habit) {
         return habitCacheMap.containsKey(habit.getId());
+    }
+
+    /**
+     * Checks whether there is a {@link Habit} with a given title
+     * @param habitTitle title of type {@link String}
+     * @return true if the {@link Habit} exists, false otherwise
+     */
+    public boolean hasHabit(String habitTitle) {
+        for (Habit habit : habitCacheList)
+            if (habit.getTitle() == habitTitle) return true;
+        return false;
     }
 
     /**

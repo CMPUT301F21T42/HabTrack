@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MapsActivity" >
+    tools:context=".SearchUsersActivity"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,39 +13,39 @@
         android:layout_margin="10dp" >
 
         <EditText
-            android:id="@+id/mapText"
+            android:id="@+id/searchFriendInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="10dp"
-            android:inputType="textPersonName"
-            android:hint="Search Location" />
+            android:ems="12"
+            android:hint="Search friends"
+            android:inputType="textPersonName" />
 
         <Space
             android:layout_width="10dp"
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/search_button_maps"
+            android:id="@+id/searchFriendBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="searchLocation"
             android:text="Search" />
     </LinearLayout>
 
-    <fragment
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/confirm_button_maps"
+    <ListView
+        android:id="@+id/usersListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="confirmLocation"
-        android:text="Confirm" />
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:id="@+id/noUsersFoundMessage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="No Users Found"
+        android:visibility="invisible"/>
 
 </LinearLayout>

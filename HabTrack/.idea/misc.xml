@@ -12,11 +12,16 @@
         <entry key="app/src/main/res/drawable/bottom_navigation_selector.xml" value="0.11944444444444445" />
         <entry key="app/src/main/res/drawable/ic_menu_camera.xml" value="0.29074074074074074" />
         <entry key="app/src/main/res/drawable/custom_input.xml" value="0.3104166666666667" />
+        <entry key="app/src/main/res/drawable/ic_outline_notifications_24.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_following.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_friend_profile.xml" value="0.17108167770419427" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.24270833333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.24270833333333333" />
+        <entry key="app/src/main/res/layout/activity_search_users.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_update_account.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_user_login_status.xml" value="0.22708333333333333" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.30512820512820515" />
         <entry key="app/src/main/res/layout/child_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content.xml" value="0.18611111111111112" />
@@ -35,10 +40,10 @@
         <entry key="app/src/main/res/layout/fragment_friends.xml" value="0.20716246183102285" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.30512820512820515" />
         <entry key="app/src/main/res/layout/fragment_manage.xml" value="0.17407407407407408" />
-        <entry key="app/src/main/res/layout/fragment_myday.xml" value="0.15989583333333332" />
+        <entry key="app/src/main/res/layout/fragment_myday.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.17988101832791797" />
         <entry key="app/src/main/res/layout/fragment_view_edit_delete_habit_event.xml" value="0.3619791666666667" />
-        <entry key="app/src/main/res/layout/fragment_viewprogress.xml" value="0.4951590594744122" />
+        <entry key="app/src/main/res/layout/fragment_viewprogress.xml" value="0.5230853966978264" />
         <entry key="app/src/main/res/layout/group_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.15989583333333332" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.1" />

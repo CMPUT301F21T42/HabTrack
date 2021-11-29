@@ -26,7 +26,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.habtrack.FirestoreManager;
 import com.example.habtrack.Habit;
@@ -165,7 +164,7 @@ public class AddhabitFragment extends DialogFragment {
                             Toast.makeText(getContext(), getString((R.string.error_message), "title"), Toast.LENGTH_SHORT).show();
                         } else if (!hh.isLegalReason(r)) {
                             Toast.makeText(getContext(), getString((R.string.error_message), "reason"), Toast.LENGTH_SHORT).show();
-                        } else if (!hh.isLegalStartDate(dateInput)) {
+                        } else if (!hh.isLegalDate(dateInput)) {
                             Toast.makeText(getContext(), getString((R.string.error_message), "date"), Toast.LENGTH_SHORT).show();
                         } else {
                             Date startD = parseDate(dateInput, inFormat);
