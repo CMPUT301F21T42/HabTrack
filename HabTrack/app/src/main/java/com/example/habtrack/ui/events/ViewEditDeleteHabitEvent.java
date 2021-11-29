@@ -164,6 +164,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 //         comment = binding.habitEventComment;
 
 //         latlng = binding.latlng;
+        latlng = view.findViewById(R.id.latlng);
 
         String HEtitle = hEvent.getTitle();
         String HEcomment = hEvent.getComment();
@@ -304,7 +305,10 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                     }
                 });
     }
-
+    /**
+     * This method updates the existing habit event collection in the firebase, according to the
+     * changes made by the user in the edit fragment
+     */
     private void modifyHabitEventDB(){
 
         FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
