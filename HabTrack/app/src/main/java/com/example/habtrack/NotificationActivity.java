@@ -1,3 +1,19 @@
+/*
+ * NotificationActivity
+ *
+ * NotificationActivity is the activity that centers around incoming follow requests. In this
+ * activity a user can see the username of a user that has requested to follow them and either
+ * grant or deny the follow request.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * November 28, 2021
+ *
+ * Copyright notice
+ */
+
 package com.example.habtrack;
 
 import androidx.annotation.NonNull;
@@ -34,6 +50,16 @@ import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
+/**
+ * This activity centers around the Notification page of the application. Here the user can inspect
+ * all their follow requests. They can click on a users name to be brought to the FriendsProfileActivity
+ * of that user, and they can grant or deny the follow request of that user.
+ *
+ * @author Jenish
+ * @see FriendProfileActivity
+ * @version 1.0
+ * @since 1.0
+ */
 public class NotificationActivity extends AppCompatActivity {
 
     Context context = this;
