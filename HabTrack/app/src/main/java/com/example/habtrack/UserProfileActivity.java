@@ -23,6 +23,7 @@ package com.example.habtrack;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,8 +46,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-
-import kotlin.internal.Exact;
 
 /**
  * UserProfileActivity centers around the user profile of the HabTrack application. This class
@@ -75,6 +74,21 @@ public class UserProfileActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     /**
+     * Sets the listener for the backButton
+     * @param item of type {@link MenuItem}
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
      * onCreate() method is called when the screen of the application is changed to the
      * user profile. It finds the views of all components defined in the xml file. It will
      * also retrieve username and email of the current user from the DB to display.
@@ -88,32 +102,12 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        imageView =findViewById(R.id.avatar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        userName = findViewById(R.id.display_user_name);
-//        email = findViewById(R.id.display_email);
+        imageView =findViewById(R.id.avatar);
 
         logout = findViewById(R.id.log_out);
         updateAccount = findViewById(R.id.update_account);
-
-        //progressBar.setVisibility(View.VISIBLE);
-        // Toast.makeText(context, FirebaseAuth.getInstance().getCurrentUser().getUid(), Toast.LENGTH_LONG).show();
-
-//            DocumentReference userDocumentReference = UserInfo.getUserDocumentReference(FirebaseAuth.getInstance().getCurrentUser().getUid());
-//            userDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//                @Override
-//                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-//                    progressBar.setVisibility(View.GONE);
-//                    try {
-//                        userName.setText((String) value.getData().get("userName"));
-//                        email.setText((String) value.getData().get("email"));
-//                    } catch (NullPointerException e) {
-//                        initializeView();
-//                    } finally {
-//                        initializeView();
-//                    }
-//                }
-//            });
 
         initializeView();
 
@@ -162,13 +156,4 @@ public class UserProfileActivity extends AppCompatActivity {
         // user should not be able to go back
         finish();
     }
-
-    /**
-     * Pressing back should result in user being taken
-     * to MainActivity
-     */
-//    @Override
-//    public void onBackPressed() {
-//        startActivity(new Intent(context, MainActivity.class));
-//    }
 }

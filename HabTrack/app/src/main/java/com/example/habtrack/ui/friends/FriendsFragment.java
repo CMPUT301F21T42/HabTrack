@@ -6,10 +6,13 @@
 package com.example.habtrack.ui.friends;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -23,9 +26,16 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.habtrack.FirestoreManager;
+import com.example.habtrack.FriendsManager;
 import com.example.habtrack.Habit;
+import com.example.habtrack.UserInfo;
 import com.example.habtrack.databinding.FragmentFriendsBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,8 +47,10 @@ public class FriendsFragment extends Fragment {
     private ExpandableListView expandableListView;
     private ArrayList<String> groupList;
     private ArrayList<String> childList;
+    private ArrayList<String> followings = new ArrayList<>();
     private HashMap<String, ArrayList<Habit>> mobileCollection;
     private ExpandableListAdapter friendsAdapter;
+    private TextView noFriends;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -46,11 +58,14 @@ public class FriendsFragment extends Fragment {
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        createGroupList();
-        createCollection();
-        expandableListView = binding.friendsList;
+        noFriends = binding.noFriends;
+        groupList = new ArrayList<>();
+        mobileCollection = new HashMap<>();
         friendsAdapter = new FriendsListAdapter(getContext(), groupList, mobileCollection);
+        expandableListView = binding.friendsList;
         expandableListView.setAdapter(friendsAdapter);
+
+        createGroupList();
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             int lastExpandedPosition = -1;
             @Override
@@ -72,11 +87,7 @@ public class FriendsFragment extends Fragment {
     }
 
     private void createCollection() {
-        // TODO: CHANGE TO ACTUAL FRIENDS' HABITS, NOW USING CURRENT USER
-        FirestoreManager firestoreManager = FirestoreManager.getInstance(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        mobileCollection = new HashMap<String, ArrayList<Habit>>();
-        for(String group : groupList)
-            mobileCollection.put(group, firestoreManager.getHabits());
+
     }
 
     private void loadChild(String[] mobileModels) {
@@ -87,8 +98,34 @@ public class FriendsFragment extends Fragment {
     }
 
     private void createGroupList() {
-        groupList = new ArrayList<>();
-        groupList.add("User1");
-        groupList.add("User2");
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("Users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                followings = (ArrayList) value.getData().get("following");
+                if (followings != null && followings.size() > 0) {
+                    for (String userID : followings) {
+                        DocumentReference userDocument = FirebaseFirestore.getInstance().collection("Users").document(userID);
+                        userDocument.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                UserInfo friend = new UserInfo();
+                                friend.setUserName(String.valueOf(value.getData().get("userName")));
+                                friend.setEmail(String.valueOf(value.getData().get("email")));
+                                friend.setUserID(value.getId());
+                                groupList.add(friend.getUserName());
+                                FirestoreManager firestoreManager = FirestoreManager.getInstance(userID);
+                                mobileCollection.put(friend.getUserName(), firestoreManager.getHabits());
+                                ((BaseExpandableListAdapter) friendsAdapter).notifyDataSetChanged();
+                            }
+                        });
+                    }
+                    noFriends.setVisibility(View.INVISIBLE);
+                } else {
+                    noFriends.setVisibility(View.VISIBLE);
+                    Log.d("Sample", "No Followings");
+                }
+            }
+        });
     }
 }

@@ -84,6 +84,12 @@ public class ManageFragment extends Fragment {
         habitAdapter = new HabitListAdapter(getContext(), dataList, getParentFragmentManager());
         habitList.setAdapter(habitAdapter);
 
+        if (dataList != null && dataList.size() == 0) {
+            binding.noHabits.setVisibility(View.VISIBLE);
+        } else {
+            binding.noHabits.setVisibility(View.INVISIBLE);
+        }
+
         callback = new ItemTouchHelperCallback((ItemTouchHelperCallback.ItemTouchHelperAdapter) habitAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(habitList);
@@ -99,6 +105,12 @@ public class ManageFragment extends Fragment {
             @Override
             public void onDataChange() {
                 habitAdapter.notifyDataSetChanged();
+
+                if (dataList != null && dataList.size() == 0) {
+                    binding.noHabits.setVisibility(View.VISIBLE);
+                } else {
+                    binding.noHabits.setVisibility(View.INVISIBLE);
+                }
             }
         });
 

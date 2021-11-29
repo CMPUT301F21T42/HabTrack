@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -62,6 +63,7 @@ public class MydayFragment extends Fragment {
 //    private MydayViewModel mydayViewModel;
     private FragmentMydayBinding binding;
 
+    private TextView noScheduled;
     private ListView mydayList;
     private ArrayList<Habit> dataList;
     private ArrayAdapter<Habit> mydayAdapter;
@@ -92,6 +94,7 @@ public class MydayFragment extends Fragment {
         binding = FragmentMydayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        noScheduled = binding.noScheduled;
         mydayList = binding.mydayList;
         dataList = new ArrayList<>();
 
@@ -185,6 +188,12 @@ public class MydayFragment extends Fragment {
             }
         }
         mydayAdapter.notifyDataSetChanged();
+
+        if (dataList != null && dataList.size() == 0) {
+            noScheduled.setVisibility(View.VISIBLE);
+        } else {
+            noScheduled.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

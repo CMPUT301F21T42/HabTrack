@@ -160,6 +160,8 @@ public class EventsFragment extends Fragment {
                             dataList.add(hEvent);
                         }
                         eventAdapter.notifyDataSetChanged();
+
+
                     }
                 });
     }
