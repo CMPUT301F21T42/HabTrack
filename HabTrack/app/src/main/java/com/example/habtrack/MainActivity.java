@@ -160,9 +160,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     // TODO: Exit app (finish()) only when the MainActivity is in "My Day" fragment
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        finishAffinity();
-//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+    }
 }

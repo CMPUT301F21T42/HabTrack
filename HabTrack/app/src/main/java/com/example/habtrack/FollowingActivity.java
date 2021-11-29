@@ -67,6 +67,7 @@ public class FollowingActivity extends AppCompatActivity {
                         noFollowing.setVisibility(View.VISIBLE);
                     }
                 } else {
+                    noFollowing.setVisibility(View.VISIBLE);
                     Log.d("Error", "array is null");
                 }
 

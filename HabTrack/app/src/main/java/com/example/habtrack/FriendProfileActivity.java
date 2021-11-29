@@ -213,7 +213,7 @@ public class FriendProfileActivity extends AppCompatActivity {
         friendsManager.removeFollower(currentUserID, targetUserId);
 
         // Remove target user from current user's following list
-        friendsManager.removeFollower(targetUserId, currentUserID);
+        friendsManager.removeFollowing(targetUserId, currentUserID);
     }
 
     public void setFollowButton(String userID) {

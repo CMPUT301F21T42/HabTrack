@@ -104,6 +104,9 @@ public class NotificationActivity extends AppCompatActivity {
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 incomingFriendRequests.clear();
                 incomingFriendRequests = (ArrayList) value.getData().get("incomingFriendRequest");
+                if (incomingFriendRequests == null) {
+                    incomingFriendRequests = new ArrayList<>();
+                }
             }
         });
         userCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -123,6 +126,7 @@ public class NotificationActivity extends AppCompatActivity {
                         notificationsList.setAdapter(notificationsAdapter);
                     } else {
                         Log.d("Sample", "No Notifications");
+                        notificationsList.setAdapter(notificationsAdapter);
                         noPendingFriendRequests.setVisibility(View.VISIBLE);
                     }
 
