@@ -14,6 +14,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+/**
+ * This file tests the functionality of Adding a new Habit Event.
+ * It creates a new habit, clicks on chechbox to mark it complete
+ * and navigates to Habit Events List to check if it gets added.
+ */
+
 public class AddHabitEventTest {
 
     private Solo solo;
