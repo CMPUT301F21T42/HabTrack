@@ -187,6 +187,20 @@ public class FirestoreManager {
     }
 
     /**
+     * Returns the list of {@link Habit}s sorted by user preference ranking
+     * @return PUBLIC habits of type {@link ArrayList}
+     */
+    public ArrayList<Habit> getPublicHabits() {
+        ArrayList<Habit> publicHabit = new ArrayList<>();
+        for (Habit habit : habitCacheList) {
+            if (habit.isPublic()) {
+                publicHabit.add(habit);
+            }
+        }
+        return publicHabit;
+    }
+
+    /**
      * Checks whether a {@link Habit} exists
      * @param habit of type {@link Habit}
      * @return true if the {@link Habit} exists, false otherwise

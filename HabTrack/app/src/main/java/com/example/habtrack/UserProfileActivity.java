@@ -196,6 +196,9 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 currentUserFollowings = (ArrayList) value.getData().get("following");
+                if (currentUserFollowings == null) {
+                    currentUserFollowings = new ArrayList();
+                }
             }
         });
     }
@@ -221,7 +224,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                     habit.setTitle(String.valueOf(doc.getData().get("title")));
                                     habit.setProgressNumerator(Integer.parseInt(doc.getData().get("progressNumerator").toString()));
                                     habit.setProgressDenominator(Integer.parseInt(doc.getData().get("progressDenominator").toString()));
-                                    // habit.setPublic((boolean) doc.getData().get("public"));
+                                    habit.setPublic((boolean) doc.getData().get("public"));
                                     // Only public habits are visible
                                     if (habit.isPublic()) {
                                         habitDataList.add(habit);
