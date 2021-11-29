@@ -211,7 +211,7 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (currentUserFollowings != null) {
-                    if (currentUserFollowings.contains(userID) || userID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    if (currentUserFollowings.contains(userID) || userID.equals(currentUserID)) {
                         Log.d("Sample", "in");
                         habitsCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
@@ -226,10 +226,9 @@ public class UserProfileActivity extends AppCompatActivity {
                                     habit.setProgressDenominator(Integer.parseInt(doc.getData().get("progressDenominator").toString()));
                                     habit.setPublic((boolean) doc.getData().get("public"));
                                     // Only public habits are visible
-                                    if (habit.isPublic()) {
+                                    if (habit.isPublic() || userID.equals(currentUserID)) {
                                         habitDataList.add(habit);
                                     }
-                                    habitDataList.add(habit);
                                 }
                                 if (habitDataList.isEmpty()) {
                                     followToViewHabits.setVisibility(View.VISIBLE);
