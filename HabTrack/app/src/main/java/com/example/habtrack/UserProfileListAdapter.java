@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -14,13 +13,13 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class FriendProfileListAdapter extends ArrayAdapter<Habit> {
+public class UserProfileListAdapter extends ArrayAdapter<Habit> {
     private ArrayList<Habit> habitDataList;
-    private FriendProfileActivity context;
+    private UserProfileActivity context;
     private final String TAG = "Sample";
 
 
-    public FriendProfileListAdapter(@NonNull FriendProfileActivity context, ArrayList<Habit> habitDataList) {
+    public UserProfileListAdapter(@NonNull UserProfileActivity context, ArrayList<Habit> habitDataList) {
         super(context, R.layout.content_search_users, habitDataList);
         this.habitDataList = habitDataList;
         this.context = context;

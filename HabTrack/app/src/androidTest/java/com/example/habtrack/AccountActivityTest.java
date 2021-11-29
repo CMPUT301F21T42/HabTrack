@@ -1,9 +1,9 @@
 /*
- * UserProfileActivityTest
+ * AccountActivityTest
  *
- * UserProfileActivityTest class contains Robotium Intent tests for the User Profile Acitivity.
+ * AccountActivityTest class contains Robotium Intent tests for the User Profile Acitivity.
  * Specifically it tests that a user can create a profile, log into the application and open the
- * UserProfileActivity. It also tests that the logout button functions correctly and that the
+ * AccountActivity. It also tests that the logout button functions correctly and that the
  * update account button correctly switches the activity too. The created profile is always deleted
  * after every test.
  *
@@ -29,7 +29,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * Test class for UserProfileActivity. All the UI tests are written here. Robotium test framework is
+ * Test class for AccountActivity. All the UI tests are written here. Robotium test framework is
  * used
  *
  * @author Mattheas Jamieson
@@ -37,7 +37,7 @@ import org.junit.Test;
  * @version 1.0
  * @since 1.0
  */
-public class UserProfileActivityTest {
+public class AccountActivityTest {
     private Solo solo;
 
     @Rule
@@ -87,10 +87,10 @@ public class UserProfileActivityTest {
         // delay
         solo.sleep(2000);
 
-        // Assert current activity is UserProfileActivity
+        // Assert current activity is AccountActivity
         solo.clickOnImageButton(0);
         solo.clickOnText("Profile");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
 
         // delete user from database
         solo.clickOnButton("Update Account");
@@ -125,10 +125,10 @@ public class UserProfileActivityTest {
         // delay
         solo.sleep(2000);
 
-        // Assert current activity is UserProfileActivity
+        // Assert current activity is AccountActivity
         solo.clickOnImageButton(0);
         solo.clickOnText("Profile");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
 
         // sign user out of application
         solo.clickOnButton("Log out");
@@ -177,7 +177,7 @@ public class UserProfileActivityTest {
         // Tap Update Account button and check activity switches
         solo.clickOnImageButton(0);
         solo.clickOnText("Profile");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
         solo.clickOnButton("Update Account");
         solo.assertCurrentActivity("Wrong Activity", UpdateAccountActivity.class);
 

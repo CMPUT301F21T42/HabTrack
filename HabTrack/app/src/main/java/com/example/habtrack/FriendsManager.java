@@ -2,7 +2,7 @@
  * FriendsManager
  *
  * FriendsManager class handles friend requests and followers between two users. It has an
- * aggregation relationship where the FriendProfileActivity, where FriendProfileActivity will create
+ * aggregation relationship where the UserProfileActivity, where UserProfileActivity will create
  * an instance of a FriendsManager class if one does not exist, else it uses the created instance. This class has methods that
  * can add/ remove outgoing follow requests, grants/ denys incoming follow requests, also removes/
  * adds followers and remove/adds followings. All these methods take two userID's as parameters to
@@ -35,7 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * between two users pertaining to following/ follwers.
  *
  * @author Jenish
- * @see FriendProfileActivity
+ * @see UserProfileActivity
  * @version 1.0
  * @since 1.0
  */

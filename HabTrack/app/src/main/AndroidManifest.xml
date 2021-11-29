@@ -18,7 +18,7 @@
             android:value="@string/MAPS_API_KEY" />
 
         <activity
-            android:name=".FriendProfileActivity"
+            android:name=".UserProfileActivity"
             android:exported="true" />
         <activity
             android:name=".FollowingActivity"
@@ -42,7 +42,7 @@
             android:name=".UpdateAccountActivity"
             android:exported="true" />
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".AccountActivity"
             android:exported="true" />
         <activity
             android:name=".SignUpActivity"

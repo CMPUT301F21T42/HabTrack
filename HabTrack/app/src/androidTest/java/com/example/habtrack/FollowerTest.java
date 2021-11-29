@@ -17,50 +17,26 @@
 package com.example.habtrack;
 
 import android.app.Activity;
-import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import com.robotium.solo.Solo;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
-
-import com.example.habtrack.R;
-import com.example.habtrack.UserLoginStatusActivity;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * Test class for requirements US 05.01.01 through 05.03.01. All the UI tests are written here.
@@ -146,7 +122,7 @@ public class FollowerTest {
         // sign out first test user
         solo.clickOnImageButton(0);
         solo.clickOnText("Account");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
         solo.clickOnButton("Log out");
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
     }
@@ -171,14 +147,14 @@ public class FollowerTest {
         solo.clickOnButton("Search");
         solo.clearEditText((EditText) solo.getView(R.id.searchFriendInput));
         solo.clickOnText(testUserOneUserName);
-        solo.assertCurrentActivity("Wrong Activity", FriendProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
         solo.clickOnButton("Follow");
 
         // sign out of current user
         solo.goBack();
         solo.goBack();
         solo.clickOnText("Account");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
         solo.clickOnButton("Log out");
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
     }
@@ -205,7 +181,7 @@ public class FollowerTest {
 
         // sign out of current user
         solo.clickOnText("Account");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
         solo.clickOnButton("Log out");
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
     }
@@ -235,7 +211,7 @@ public class FollowerTest {
 
         // sign out of first user
         solo.clickOnText("Account");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
         solo.clickOnButton("Log out");
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
@@ -254,7 +230,7 @@ public class FollowerTest {
         // sign out user two
         solo.clickOnImageButton(0);
         solo.clickOnText("Account");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
         solo.clickOnButton("Log out");
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
     }

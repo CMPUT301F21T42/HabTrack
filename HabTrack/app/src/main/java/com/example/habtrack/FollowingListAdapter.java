@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,7 +33,7 @@ import java.util.ArrayList;
  * specific user.
  *
  * @author Jenish
- * @see FriendProfileActivity
+ * @see UserProfileActivity
  * @version 1.0
  * @since 1.0
  */

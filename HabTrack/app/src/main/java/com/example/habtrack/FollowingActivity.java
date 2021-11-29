@@ -3,7 +3,7 @@
  *
  * FollowingActivity activity centers around a list of users that the current signed in user is
  * following. The signed in user can click on a specific user in the list and be brought to the
- * corresponding users FriendProfileActivity.
+ * corresponding users UserProfileActivity.
  *
  * No known outstanding issues.
  *
@@ -38,18 +38,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
  * This class's onCreate method fetches and displays all relevant users. It also contains an
- * onClick listener to start the FriendProfileActivity of a selected user from the list.
+ * onClick listener to start the UserProfileActivity of a selected user from the list.
  *
  * @author Jenish
  * @see FollowingListAdapter
- * @see FriendProfileActivity
+ * @see UserProfileActivity
  * @version 1.0
  * @since 1.0
  */
@@ -125,7 +123,7 @@ public class FollowingActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 UserInfo user = followingDataList.get(i);
-                Intent intent = new Intent(context, FriendProfileActivity.class);
+                Intent intent = new Intent(context, UserProfileActivity.class);
                 intent.putExtra("userID", user.getUserID()); // getText() SHOULD NOT be static!!!
                 startActivity(intent);
             }

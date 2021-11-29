@@ -16,13 +16,10 @@
 
 package com.example.habtrack;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,21 +29,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
@@ -56,7 +48,7 @@ import java.util.ArrayList;
  * of that user, and they can grant or deny the follow request of that user.
  *
  * @author Jenish
- * @see FriendProfileActivity
+ * @see UserProfileActivity
  * @version 1.0
  * @since 1.0
  */
@@ -110,7 +102,7 @@ public class NotificationActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 UserInfo user = notificationsDataList.get(i);
-                Intent intent = new Intent(context, FriendProfileActivity.class);
+                Intent intent = new Intent(context, UserProfileActivity.class);
                 intent.putExtra("userID", user.getUserID()); // getText() SHOULD NOT be static!!!
                 startActivity(intent);
             }

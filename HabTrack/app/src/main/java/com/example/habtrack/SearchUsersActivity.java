@@ -33,26 +33,22 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Document;
-
 import java.util.ArrayList;
 
 /**
  * This class contains onClick listening events for the search button that fetches a list of users
  * that matches the entered search criteria. As well as a listener for the list of users itself that
- * will change the activity to the FriendProfileActivity of the selected user. It also contains
+ * will change the activity to the UserProfileActivity of the selected user. It also contains
  * methods to update the user list and search the user list for a given input.
  *
  * @author Jenish
- * @see FriendProfileActivity
+ * @see UserProfileActivity
  * @version 1.0
  * @since 1.0
  */
@@ -138,7 +134,7 @@ public class SearchUsersActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 UserInfo user = userDataList.get(i);
-                Intent intent = new Intent(context, FriendProfileActivity.class);
+                Intent intent = new Intent(context, UserProfileActivity.class);
                 intent.putExtra("userID", user.getUserID());
                 startActivity(intent);
             }

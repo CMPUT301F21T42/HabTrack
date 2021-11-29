@@ -92,12 +92,12 @@ public class UpdateAccountActivityTest {
         // Update userName
         solo.clickOnImageButton(0);
         solo.clickOnText("Profile");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
         solo.clickOnButton("Update Account");
         solo.clearEditText((EditText) solo.getView(R.id.update_user_name));
         solo.enterText((EditText) solo.getView(R.id.update_user_name), "matt_updated");
         solo.clickOnButton("Save changes");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
 
         // assert that userName is updated
         assertTrue(solo.searchText("matt_updated"));
@@ -140,12 +140,12 @@ public class UpdateAccountActivityTest {
         // Update email
         solo.clickOnImageButton(0);
         solo.clickOnText("Profile");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
         solo.clickOnButton("Update Account");
         solo.clearEditText((EditText) solo.getView(R.id.update_email));
         solo.enterText((EditText) solo.getView(R.id.update_email), "mattjq@updated.com");
         solo.clickOnButton("Save changes");
-        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", AccountActivity.class);
 
         // assert that email is updated
         assertTrue(solo.searchText("mattjq@updated.com"));

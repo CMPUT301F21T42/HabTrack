@@ -18,12 +18,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -47,7 +45,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
 /**
  * MainActivity holds the navigation for the drawer element,
@@ -124,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), FriendProfileActivity.class);
+                Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
                 intent.putExtra("userID", currentUserID);
                 startActivity(intent);
             }
@@ -139,7 +136,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * This method starts the {@link UserProfileActivity}
+     * This method starts the {@link AccountActivity}
      * when the "profile" option is selected from the navigation drawer
      * @param item
      * @return
@@ -147,7 +144,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_profile) {
-            Intent intent = new Intent(this, UserProfileActivity.class);
+            Intent intent = new Intent(this, AccountActivity.class);
             startActivity(intent);
         } else if (item.getItemId() == R.id.nav_notifications) {
             Intent intent = new Intent(this, NotificationActivity.class);
