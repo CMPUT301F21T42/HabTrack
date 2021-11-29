@@ -45,7 +45,7 @@ public class FirestoreManager {
      * This variable contains a unique identifier for the user.
      * This variable is of type {@link String}.
      */
-    private static String userId;
+    public static String userId;
 
     /**
      * This variable contains a {@link HashMap} of habitId : Habit.
@@ -126,6 +126,11 @@ public class FirestoreManager {
             FirestoreManager.instance = new FirestoreManager(userId);
 
         return FirestoreManager.instance;
+    }
+
+    public static void setInstance(String userId, FirestoreManager instance) {
+        FirestoreManager.userId = userId;
+        FirestoreManager.instance = instance;
     }
 
     /**

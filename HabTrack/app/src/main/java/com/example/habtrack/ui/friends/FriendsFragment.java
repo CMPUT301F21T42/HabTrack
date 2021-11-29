@@ -10,23 +10,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.habtrack.FirestoreManager;
-import com.example.habtrack.FriendsManager;
 import com.example.habtrack.Habit;
 import com.example.habtrack.UserInfo;
 import com.example.habtrack.databinding.FragmentFriendsBinding;
@@ -46,11 +39,11 @@ public class FriendsFragment extends Fragment {
 
     private ExpandableListView expandableListView;
     private ArrayList<String> groupList;
-    private ArrayList<String> childList;
     private ArrayList<String> followings = new ArrayList<>();
-    private HashMap<String, ArrayList<Habit>> mobileCollection;
+    private HashMap<String, ArrayList<Habit>> groupCollection;
     private ExpandableListAdapter friendsAdapter;
     private TextView noFriends;
+    private FirestoreManager currentUserFirestoreManager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -58,10 +51,12 @@ public class FriendsFragment extends Fragment {
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        currentUserFirestoreManager = FirestoreManager.getInstance(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
         noFriends = binding.noFriends;
         groupList = new ArrayList<>();
-        mobileCollection = new HashMap<>();
-        friendsAdapter = new FriendsListAdapter(getContext(), groupList, mobileCollection);
+        groupCollection = new HashMap<>();
+        friendsAdapter = new FriendsListAdapter(getContext(), groupList, groupCollection);
         expandableListView = binding.friendsList;
         expandableListView.setAdapter(friendsAdapter);
 
@@ -81,20 +76,15 @@ public class FriendsFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        FirestoreManager.setInstance(FirebaseAuth.getInstance().getCurrentUser().getUid(), currentUserFirestoreManager);
+        super.onStop();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    private void createCollection() {
-
-    }
-
-    private void loadChild(String[] mobileModels) {
-        childList = new ArrayList<>();
-        for(String model : mobileModels){
-            childList.add(model);
-        }
     }
 
     private void createGroupList() {
@@ -115,7 +105,7 @@ public class FriendsFragment extends Fragment {
                                 friend.setUserID(value.getId());
                                 groupList.add(friend.getUserName());
                                 FirestoreManager firestoreManager = FirestoreManager.getInstance(userID);
-                                mobileCollection.put(friend.getUserName(), firestoreManager.getHabits());
+                                groupCollection.put(friend.getUserName(), firestoreManager.getHabits());
                                 ((BaseExpandableListAdapter) friendsAdapter).notifyDataSetChanged();
                             }
                         });
