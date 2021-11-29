@@ -1,3 +1,19 @@
+/*
+ * FollowingActivity
+ *
+ * FollowingActivity activity centers around a list of users that the current signed in user is
+ * following. The signed in user can click on a specific user in the list and be brought to the
+ * corresponding users FriendProfileActivity.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * November 29, 2021
+ *
+ * Copyright notice
+ */
+
 package com.example.habtrack;
 
 import androidx.annotation.Nullable;
@@ -27,6 +43,16 @@ import com.google.firebase.firestore.auth.User;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * This class's onCreate method fetches and displays all relevant users. It also contains an
+ * onClick listener to start the FriendProfileActivity of a selected user from the list.
+ *
+ * @author Jenish
+ * @see FollowingListAdapter
+ * @see FriendProfileActivity
+ * @version 1.0
+ * @since 1.0
+ */
 public class FollowingActivity extends AppCompatActivity {
 
     Context context = this;
