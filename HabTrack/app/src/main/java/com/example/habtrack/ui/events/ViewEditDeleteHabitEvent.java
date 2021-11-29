@@ -193,7 +193,8 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                 });
 
         // Sets the onClickListener for the map
-        ImageButton ib = binding.imageButton;
+        ImageButton ib = view.findViewById(R.id.imageButton);
+//        ImageButton ib = binding.imageButton;
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -311,7 +312,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .collection("HabitEvents")
                 .document(hEvent.getHabitEventID())
-                .set(new HabitEvents(hEvent.getTitle(), hEvent.getComment(), hEvent.getPhoto(),
+                .set(new HabitEvents(hEvent.getHabitId(), hEvent.getComment(), hEvent.getPhoto(),
                         hEvent.getLocation(), hEvent.getTimeStamp()));
         }
      

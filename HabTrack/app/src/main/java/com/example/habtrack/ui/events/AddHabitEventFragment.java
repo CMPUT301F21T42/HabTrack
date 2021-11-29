@@ -223,7 +223,8 @@ public class AddHabitEventFragment extends DialogFragment {
                 });
 
         // Sets the onClickListener for the map
-        ImageButton ib = binding.imageButton;
+//        ImageButton ib = binding.imageButton;
+        ImageButton ib = view.findViewById(R.id.imageButton);
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
