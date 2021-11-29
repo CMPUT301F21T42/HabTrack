@@ -132,6 +132,7 @@ public class AddHabitEventFragment extends DialogFragment {
                         Intent data = result.getData();
 
                         Bitmap someImage = (Bitmap) data.getExtras().get("data");
+                        imageButton.setImageBitmap(someImage);
 
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         someImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
