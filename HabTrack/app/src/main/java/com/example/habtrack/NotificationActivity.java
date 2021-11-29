@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -50,10 +51,27 @@ public class NotificationActivity extends AppCompatActivity {
 
     CollectionReference userCollection = FirebaseFirestore.getInstance().collection("Users");
 
+    /**
+     * Sets the listener for the backButton
+     * @param item of type {@link MenuItem}
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         noPendingFriendRequests = findViewById(R.id.no_pending_requests);
         notificationsList = findViewById(R.id.notifications_list_view);

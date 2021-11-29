@@ -118,7 +118,9 @@ public class FriendsFragment extends Fragment {
                             }
                         });
                     }
+                    binding.noFriends.setVisibility(View.INVISIBLE);
                 } else {
+                    binding.noFriends.setVisibility(View.VISIBLE);
                     Log.d("Sample", "No Followings");
                 }
             }

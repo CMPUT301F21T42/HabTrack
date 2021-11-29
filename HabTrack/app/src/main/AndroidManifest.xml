@@ -43,14 +43,7 @@
             android:exported="true" />
         <activity
             android:name=".UserProfileActivity"
-            android:exported="true"
-            android:parentActivityName=".MainActivity">
-
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.habtrack.MainActivity" />
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".SignUpActivity"
             android:exported="true" />

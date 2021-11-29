@@ -185,6 +185,12 @@ public class MydayFragment extends Fragment {
             }
         }
         mydayAdapter.notifyDataSetChanged();
+
+        if (dataList != null && dataList.size() == 0) {
+            binding.noScheduled.setVisibility(View.VISIBLE);
+        } else {
+            binding.noScheduled.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

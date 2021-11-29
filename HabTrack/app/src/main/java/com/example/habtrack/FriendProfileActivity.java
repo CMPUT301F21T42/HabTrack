@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -55,10 +56,27 @@ public class FriendProfileActivity extends AppCompatActivity {
 
     CollectionReference userCollection = FirebaseFirestore.getInstance().collection("Users");
 
+    /**
+     * Sets the listener for the backButton
+     * @param item of type {@link MenuItem}
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_profile);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         userID = getIntent().getExtras().getString("userID");
         Log.d("friendsprofile", String.valueOf(userID));

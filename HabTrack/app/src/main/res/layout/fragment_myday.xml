@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="?attr/actionBarSize"
     android:orientation="vertical"
     tools:context=".ui.myday.MydayFragment">
 
@@ -13,5 +14,14 @@
         android:layout_height="wrap_content" />
 <!--        android:choiceMode="singleChoice"-->
 <!--        android:listSelector="@android:color/darker_gray"-->
+
+    <TextView
+        android:id="@+id/no_scheduled"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="You have no scheduled habit"
+        android:visibility="invisible"/>
 
 </LinearLayout>
