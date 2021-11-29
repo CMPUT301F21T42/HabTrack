@@ -1,3 +1,22 @@
+/*
+ * FriendProfileActivity
+ *
+ * FriendProfileActivity is the activity that centers around a users profile. It contains the
+ * users username and email. As well as number of followers, habits, followings, and if the user
+ * has given permission to another user (through an approved follow request) then that other user
+ * can view their public habits. It also contains a follow button that a user can tap to send a
+ * follow request to that specific users profile. The follow button is made visible/ invisible
+ * depending on if the user is viewing their own profile or not.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * November 28, 2021
+ *
+ * Copyright notice
+ */
+
 package com.example.habtrack;
 
 import androidx.annotation.Nullable;
@@ -26,6 +45,19 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+/**
+ * This class's onCreate method fetches and displays all the relevant info about a user, including
+ * the number of followers, following and habits, as well as their username and email. The follow
+ * button is made invisible if the user is viewing their own account but if not then a onClick
+ * listening event is setup for that. Also has an assocation relationship with the FriendsManager
+ * class, where follow and unfollow requests are handled. 
+ *
+ * @author Jenish
+ * @see FriendProfileActivity
+ * @see FriendsManager
+ * @version 1.0
+ * @since 1.0
+ */
 public class FriendProfileActivity extends AppCompatActivity {
 
     Context context = this;
