@@ -100,13 +100,13 @@ public class FollowerTest {
      * follow requests and viewing the public habits of the other user.
      */
     @Test
-    public void createTestUsers() {
+    public void checkCreateTestUsers() {
         // create two test users
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.clickOnText("Sign up");
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.new_username), "testuserfriend");
-        solo.enterText((EditText) solo.getView(R.id.new_email), "friend@test.com");
+        solo.enterText((EditText) solo.getView(R.id.new_username), "testfriend");
+        solo.enterText((EditText) solo.getView(R.id.new_email), "testfriend1@test.com");
         solo.enterText((EditText) solo.getView(R.id.new_password), "testpassword");
         solo.enterText((EditText) solo.getView(R.id.confirm_password), "testpassword");
         solo.clickOnButton("Sign up");
@@ -114,15 +114,15 @@ public class FollowerTest {
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.clickOnText("Sign up");
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.new_username), "testuserfriendtwo");
-        solo.enterText((EditText) solo.getView(R.id.new_email), "friendtwo@test.com");
+        solo.enterText((EditText) solo.getView(R.id.new_username), "testfriendtwo");
+        solo.enterText((EditText) solo.getView(R.id.new_email), "testfriend2@test.com");
         solo.enterText((EditText) solo.getView(R.id.new_password), "testpassword");
         solo.enterText((EditText) solo.getView(R.id.confirm_password), "testpassword");
         solo.clickOnButton("Sign up");
 
         // sign in with first test user using robotium
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.email), "friend@test.com");
+        solo.enterText((EditText) solo.getView(R.id.email), "testfriend1@test.com");
         solo.enterText((EditText) solo.getView(R.id.password), "testpassword");
         solo.clickOnButton("Log in");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
@@ -131,42 +131,48 @@ public class FollowerTest {
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.title_editText)).perform(typeText("Study"));
         onView(withId(R.id.reason_editText)).perform(typeText("earn money"), closeSoftKeyboard());
+        onView(withId(R.id.ispublic_switch)).perform(click());
         onView(withId(R.id.monday_checkBox)).perform(click());
         onView(withId(R.id.wednesday_checkBox)).perform(click());
         onView(withText("OK")).perform(click());
 
         // sign out first test user
         solo.clickOnImageButton(0);
-        solo.clickOnText("Profile");
+        solo.clickOnText("Account");
         solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
         solo.clickOnButton("Log out");
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
     }
 
     /**
-     * Signs into second user, search up first user and send a follow request using robotium
-     * and espresso.
+     * Signs into second user, search up first user and send a follow request using robotium.
      */
     @Test
     public void checkSendFollowRequest() {
         // sign in with second test user using robotium
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.email), "friendtwo@test.com");
+        solo.enterText((EditText) solo.getView(R.id.email), "testfriend2@test.com");
         solo.enterText((EditText) solo.getView(R.id.password), "testpassword");
         solo.clickOnButton("Log in");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
         // search for first user and send follow request
-        onView(withId(R.id.nav_friends)).perform(click());
-        solo.enterText((EditText) solo.getView(R.id.searchFriendInput), "testuserfriend");
-        solo.clickOnButton("Search");
-        solo.clickOnView(solo.getView(R.id.request_to_follow));
-
-        // sign out user two from app
-        solo.goBack();
-        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         solo.clickOnImageButton(0);
-        solo.clickOnText("Profile");
+        solo.clickOnText("Explore");
+        solo.assertCurrentActivity("Wrong Activity", SearchUsersActivity.class);
+        //onView(withId(R.id.nav_friends)).perform(click());
+        solo.enterText( , "testuserfriend");
+        solo.clickOnButton("Search");
+        solo.clearEditText(myEditText);
+        solo.clickOnText("testuserfriend");
+        solo.sleep(500);
+        solo.assertCurrentActivity("Wrong Activity", FriendProfileActivity.class);
+        solo.clickOnButton("Follow");
+
+        // sign out of current user
+        solo.goBack();
+        solo.goBack();
+        solo.clickOnText("Account");
         solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
         solo.clickOnButton("Log out");
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
