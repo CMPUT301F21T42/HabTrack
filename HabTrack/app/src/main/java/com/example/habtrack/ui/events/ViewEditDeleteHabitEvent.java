@@ -56,6 +56,14 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
         DeleteFlag = deleteFlag;
     }
 
+    public ImageView getImageView() {
+        return this.imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
     /**
      * This method creates the view for the view edit delete fragment and allows the user to delete
      * and edit the habit events
@@ -106,7 +114,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                     newActivityResultLauncher.launch(open_Camera);
                 }
                 else {
-                    new EditPhotographFragment(hEvent, imageView, newActivityResultLauncher, obj1).show(getActivity().getSupportFragmentManager(), "EditPhotograph");
+                    new EditPhotographFragment(newActivityResultLauncher, obj1).show(getActivity().getSupportFragmentManager(), "EditPhotograph");
                     Log.d("Edit-PhotoGraph Fragment", "Edit PhotoGraph Fragment pops up");
                 }
                 Log.d("editimage", "On image click Working");
@@ -181,14 +189,6 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                                 }
 
                                 modifyHabitEventDB();
-
-//                                FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
-//                                HabTrackDB.collection("Users")
-//                                        .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-//                                        .collection("HabitEvents")
-//                                        .document(hEvent.getHabitEventID())
-//                                        .set(new HabitEvents(hEvent.getTitle(), hEvent.getComment(), hEvent.getPhoto(),
-//                                                hEvent.getLocation(), hEvent.getTimeStamp()));
                             }
                         }
                     }
@@ -220,6 +220,4 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
                         hEvent.getLocation(), hEvent.getTimeStamp()));
 
     }
-
-
 }
