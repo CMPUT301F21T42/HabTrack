@@ -1,3 +1,18 @@
+/*
+ * SearchUsersActivity
+ *
+ * SearchUsersActivity is the activity that centers around searching for other users to send follow
+ * requests to.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * November 28, 2021
+ *
+ * Copyright notice
+ */
+
 package com.example.habtrack;
 
 import androidx.annotation.Nullable;
@@ -30,6 +45,17 @@ import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 
+/**
+ * This class contains onClick listening events for the search button that fetches a list of users
+ * that matches the entered search criteria. As well as a listener for the list of users itself that
+ * will change the activity to the FriendProfileActivity of the selected user. It also contains
+ * methods to update the user list and search the user list for a given input.
+ *
+ * @author Jenish
+ * @see FriendProfileActivity
+ * @version 1.0
+ * @since 1.0
+ */
 public class SearchUsersActivity extends AppCompatActivity {
 
     Context context = this;
