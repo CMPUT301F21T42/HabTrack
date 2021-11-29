@@ -63,10 +63,6 @@ public class SearchUsersActivity extends AppCompatActivity {
     ListView usersList;
     ArrayAdapter usersAdapter;
 
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    String currentUserID = mAuth.getCurrentUser().getUid();
-    FriendsManager friendsManager = FriendsManager.getInstance(currentUserID);
-
     CollectionReference userCollection = FirebaseFirestore.getInstance().collection("Users");
 
     ArrayList<UserInfo> userDataList;
@@ -111,8 +107,6 @@ public class SearchUsersActivity extends AppCompatActivity {
                     user.setUserID(doc.getId());
                     userDataList.add(user);
                 }
-
-                Log.d("friendsManager", String.valueOf(userDataList.size()));
             }
         });
 
@@ -140,10 +134,6 @@ public class SearchUsersActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void refreshUserList() {
-        usersList.setAdapter(usersAdapter);
     }
 
     private void searchUserFromInput() {

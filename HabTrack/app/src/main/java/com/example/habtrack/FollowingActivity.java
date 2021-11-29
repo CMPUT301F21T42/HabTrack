@@ -60,14 +60,13 @@ public class FollowingActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     String currentUserID = mAuth.getCurrentUser().getUid();
-    FriendsManager friendsManager = FriendsManager.getInstance(currentUserID);
 
     ArrayList<UserInfo> followingDataList;
     ArrayList followingUserIDList;
     FollowingListAdapter followingAdapter;
 
     CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Users");
-    DocumentReference documentReference = FirebaseFirestore.getInstance().document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+    DocumentReference documentReference = FirebaseFirestore.getInstance().document("Users/" + currentUserID);
 
     /**
      * Sets the listener for the backButton
@@ -124,7 +123,7 @@ public class FollowingActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 UserInfo user = followingDataList.get(i);
                 Intent intent = new Intent(context, UserProfileActivity.class);
-                intent.putExtra("userID", user.getUserID()); // getText() SHOULD NOT be static!!!
+                intent.putExtra("userID", user.getUserID());
                 startActivity(intent);
             }
         });

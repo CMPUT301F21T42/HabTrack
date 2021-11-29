@@ -103,7 +103,7 @@ public class NotificationActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 UserInfo user = notificationsDataList.get(i);
                 Intent intent = new Intent(context, UserProfileActivity.class);
-                intent.putExtra("userID", user.getUserID()); // getText() SHOULD NOT be static!!!
+                intent.putExtra("userID", user.getUserID());
                 startActivity(intent);
             }
         });

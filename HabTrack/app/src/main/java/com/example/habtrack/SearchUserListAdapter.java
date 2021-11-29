@@ -52,7 +52,6 @@ import java.util.HashMap;
 public class SearchUserListAdapter extends ArrayAdapter<UserInfo> {
     private ArrayList<UserInfo> userDataList;
     private SearchUsersActivity context;
-    private final String TAG = "Sample";
 
     public SearchUserListAdapter(@NonNull SearchUsersActivity context, ArrayList<UserInfo> userDataList) {
         super(context, R.layout.content_search_users, userDataList);

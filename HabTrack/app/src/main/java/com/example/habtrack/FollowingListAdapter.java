@@ -40,7 +40,6 @@ import java.util.ArrayList;
 public class FollowingListAdapter extends ArrayAdapter<UserInfo> {
     private ArrayList<UserInfo> followingDataList;
     private FollowingActivity context;
-    private final String TAG = "Sample";
 
 
     public FollowingListAdapter(@NonNull FollowingActivity context, ArrayList<UserInfo> friendsDataList) {

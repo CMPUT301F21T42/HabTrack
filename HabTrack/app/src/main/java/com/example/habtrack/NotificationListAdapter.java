@@ -41,7 +41,6 @@ import java.util.ArrayList;
 public class NotificationListAdapter extends ArrayAdapter<UserInfo> {
     private ArrayList<UserInfo> notificationsDataList;
     private NotificationActivity context;
-    private final String TAG = "Sample";
 
 
     public NotificationListAdapter(@NonNull NotificationActivity context, ArrayList<UserInfo> notificationsDataList) {
