@@ -1,3 +1,19 @@
+/*
+ * NotificationListAdapter
+ *
+ * NotificationListAdapter acts in a similar way to the SearchUserListAdapter. It extends the
+ * ArrayAdapter class and connects the data, which in this case is a list of follow requests
+ * (notifications) and the UI.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * November 28, 2021
+ *
+ * Copyright notice
+ */
+
 package com.example.habtrack;
 
 import android.app.Activity;
@@ -13,6 +29,15 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+/**
+ * This class is an ArrayAdapter for the list of users that that have all sent a yet approved/ unapproved
+ * follow request to a particular user.
+ *
+ * @author Jenish
+ * @see NotificationActivity
+ * @version 1.0
+ * @since 1.0
+ */
 public class NotificationListAdapter extends ArrayAdapter<UserInfo> {
     private ArrayList<UserInfo> notificationsDataList;
     private NotificationActivity context;
