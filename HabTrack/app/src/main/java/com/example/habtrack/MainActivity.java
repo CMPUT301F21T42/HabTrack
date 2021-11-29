@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationView bottom_nav_view = findViewById(R.id.bottom_nav_view);
         NavigationUI.setupWithNavController(bottom_nav_view, navController);
 
-        TextView user_name = findViewById(R.id.user_name);
+        TextView user_name = findViewById(R.id.user_username);
         TextView user_email = findViewById(R.id.user_email);
 //        user_name.setText();
 //        user_email.setText();
