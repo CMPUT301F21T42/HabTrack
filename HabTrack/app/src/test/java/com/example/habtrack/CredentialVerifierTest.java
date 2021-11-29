@@ -35,10 +35,10 @@ public class CredentialVerifierTest {
     void testVerifyUserNameField () {
         String emptyUserName = "";
         String numberUserName = "abc5";
-        String validUserName = "/n&gj':";
+        String validUserName = "134n3gj 23bj32b";
 
         assertFalse(CredentialVerifier.verifyUserNameField(emptyUserName));
-        assertFalse(CredentialVerifier.verifyUserNameField(numberUserName));
+        assertTrue(CredentialVerifier.verifyUserNameField(numberUserName));
         assertTrue(CredentialVerifier.verifyUserNameField(validUserName));
     }
 
