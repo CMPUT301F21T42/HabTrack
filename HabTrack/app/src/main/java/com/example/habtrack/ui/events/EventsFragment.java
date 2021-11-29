@@ -1,3 +1,17 @@
+/** Copyright 2021
+ * Raunak Agarwal, Revanth Atmakuri, Mattheas Jamieson,
+ * Jenish Patel, Jasmine Wadhwa, Wendy Zhang
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * CMPUT301F21T42 Project: HabTrack <br>
+ * To help someone who wants to track their habits.
+ * The {@code Habit} class
+ */
+
 package com.example.habtrack.ui.events;
 
 import android.os.Bundle;
@@ -7,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,11 +33,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.habtrack.EventsAdapter;
+import com.example.habtrack.FirestoreManager;
 import com.example.habtrack.Habit;
 import com.example.habtrack.HabitEvents;
+import com.example.habtrack.HabitHandler;
 import com.example.habtrack.OnItemClickListener;
+import com.example.habtrack.R;
 import com.example.habtrack.databinding.FragmentEventsBinding;
 import com.example.habtrack.ui.edithabit.EdithabitFragment;
+import com.example.habtrack.ui.myday.MydayFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,9 +60,14 @@ public class EventsFragment extends Fragment {
     //    private EventsViewModel eventsViewModel;
     private FragmentEventsBinding binding;
 
+    private EditText year, month, day;
+    private EditText title;
+
     private ListView eventList;
     private ArrayList<HabitEvents> dataList;
     private ArrayAdapter<HabitEvents> eventAdapter;
+
+    HabitHandler hh = new HabitHandler();
 
     FirebaseFirestore db;
 
@@ -54,7 +78,6 @@ public class EventsFragment extends Fragment {
      * @param savedInstanceState
      * @return root
      */
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 //        eventsViewModel =
@@ -62,6 +85,11 @@ public class EventsFragment extends Fragment {
 
         binding = FragmentEventsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        year = binding.yearEditText;
+        month = binding.monthEditText;
+        day = binding.dayEditText;
+        title = binding.habitEditText;
 
         eventList = binding.eventList;
         dataList = new ArrayList<>();
@@ -87,8 +115,40 @@ public class EventsFragment extends Fragment {
             }
         });
 
-        FirebaseFirestore HabTrackDB = FirebaseFirestore.getInstance();
-        HabTrackDB.collection("Users")
+        db = FirebaseFirestore.getInstance();
+
+        final Button confirmButton = binding.buttonConfirm;
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String t = title.getText().toString();
+                String dateInput = getString(R.string.date_formatter,
+                        year.getText().toString(), month.getText().toString(), day.getText().toString());
+                if (hh.isLegalDate(dateInput))
+                    dataList.removeIf((HabitEvents hEvent) -> !hEvent.getTimeStamp().equals(dateInput));
+                if (hh.isLegalTitle(t))
+                    dataList.removeIf((HabitEvents hEvent) -> !hEvent.getTitle().equals(t));
+                eventAdapter.notifyDataSetChanged();
+            }
+        });
+
+        final Button resetButton = binding.buttonReset;
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onResetPressed();
+            }
+        });
+
+        refreshDataList();
+        return root;
+    }
+
+    /**
+     * Updates the {@link EventsFragment#dataList} when creating the view
+     */
+    private void refreshDataList() {
+        db.collection("Users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .collection("HabitEvents")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -104,8 +164,18 @@ public class EventsFragment extends Fragment {
 
                     }
                 });
+    }
 
-        return root;
+    /**
+     * Resets the data list to show all events
+     */
+    private void onResetPressed() {
+        refreshDataList();
+        title.setText("");
+        year.setText("");
+        month.setText("");
+        day.setText("");
+        binding.fieldSearchEntry.setVisibility(View.GONE);
     }
 
     @Override
