@@ -1,3 +1,18 @@
+/*
+ * FollowingListAdapter
+ *
+ * FollowingListAdapter extends the ArrayAdapter class that helps connect the data (stored in a list)
+ * to the UI.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * November 29, 2021
+ *
+ * Copyright notice
+ */
+
 package com.example.habtrack;
 
 import android.app.Activity;
@@ -14,6 +29,15 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+/**
+ * This class is an ArrayAdapter for the list of users that that are confirmed followers of a
+ * specific user.
+ *
+ * @author Jenish
+ * @see FriendProfileActivity
+ * @version 1.0
+ * @since 1.0
+ */
 public class FollowingListAdapter extends ArrayAdapter<UserInfo> {
     private ArrayList<UserInfo> followingDataList;
     private FollowingActivity context;
