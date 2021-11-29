@@ -16,12 +16,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-/**These tests are written for the user having
- * email: raunak@gmail.ca
- * password: Qwerty12345
+/**These tests are written for the following user being logged in:
+ * email: qwerty@gmail.ca
+ * password: zxcvbnm12
  *(otherwise they will fail)
  * This test edit an already existing
- * habit with the name study
+ * habit with the name dance
  *
  */
 public class EditFragmentTest {
@@ -40,7 +40,7 @@ public class EditFragmentTest {
         View v = solo.getView(R.id.nav_manage);// goes to manage tab
         solo.clickOnView(v, true);
         //clicking on the study habit to make changes to it
-        solo.clickOnText("study",1);
+        solo.clickOnText("dance",1);
         solo.clearEditText((EditText) solo.getView(R.id.title_editText));
         solo.enterText((EditText) solo.getView(R.id.title_editText), "studying");
         solo.waitForText("studying", 1, 2000);
@@ -49,6 +49,7 @@ public class EditFragmentTest {
         assertEquals(true,solo.isCheckBoxChecked(0));
         solo.clickOnText("OK",1);
     }
+
     @After
     public void resetmethod(){
         //resets the data back to original configuration
@@ -56,7 +57,7 @@ public class EditFragmentTest {
         solo.clickOnView(v, true);
         solo.clickOnText("studying",1);
         solo.clearEditText((EditText) solo.getView(R.id.title_editText));
-        solo.enterText((EditText) solo.getView(R.id.title_editText), "study");
+        solo.enterText((EditText) solo.getView(R.id.title_editText), "dance");
         solo.clickOnCheckBox(0);
         solo.clickOnText("OK",1);
 

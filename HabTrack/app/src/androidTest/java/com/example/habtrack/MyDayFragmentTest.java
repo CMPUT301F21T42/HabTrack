@@ -14,6 +14,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+/**These tests are written for the following user being logged in:
+ * email: qwerty@gmail.ca
+ * password: zxcvbnm12
+ *(otherwise they will fail)
+ */
 
 public class MyDayFragmentTest {
     Solo solo;
@@ -37,16 +42,7 @@ public class MyDayFragmentTest {
         //EditText t1 = solo.getText(0);
         assertEquals(true,solo.isCheckBoxChecked(0));
 
-        //View nav_events = solo.getView(R.id.nav_events);
 
-        //View nav_events = solo.getView(R.id.nav_events);
-        //solo.clickOnView(nav_events);
-        //solo.waitForText(t1,1,10);
     }
-//    @After
-//    public void resetdata(){
-//        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-//        View myday = solo.getView(R.id.myday_checkBox);
-//        solo.clickOnCheckBox(0);
-//    }
+
 }
