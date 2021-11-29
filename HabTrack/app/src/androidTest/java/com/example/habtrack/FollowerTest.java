@@ -1,7 +1,7 @@
 /*
  * FollowerTest
  *
- * FollowerTest class contains Robotium (or possibly espresso) Intent tests for testing story point US 05.01.01,
+ * FollowerTest class contains Robotium mixed with Espresso Intent tests for testing story point US 05.01.01,
  * US 05.02.01 and US 05.03.01. Specifically that is testing sending a follow request, granting/ denying a follow
  * request and viewing the habits of followed users respectfully.
  *
@@ -64,7 +64,7 @@ import org.junit.runner.RunWith;
 
 /**
  * Test class for requirements US 05.01.01 through 05.03.01. All the UI tests are written here.
- * Robotium test framework is used alongside espresso
+ * Robotium test framework is used alongside Espresso.
  *
  * @author Mattheas Jamieson
  * @see LoginActivity
@@ -127,7 +127,7 @@ public class FollowerTest {
         solo.enterText((EditText) solo.getView(R.id.confirm_password), testUserPassword);
         solo.clickOnButton("Sign up");
 
-        // sign in with first test user 
+        // sign in with first test user
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.email), testUserOneEmail);
         solo.enterText((EditText) solo.getView(R.id.password), testUserPassword);
@@ -191,21 +191,23 @@ public class FollowerTest {
     public void checkDenyFollowRequest() {
         // sign in with first test user
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.email), "friend@test.com");
+        solo.enterText((EditText) solo.getView(R.id.email), testUserOneEmail);
         solo.enterText((EditText) solo.getView(R.id.password), testUserPassword);
         solo.clickOnButton("Log in");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
         // check for follow request and deny
-        // does not work clicking image button twice
         solo.clickOnImageButton(0);
-        solo.clickOnImageButton(0);
-        //solo.clickOnText("Follower");
-        //assertTrue(solo.searchText("testuserfriendtwo"));
+        solo.clickOnText("Notifications");
+        assertTrue(solo.searchText(testUserTwoUserName));
+        solo.clickOnText("Deny");
+        solo.goBack();
 
-        // deny follow request
-
-        // check your follower number is zero
+        // sign out of current user
+        solo.clickOnText("Account");
+        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.clickOnButton("Log out");
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
     }
 
     /**
@@ -214,7 +216,7 @@ public class FollowerTest {
      */
     @Test
     public void checkGrantFollowRequest() {
-        // resend follow request
+        // resend follow request from user two to user one
         checkSendFollowRequest();
 
         // sign in with first test user
@@ -231,14 +233,7 @@ public class FollowerTest {
         solo.clickOnText("Accept");
         solo.goBack();
 
-        // close navigation drawers and open friend list to assert new follower
-        DrawerLayout mDrawerLayout = (DrawerLayout) solo.getView(R.id.drawer_layout);
-        mDrawerLayout.closeDrawers();
-        onView(withId(R.id.nav_friends)).perform(click());
-        assertTrue(solo.searchText(testUserTwoUserName));
-
         // sign out of first user
-        solo.clickOnImageButton(0);
         solo.clickOnText("Account");
         solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
         solo.clickOnButton("Log out");
@@ -251,8 +246,16 @@ public class FollowerTest {
         solo.clickOnButton("Log in");
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
-        // CHECK FOR PUBLIC HSBIT
+        // Check public habit is viewable
+        onView(withId(R.id.nav_friends)).perform(click());
+        solo.clickOnText(testUserOneUserName);
+        assertTrue(solo.searchText("Study"));
+
+        // sign out user two
         solo.clickOnImageButton(0);
-        solo.clickOnText("Following");
+        solo.clickOnText("Account");
+        solo.assertCurrentActivity("Wrong Activity", UserProfileActivity.class);
+        solo.clickOnButton("Log out");
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
     }
 }
