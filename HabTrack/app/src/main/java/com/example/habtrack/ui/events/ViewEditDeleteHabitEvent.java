@@ -164,6 +164,7 @@ public class ViewEditDeleteHabitEvent extends DialogFragment {
 //         comment = binding.habitEventComment;
 
 //         latlng = binding.latlng;
+        latlng = view.findViewById(R.id.latlng);
 
         String HEtitle = hEvent.getTitle();
         String HEcomment = hEvent.getComment();
