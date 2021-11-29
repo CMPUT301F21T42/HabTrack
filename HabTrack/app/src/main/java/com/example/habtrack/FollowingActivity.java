@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -44,10 +45,27 @@ public class FollowingActivity extends AppCompatActivity {
     CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Users");
     DocumentReference documentReference = FirebaseFirestore.getInstance().document("Users/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+    /**
+     * Sets the listener for the backButton
+     * @param item of type {@link MenuItem}
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_following);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         noFollowing = findViewById(R.id.no_following);
         followingList = findViewById(R.id.following_list_view);

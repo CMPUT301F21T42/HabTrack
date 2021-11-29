@@ -23,6 +23,7 @@ package com.example.habtrack;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -73,6 +74,21 @@ public class UserProfileActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     /**
+     * Sets the listener for the backButton
+     * @param item of type {@link MenuItem}
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
      * onCreate() method is called when the screen of the application is changed to the
      * user profile. It finds the views of all components defined in the xml file. It will
      * also retrieve username and email of the current user from the DB to display.
@@ -85,6 +101,8 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imageView =findViewById(R.id.avatar);
 

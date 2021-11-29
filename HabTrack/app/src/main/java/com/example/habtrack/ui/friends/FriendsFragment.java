@@ -50,6 +50,7 @@ public class FriendsFragment extends Fragment {
     private ArrayList<String> followings = new ArrayList<>();
     private HashMap<String, ArrayList<Habit>> mobileCollection;
     private ExpandableListAdapter friendsAdapter;
+    private TextView noFriends;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class FriendsFragment extends Fragment {
         binding = FragmentFriendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        noFriends = binding.noFriends;
         groupList = new ArrayList<>();
         mobileCollection = new HashMap<>();
         friendsAdapter = new FriendsListAdapter(getContext(), groupList, mobileCollection);
@@ -118,7 +120,9 @@ public class FriendsFragment extends Fragment {
                             }
                         });
                     }
+                    noFriends.setVisibility(View.INVISIBLE);
                 } else {
+                    noFriends.setVisibility(View.VISIBLE);
                     Log.d("Sample", "No Followings");
                 }
             }
