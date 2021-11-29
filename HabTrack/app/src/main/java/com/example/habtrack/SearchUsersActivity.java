@@ -47,8 +47,6 @@ public class SearchUsersActivity extends AppCompatActivity {
     CollectionReference userCollection = FirebaseFirestore.getInstance().collection("Users");
 
     ArrayList<UserInfo> userDataList;
-    ArrayList currentUserFollowings;
-    ArrayList currentUserOutgoingFriendRequests;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
