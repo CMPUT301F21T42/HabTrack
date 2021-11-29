@@ -31,7 +31,7 @@ public class AddHabitEventTest {
     }
 
     @Test
-    public void AddHabitEventTest() {
+    public void addHabitEventTest() {
         //solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
         View v = solo.getView(R.id.fab);
