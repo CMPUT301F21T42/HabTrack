@@ -131,7 +131,7 @@ public class FriendProfileActivity extends AppCompatActivity {
                 }
                 ArrayList targetUserFollowings = (ArrayList) value.getData().get("following");
                 if (targetUserFollowings != null) {
-                    followingsCountData = targetUserFollowers.size();
+                    followingsCountData = targetUserFollowings.size();
                     Log.d("Sample", String.valueOf(followersCount));
                     followingsCount.setText(String.valueOf(followingsCountData));
                 }
