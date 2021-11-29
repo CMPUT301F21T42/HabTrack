@@ -231,7 +231,7 @@ public class FirestoreManager {
                             public void onFailure(@NonNull Exception e) {
                                 // These are a method which gets executed if there’s any problem
                                 Log.d(TAG, "Data could not be added!" + e.toString());
-                                // TODO: If ranking added successfully but habit failed to add, should remove ranking
+                                // If ranking added successfully but habit failed to add, should remove ranking
                             }
                         });
             }
@@ -282,7 +282,7 @@ public class FirestoreManager {
                             public void onFailure(@NonNull Exception e) {
                                 // These are a method which gets executed if there’s any problem
                                 Log.d(TAG, "Data could not be added!" + e.toString());
-                                // TODO: If ranking delete successfully but habit failed to delete, what to do here?
+                                // If ranking delete successfully but habit failed to delete, what to do here?
                             }
                         });
             }

@@ -55,7 +55,6 @@ import java.util.Date;
 public class MydayFragment extends Fragment {
     final String TAG = "Sample";
 
-//    private MydayViewModel mydayViewModel;
     private FragmentMydayBinding binding;
 
     private TextView noScheduled;
@@ -83,8 +82,6 @@ public class MydayFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-//        mydayViewModel =
-//                new ViewModelProvider(this).get(MydayViewModel.class);
 
         binding = FragmentMydayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

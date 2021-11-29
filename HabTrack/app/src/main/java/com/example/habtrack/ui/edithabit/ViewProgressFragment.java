@@ -52,7 +52,6 @@ import java.util.Date;
 public class ViewProgressFragment extends DialogFragment {
     final String TAG = "Sample";
 
-//    private EdithabitViewModel edithabitViewModel;
     private FragmentViewprogressBinding binding;
     private TextView habit_name;
 

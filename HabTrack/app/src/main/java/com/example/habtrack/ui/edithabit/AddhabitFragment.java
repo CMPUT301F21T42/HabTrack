@@ -46,7 +46,6 @@ import java.util.Date;
 public class AddhabitFragment extends DialogFragment {
     final String TAG = "Sample";
 
-//    private EdithabitViewModel edithabitViewModel;
     private FragmentAddhabitBinding binding;
 
     private EditText year, month, day;
@@ -98,9 +97,6 @@ public class AddhabitFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
-//        edithabitViewModel =
-//                new ViewModelProvider(this).get(EdithabitViewModel.class);
 
         binding = FragmentAddhabitBinding.inflate(LayoutInflater.from(getContext()));
         View root = binding.getRoot();

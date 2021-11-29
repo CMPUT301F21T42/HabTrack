@@ -10,9 +10,7 @@
         android:id="@+id/display_msg"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:text="Do you want to make changes?"
-
-        />
-
-
+        android:layout_margin="20dp"
+        android:text="Do you want to make changes?" />
+    
     </LinearLayout>

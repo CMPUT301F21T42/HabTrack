@@ -54,7 +54,6 @@ import java.util.ArrayList;
 
 public class EventsFragment extends Fragment {
 
-    //    private EventsViewModel eventsViewModel;
     private FragmentEventsBinding binding;
 
     private EditText year, month, day;
@@ -77,8 +76,6 @@ public class EventsFragment extends Fragment {
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-//        eventsViewModel =
-//                new ViewModelProvider(this).get(EventsViewModel.class);
 
         binding = FragmentEventsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

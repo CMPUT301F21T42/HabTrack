@@ -39,7 +39,6 @@ import java.util.ArrayList;
 public class ManageFragment extends Fragment {
     final String TAG = "Sample";
 
-//    private ManageViewModel manageViewModel;
     private FragmentManageBinding binding;
     private FirestoreManager firestoreManager;
 

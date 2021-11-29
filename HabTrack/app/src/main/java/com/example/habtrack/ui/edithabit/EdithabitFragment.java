@@ -49,7 +49,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class EdithabitFragment extends DialogFragment {
     final String TAG = "Sample";
 
-//    private EdithabitViewModel edithabitViewModel;
     private FragmentEdithabitBinding binding;
 
     private TextView date;
@@ -96,9 +95,6 @@ public class EdithabitFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
-//        edithabitViewModel =
-//                new ViewModelProvider(this).get(EdithabitViewModel.class);
 
         binding = FragmentEdithabitBinding.inflate(LayoutInflater.from(getContext()));
         View root = binding.getRoot();
