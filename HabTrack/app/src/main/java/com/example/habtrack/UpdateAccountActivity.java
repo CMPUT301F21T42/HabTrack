@@ -224,7 +224,7 @@ public class UpdateAccountActivity extends AppCompatActivity {
     public void deleteAccount() {
         new AlertDialog.Builder(context)
                 .setTitle("Delete Account")
-                .setMessage("Are you sure you want to delete your account? App will need to be restarted")
+                .setMessage("Are you sure you want to delete your account?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         signOutUser();

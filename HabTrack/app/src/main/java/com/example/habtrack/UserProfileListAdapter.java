@@ -31,7 +31,7 @@ public class UserProfileListAdapter extends ArrayAdapter<Habit> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if(convertView == null){
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.content_friend_profile, null);
+            convertView = layoutInflater.inflate(R.layout.content_user_profile, null);
         }
 
         Habit habit = habitDataList.get(position);
