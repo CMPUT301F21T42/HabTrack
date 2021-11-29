@@ -1,3 +1,18 @@
+/*
+ * SearchUserListAdapter
+ *
+ * SearchUserListAdapter extends the ArrayAdapter class that helps connect the data (stored in a list)
+ * to the UI.
+ *
+ * No known outstanding issues.
+ *
+ * Version 1.0
+ *
+ * November 28, 2021
+ *
+ * Copyright notice
+ */
+
 package com.example.habtrack;
 
 import android.app.Activity;
@@ -25,6 +40,15 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class is an ArrayAdapter for the list of users that results from the SearchUsersActivity
+ * and helps connect this data to the UI.
+ *
+ * @author Jenish
+ * @see SearchUsersActivity
+ * @version 1.0
+ * @since 1.0
+ */
 public class SearchUserListAdapter extends ArrayAdapter<UserInfo> {
     private ArrayList<UserInfo> userDataList;
     private SearchUsersActivity context;
